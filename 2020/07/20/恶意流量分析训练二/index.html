@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>恶意流量分析训练二 | Yueting&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一、实验目的本次实验所涉及并要求掌握的知识点。  通过该实验了解使用wireshark进行恶意流量分析，本次实验涉及知识包括操作系统指纹识别、域环境、Emotet银行木马流量特征等。  二、实验环境实验所使用的设备名称及规格，网络管理工具简介、版本等。  服务器：Windows 7 ，IP地址：随机分配 辅助工具：Wireshark  三、实验内容与实验要求实验内容、原理分析及具体实验要求。  1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="恶意流量分析训练二">
+<meta property="og:url" content="https://ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%BA%8C/index.html">
+<meta property="og:site_name" content="Yueting&#39;s Blog">
+<meta property="og:description" content="一、实验目的本次实验所涉及并要求掌握的知识点。  通过该实验了解使用wireshark进行恶意流量分析，本次实验涉及知识包括操作系统指纹识别、域环境、Emotet银行木马流量特征等。  二、实验环境实验所使用的设备名称及规格，网络管理工具简介、版本等。  服务器：Windows 7 ，IP地址：随机分配 辅助工具：Wireshark  三、实验内容与实验要求实验内容、原理分析及具体实验要求。  1">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590932843485.png">
+<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590932890626.png">
+<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590932964175.png">
+<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590933158128.png">
+<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590933381111.png">
+<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590933604056.png">
+<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590933944966.png">
+<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934174649.png">
+<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934296184.png">
+<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934422638.png">
+<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934488802.png">
+<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934631806.png">
+<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934719712.png">
+<meta property="article:published_time" content="2020-07-20T05:10:56.000Z">
+<meta property="article:modified_time" content="2020-05-31T14:30:22.000Z">
+<meta property="article:author" content="Yue Ting">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590932843485.png">
+  
+    <link rel="alternate" href="/ytytytytyt6.github.io/atom.xml" title="Yueting&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/ytytytytyt6.github.io/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/ytytytytyt6.github.io/" id="logo">Yueting&#39;s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/ytytytytyt6.github.io/">Home</a>
+        
+          <a class="main-nav-link" href="/ytytytytyt6.github.io/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/ytytytytyt6.github.io/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://ytytytytyt6.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-恶意流量分析训练二" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%BA%8C/" class="article-date">
+  <time datetime="2020-07-20T05:10:56.000Z" itemprop="datePublished">2020-07-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      恶意流量分析训练二
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h1><p>本次实验所涉及并要求掌握的知识点。</p>
+<hr>
+<p>通过该实验了解使用wireshark进行恶意流量分析，本次实验涉及知识包括<strong>操作系统指纹识别、域环境、Emotet银行木马流量特征等</strong>。</p>
+<hr>
+<h1 id="二、实验环境"><a href="#二、实验环境" class="headerlink" title="二、实验环境"></a>二、实验环境</h1><p>实验所使用的设备名称及规格，网络管理工具简介、版本等。</p>
+<hr>
+<p>服务器：Windows 7 ，IP地址：随机分配</p>
+<p>辅助工具：Wireshark</p>
+<hr>
+<h1 id="三、实验内容与实验要求"><a href="#三、实验内容与实验要求" class="headerlink" title="三、实验内容与实验要求"></a>三、实验内容与实验要求</h1><p>实验内容、原理分析及具体实验要求。</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">环境：</span><br><span class="line">局域网段：172.16.3.0&#x2F;24（172.16.3.0 到 172.16.3.255）</span><br><span class="line">域：eggnogsoup.com</span><br><span class="line">域控：172.16.3.2-EggNogSoup-DC</span><br><span class="line">网关：172.16.3.1</span><br><span class="line">广播地址：172.16.3.255</span><br><span class="line">Q1:域里有多少台存活的主机，分别给出他们的地址</span><br><span class="line">Q2.哪个主机的操作系统是ubuntu？</span><br><span class="line">这个问题考到一个知识点，就是访问网页时，用户的http请求包的头部的user-agent可能会泄露对应的操作系统的部分信息。</span><br><span class="line">Q3：ip地址为172.16.3.188的是什么类型的主机？</span><br><span class="line">Q4:哪个ip地址最有可能是Amazon Fire tablet</span><br><span class="line">Q5:哪些windows主机曾经连接到域控上？</span><br><span class="line">Q6:下面三台主机中哪一台主机有感染Emotet银行木马的迹象？（172.16.3.114,172.16.3.133,172.16.3.189）</span><br><span class="line">Q7:运行着安卓8.0.0的ip地址是多少？是什么牌子和型号？</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="四、实验过程与分析"><a href="#四、实验过程与分析" class="headerlink" title="四、实验过程与分析"></a>四、实验过程与分析</h1><p>根据具体实验，记录、整理相应命令、运行结果等，包括截图和文字说明。</p>
+<p>详细记录在实验过程中发生的故障和问题，并进行故障分析，说明故障排除的过程及方法。</p>
+<p>下载数据流量特征如图：</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590932843485.png" alt="1590932843485"></p>
+<p>pcap包文件：</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590932890626.png" alt="1590932890626"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q1:域里有多少台存活的主机，分别给出他们的地址</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590932964175.png" alt="1590932964175"></p>
+<p>菜单。统计。会话。IPv4。</p>
+<p>172.16.3.0/24的各个主机的ip</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590933158128.png" alt="1590933158128"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q2.哪个主机的操作系统是ubuntu？</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">这个问题考到一个知识点，就是访问网页时，用户的http请求包的头部的user-agent可能会泄露对应的操作系统的部分信息。</span><br><span class="line">部分user agent如下所示</span><br><span class="line">​       ·  ·  Firefox</span><br><span class="line">​       ·  ·  Mozilla&#x2F;5.0(Windows NT 6.1; WOW64; rv:34.0) Gecko&#x2F;20100101 Firefox&#x2F;34.0</span><br><span class="line">​       ·  ·  Mozilla&#x2F;5.0(X11; U; Linux x86_64; zh-CN; rv:1.9.2.10) Gecko&#x2F;20100922 Ubuntu&#x2F;10.10(maverick) Firefox&#x2F;3.6.10</span><br><span class="line"></span><br><span class="line">​       ·  ·  Safari</span><br><span class="line">​       ·  ·  Mozilla&#x2F;5.0(Windows NT 6.1; WOW64) AppleWebKit&#x2F;534.57.2 (KHTML, like Gecko) Version&#x2F;5.1.7Safari&#x2F;534.57.2</span><br><span class="line"></span><br><span class="line">​       ·  ·  chrome</span><br><span class="line">​       ·  ·  Mozilla&#x2F;5.0(Windows NT 6.1; WOW64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko)Chrome&#x2F;39.0.2171.71 Safari&#x2F;537.36</span><br><span class="line">​       ·  ·  Mozilla&#x2F;5.0(X11; Linux x86_64) AppleWebKit&#x2F;537.11 (KHTML, like Gecko) Chrome&#x2F;23.0.1271.64Safari&#x2F;537.11</span><br><span class="line">​       ·  ·  Mozilla&#x2F;5.0(Windows; U; Windows NT 6.1; en-US) AppleWebKit&#x2F;534.16 (KHTML, like Gecko)Chrome&#x2F;10.0.648.133 Safari&#x2F;534.16</span><br></pre></td></tr></table></figure>
+
+<p> ip contains Ubuntu and http.request</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590933381111.png" alt="1590933381111"></p>
+<p>可以看出172.16.3.110主机的操作系统是，可以随便打开一条，追踪TCP流，查看User-Agent字段进行验证</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q3：ip地址为172.16.3.188的是什么类型的主机？</span><br></pre></td></tr></table></figure>
+
+<p> ip.addr eq 172.16.3.188</p>
+<p>选择追踪流，可以发现是苹果设备</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590933604056.png" alt="1590933604056"></p>
+<p>也可以通过DNS请求发现查询iCloud</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590933944966.png" alt="1590933944966"></p>
+<p>怎样知道是iPhone ，iPad还是Mac呢？具体还是看User Agent，</p>
+<p>  ip.addr eq 172.16.3.188 and http.request</p>
+<p> 右键跟踪tcp流，可以看出是iPhone 8 </p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934174649.png" alt="1590934174649"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q4:哪个ip地址最有可能是Amazon Fire tablet</span><br></pre></td></tr></table></figure>
+
+<p> 这是亚马逊的一款平板电脑。这时候还是用找ubuntu的方法能行吗？  ip contains Amazon and http.request  失效</p>
+<p>尝试查询Amazon的域名：  dns.qry.name contains amazon</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934296184.png" alt="1590934296184"></p>
+<p>可以看到111,122,109三个主机。我们知道亚马逊的网上采用了https，我们可以尝试过滤出https域名中有amazon的</p>
+<p>​       ssl.handshake.type == 1 and ip contains amazon</p>
+<p>发现122和109主机</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934422638.png" alt="1590934422638"></p>
+<p>查看对应的MAC，发现122为苹果的设备。</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934488802.png" alt="1590934488802"></p>
+<p>对应的看ua的思路也会有浏览器特征，比如firefox,chrome等，那么这个平板上的浏览器是什么呢？</p>
+<p>通过关键字可以看到其特有的浏览器是Silk，那么我们试试使用silk关键字来过滤</p>
+<p>​       ssl.handshake.type == 1 and ip contains silk</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934631806.png" alt="1590934631806"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q5:哪些windows主机曾经连接到域控上？</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>域建立后会有一个管理域成员的目录列表，称之为活动目录ActiveDirectory(AD),而AD默认使用Kerberos处理认证请求。所以我们考虑使用kerberos关键字进行过滤</p>
+</blockquote>
+<p>  kerberos.CNameSrting</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934719712.png" alt="1590934719712"></p>
+<p>展开，cnamestring，右键选中为列查看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q6:下面三台主机中哪一台主机有感染Emotet银行木马的迹象？（172.16.3.114,172.16.3.133,172.16.3.189）</span><br></pre></td></tr></table></figure>
+
+<p>(http.request or ssl.handshake.type == 1) and  !(udp.port eq 1900) and ip.addr  eq 172.16.3.114</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q7:运行着安卓8.0.0的ip地址是多少？是什么牌子和型号？</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<h1 id="五、实验结果总结"><a href="#五、实验结果总结" class="headerlink" title="五、实验结果总结"></a>五、实验结果总结</h1><p>对实验结果进行分析，完成思考题目，总结实验的心得体会，并提出实验的改进意见。</p>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%BA%8C/" data-id="ckcv85u1j00052o9kg4jjbue3" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%B8%89/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          恶意流量分析训练三
+        
+      </div>
+    </a>
+  
+  
+    <a href="/ytytytytyt6.github.io/2020/07/20/%E6%BC%8F%E6%B4%9E%E7%AC%94%E8%AE%B0/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">漏洞笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/ytytytytyt6.github.io/tags/wireshark/" rel="tag">wireshark</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/ytytytytyt6.github.io/tags/wireshark/" style="font-size: 10px;">wireshark</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/ytytytytyt6.github.io/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/ytytytytyt6.github.io/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/ytytytytyt6.github.io/archives/2020/02/">February 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/ytytytytyt6.github.io/2020/07/20/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%B8%80/">恶意流量分析训练一</a>
+          </li>
+        
+          <li>
+            <a href="/ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%B8%89/">恶意流量分析训练三</a>
+          </li>
+        
+          <li>
+            <a href="/ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%BA%8C/">恶意流量分析训练二</a>
+          </li>
+        
+          <li>
+            <a href="/ytytytytyt6.github.io/2020/07/20/%E6%BC%8F%E6%B4%9E%E7%AC%94%E8%AE%B0/">漏洞笔记</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Yue Ting<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/ytytytytyt6.github.io/" class="mobile-nav-link">Home</a>
+  
+    <a href="/ytytytytyt6.github.io/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/ytytytytyt6.github.io/fancybox/jquery.fancybox.css">
+
+  
+<script src="/ytytytytyt6.github.io/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/ytytytytyt6.github.io/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
