@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/ytytytytyt6.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/ytytytytyt6.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/ytytytytyt6.github.io/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/ytytytytyt6.github.io/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/ytytytytyt6.github.io/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/ytytytytyt6.github.io/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/ytytytytyt6.github.io/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="wireshark导出文件1.从HTTP通信中导出对象![image-20210403165009709](&#x2F;Users&#x2F;yueting&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20210403165009709.png) 第一个请求以.doc结尾，表示第一个请求返回了Microsoft Word文档。第二个请求以.exe结尾，表示">
+<meta property="og:type" content="article">
+<meta property="og:title" content="wireshark初步入门">
+<meta property="og:url" content="https://ytytytytyt6.github.io/2021/04/03/wireshark%E5%88%9D%E6%AD%A5%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="思睿&#39;s Blog">
+<meta property="og:description" content="wireshark导出文件1.从HTTP通信中导出对象![image-20210403165009709](&#x2F;Users&#x2F;yueting&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20210403165009709.png) 第一个请求以.doc结尾，表示第一个请求返回了Microsoft Word文档。第二个请求以.exe结尾，表示">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/07/word-image-6.png">
+<meta property="article:published_time" content="2021-04-03T06:46:35.447Z">
+<meta property="article:modified_time" content="2021-04-03T10:13:28.039Z">
+<meta property="article:author" content="万俟思睿">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/07/word-image-6.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/ytytytytyt6.github.io/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ytytytytyt6.github.io/2021/04/03/wireshark初步入门/"/>
+
+
+
+
+
+  <title>wireshark初步入门 | 思睿's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/ytytytytyt6.github.io/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">思睿's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/ytytytytyt6.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/03/wireshark%E5%88%9D%E6%AD%A5%E5%85%A5%E9%97%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">wireshark初步入门</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-03T14:46:35+08:00">
+                2021-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="wireshark导出文件"><a href="#wireshark导出文件" class="headerlink" title="wireshark导出文件"></a>wireshark导出文件</h1><h2 id="1-从HTTP通信中导出对象"><a href="#1-从HTTP通信中导出对象" class="headerlink" title="1.从HTTP通信中导出对象"></a>1.从HTTP通信中导出对象</h2><p>![image-20210403165009709](/Users/yueting/Library/Application Support/typora-user-images/image-20210403165009709.png)</p>
+<p>第一个请求以.doc结尾，表示第一个请求返回了Microsoft Word文档。第二个请求以.exe结尾，表示第二个请求返回了Windows可执行文件。 HTTP GET请求在下面列出</p>
+<p>smartfax[.]com  GET /Documents/Invoice&amp;MSORequest.doc<br>smartfax[.]com  GET /knr.exe</p>
+<p>我们可以使用菜单路径从HTTP对象列表中导出这些对象：File-&gt; Export Objects-&gt; HTTP …图2在Wireshark中显示了此菜单路径。</p>
+<p>![image-20210403165214017](/Users/yueting/Library/Application Support/typora-user-images/image-20210403165214017.png)</p>
+<p>值得注意的是，HTTP对象列表中的“内容类型”显示了服务器如何在其HTTP响应标头中识别文件。在某些情况下，有意将Windows可执行文件标记为其他类型的文件，以避免被检测到。</p>
+<p>在MacBook或Linux环境中，可以将终端窗口或命令行界面（CLI）用于以下命令：</p>
+<p>file [filename]<br>shasum -a 256 [filename]</p>
+<p>![image-20210403165557862](/Users/yueting/Library/Application Support/typora-user-images/image-20210403165557862.png)</p>
+<p>上面的信息确认我们怀疑的Word文档实际上是Microsoft Word文档。它还确认可疑的Windows可执行文件确实是Windows可执行文件。我们可以针对VirusTotal检查SHA256哈希值，以查看是否将这些文件检测为恶意软件。我们还可以对SHA256哈希进行Google搜索，以查找其他信息。</p>
+<p>![image-20210403165653362](/Users/yueting/Library/Application Support/typora-user-images/image-20210403165653362.png)</p>
+<p>除了Windows可执行文件或其他恶意软件文件外，我们还可以提取网页。本教程的第二个pcap提取对象来自pcap-example-02.pcap（在此处可用）包含有人在伪造的PayPal登录页面上输入登录凭据的流量。</p>
+<p>查看来自网络钓鱼站点的网络流量时，我们可能希望查看网络钓鱼网页的外观。我们可以使用Export HTTP object菜单提取初始HTML页面，如图6所示。然后，我们可以在隔离的环境中通过Web浏览器查看它，如图7所示。</p>
+<p>![image-20210403165943093](/Users/yueting/Library/Application Support/typora-user-images/image-20210403165943093.png)</p>
+<p>图6.从第二个pcap导出伪造的PayPal登录页面。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/07/word-image-6.png" alt="img"></p>
+<p>图7.在Web浏览器中查看的导出的伪造PayPal登录页面。</p>
+<h2 id="2-从SMB流量导出对象"><a href="#2-从SMB流量导出对象" class="headerlink" title="2.从SMB流量导出对象"></a>2.从SMB流量导出对象</h2><p>某些恶意软件使用Microsoft的服务器消息块（SMB）协议在基于Active Directory（AD）的网络中传播。早在2017年7月，一个名为Trickbot的银行木马就添加了蠕虫模块，该蠕虫模块使用基于EternalBlue的漏洞在SMB上跨网络传播。今天，我们仍在寻找该Trickbot蠕虫模块的迹象。</p>
+<p>我们的下一个pcap代表Trickbot感染，该感染使用SMB从受感染的客户端10.6.26.110传播到其域控制器10.6.26.6.从pcap-example-03.pcap提取对象，在这里可用。在Wireshark中打开pcap。使用菜单路径File-&gt; Export Objects-&gt; SMB …，如图8所示。</p>
+<p>![image-20210403170114367](/Users/yueting/Library/Application Support/typora-user-images/image-20210403170114367.png)</p>
+<p>图9.进入“导出SMB对象”列表。</p>
+<p>这将弹出一个Export SMB object列表，列出可以从pcap导出的SMB对象，如图9所示。</p>
+<p>请注意列表中间附近的两个条目，其中 10.6.26.6  C $作为主机名。仔细检查它们各自的“文件名”字段，可以发现这是两个Windows可执行文件。有关详细信息，请参见下面的表1。</p>
+<p>![image-20210403170157132](/Users/yueting/Library/Application Support/typora-user-images/image-20210403170157132.png)</p>
+<p>在“内容类型”列中，我们需要[100.00％]导出这些文件的正确副本。小于100％的任何数字表示网络流量中有一些数据丢失，从而导致文件副本损坏或不完整。这些来自pcap的Trickbot相关文件具有SHA256文件哈希，如表2所示。</p>
+<p>SHA256哈希文件大小<br>59896ae5f3edcb999243c7bfdc0b17eb7fe28f3a66259d797386ea470c010040 712 kB<br>cf99990bee6c378cbf56239b3cc88276eec348d82740f84e9d5c343751f82560 115 kB<br>表2. Windows可执行文件的SHA256文件哈希。</p>
+<h2 id="从SMTP流量导出电子邮件"><a href="#从SMTP流量导出电子邮件" class="headerlink" title="从SMTP流量导出电子邮件"></a>从SMTP流量导出电子邮件</h2><p>某些类型的恶意软件旨在将受感染的Windows主机转变为垃圾邮件机器人。这些垃圾邮件发送器每分钟发送数百封垃圾邮件或恶意电子邮件。在某些情况下，邮件是使用未加密的SMTP发送的，我们可以从感染流量的pcap中导出这些邮件。</p>
+<p>一个这样的示例来自我们的下一个pcap，即从pcap-example-04.pcap提取对象（在此处可用）。在此pcap中，受感染的Windows客户端发送垃圾邮件。在Wireshark中打开pcap，在smtp.data.fragment上进行过滤，您应该看到50个主题行示例，如图10所示。这是在来自一台受感染Windows主机的五秒钟的网络流量中发生的。</p>
+<p>![image-20210403170339557](/Users/yueting/Library/Application Support/typora-user-images/image-20210403170339557.png)</p>
+<p>图10.在Wireshark中过滤电子邮件发件人和主题行。</p>
+<p>您可以使用菜单路径文件-&gt;导出对象-&gt; IMF …来导出这些消息，如图11所示。IMF代表Internet消息格式，它被保存为带有.eml文件扩展名的名称。</p>
+<p>![](/Users/yueting/Library/Application Support/typora-user-images/image-20210403170403385.png)</p>
+<p>在IMF对象列表中，所有色情短信垃圾邮件均以.eml文件扩展名列出，如图12所示。</p>
+<p>导出这些.eml文件后，可以使用诸如Thunderbird之类的电子邮件客户端对其进行检查，也可以在文本编辑器中对其进行检查，如图13所示。</p>
+<p>![image-20210403172937119](/Users/yueting/Library/Application Support/typora-user-images/image-20210403172937119.png)</p>
+<p>图13.使用文本编辑器查看从pcap导出的.eml文件。</p>
+<h2 id="4-从FTP流量导出文件"><a href="#4-从FTP流量导出文件" class="headerlink" title="4.从FTP流量导出文件"></a>4.从FTP流量导出文件</h2><p>一些恶意软件家族在恶意软件感染期间使用FTP。我们的下一个pcap具有从FTP服务器检索到的恶意软件可执行文件，然后将来自受感染Windows主机的信息发送回同一FTP服务器。</p>
+<p>下一个pcap是从pcap-example-05.pcap提取对象，可在此处获取。在Wireshark中打开pcap。在ftp.request.command上进行过滤以查看FTP命令，如图14所示。您应该找到一个用户名（USER）和密码（PASS），然后是检索（RETR）五个Windows可执行文件的请求：q.exe, w.exe, e.exe, r.exe, and t.exe。随后是大约每1个将基于HTML日志文件（STOR）的请求存储回同一FTP服务器的请求。</p>
+<p>ftp.request.command</p>
+<p>![image-20210403173053072](/Users/yueting/Library/Application Support/typora-user-images/image-20210403173053072.png)</p>
+<p>![image-20210403173229362](/Users/yueting/Library/Application Support/typora-user-images/image-20210403173229362.png)</p>
+<p>TCP流 保存</p>
+<p>![image-20210403173317980](/Users/yueting/Library/Application Support/typora-user-images/image-20210403173317980.png)</p>
+<p>![image-20210403173430978](/Users/yueting/Library/Application Support/typora-user-images/image-20210403173430978.png)</p>
+<ul>
+<li>Filter on ftp-data</li>
+<li>Follow the TCP stream for a TCP segment with the name of your file in the Info column</li>
+<li>Change “Show and save data as” to “Raw”</li>
+<li>Use the “Save as…” button to save the file</li>
+<li>Check to make sure your saved file is, in fact, a Windows executable file.</li>
+</ul>
+<p>将从受感染的Windows主机发送的HTML文件导出回FTP服务器时，我们必须进行更精确的搜索。为什么？因为每次都使用相同的文件名。过滤ftp.request.command，然后滚动到末尾。我们可以看到与用于将窃取的数据（STOR）存储到FTP服务器（作为HTML文件）的文件名相同的文件名，如图20所示。</p>
+<p>![image-20210403173710267](/Users/yueting/Library/Application Support/typora-user-images/image-20210403173710267.png)</p>
+<p>图20.用于将窃取的信息发送回FTP服务器的相同文件名。</p>
+<p>要查看通过ftp数据通道发送的关联文件，请使用过滤器ftp-data.command contains .html ，如图21所示。</p>
+<p>![image-20210403173857536](/Users/yueting/Library/Application Support/typora-user-images/image-20210403173857536.png)</p>
+<p>图21.通过FTP数据通道过滤文件名中带有.html的文件。</p>
+<p>在图21中，每次将文件存储（STOR）到FTP服务器时，目标端口都会更改。第一次是TCP端口52202。第二次是TCP端口57791。第三次是TCP端口55045。第四次是57203。第五次是61099。</p>
+<p>我们使用与以前相同的过程。与其关注文件名，不如关注TCP端口。使用端口52202跟随任何TCP段的TCP流。在TCP流窗口中，将“显示并将数据另存为”更改为“raw”。然后保存文件。对TCP端口57791上的HTML文件执行相同的操作。</p>
+<p>如果对所有五个HTML文件都执行此操作，则会发现它们是完全相同的文件。这些基于文本的HTML文件包含有关受感染Windows主机的数据，包括由恶意软件找到的所有密码。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ytytytytyt6.github.io/2020/07/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB07-30/" rel="next" title="demo.md">
+                <i class="fa fa-chevron-left"></i> demo.md
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E4%BD%BF%E7%94%A8Wireshark%E5%AF%BB%E6%89%BE%E4%B8%BB%E6%9C%BA%E4%BF%A1%E6%81%AF/" rel="prev" title="Wireshark教程：使用Wireshark寻找主机信息">
+                Wireshark教程：使用Wireshark寻找主机信息 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">万俟思睿</p>
+              <p class="site-description motion-element" itemprop="description">进一寸有一寸的欢喜</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/ytytytytyt6.github.io/archives">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#wireshark导出文件"><span class="nav-number">1.</span> <span class="nav-text">wireshark导出文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-从HTTP通信中导出对象"><span class="nav-number">1.1.</span> <span class="nav-text">1.从HTTP通信中导出对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-从SMB流量导出对象"><span class="nav-number">1.2.</span> <span class="nav-text">2.从SMB流量导出对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从SMTP流量导出电子邮件"><span class="nav-number">1.3.</span> <span class="nav-text">从SMTP流量导出电子邮件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-从FTP流量导出文件"><span class="nav-number">1.4.</span> <span class="nav-text">4.从FTP流量导出文件</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">万俟思睿</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/ytytytytyt6.github.io/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

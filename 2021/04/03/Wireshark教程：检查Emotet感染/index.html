@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/ytytytytyt6.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/ytytytytyt6.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/ytytytytyt6.github.io/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/ytytytytyt6.github.io/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/ytytytytyt6.github.io/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/ytytytytyt6.github.io/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/ytytytytyt6.github.io/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="检查Emotet感染本教程适用于调查可疑网络活动并查看数据包捕获（pcaps）的安全专业人员。必须熟悉Wireshark才能理解本教程，该教程侧重于Wireshark版本3.x。 Emotet是一名信息窃取者，于2014年首次被报告为银行恶意软件。从那以后，它就不断发展，并具有其他功能，例如：dropper，可以分发其他恶意软件家族，如Gootkit，IcedID，Qakbot和Trickbot。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wireshark教程：检查Emotet感染">
+<meta property="og:url" content="https://ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Emotet%E6%84%9F%E6%9F%93/index.html">
+<meta property="og:site_name" content="思睿&#39;s Blog">
+<meta property="og:description" content="检查Emotet感染本教程适用于调查可疑网络活动并查看数据包捕获（pcaps）的安全专业人员。必须熟悉Wireshark才能理解本教程，该教程侧重于Wireshark版本3.x。 Emotet是一名信息窃取者，于2014年首次被报告为银行恶意软件。从那以后，它就不断发展，并具有其他功能，例如：dropper，可以分发其他恶意软件家族，如Gootkit，IcedID，Qakbot和Trickbot。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-30.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-31.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-32.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-35.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-36.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-37.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-38.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-40.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-41.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-42.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-43.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-44.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-45.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-46.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-47.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-48.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-49.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-50.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-51.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-52.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-54.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-55.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-56.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-57.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-58.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-59.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-60.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-61.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-62.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-63.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-64.jpeg">
+<meta property="article:published_time" content="2021-04-03T11:41:30.963Z">
+<meta property="article:modified_time" content="2021-04-03T12:15:10.728Z">
+<meta property="article:author" content="万俟思睿">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-30.jpeg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/ytytytytyt6.github.io/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ytytytytyt6.github.io/2021/04/03/Wireshark教程：检查Emotet感染/"/>
+
+
+
+
+
+  <title>Wireshark教程：检查Emotet感染 | 思睿's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/ytytytytyt6.github.io/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">思睿's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/ytytytytyt6.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Emotet%E6%84%9F%E6%9F%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Wireshark教程：检查Emotet感染</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-03T19:41:30+08:00">
+                2021-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="检查Emotet感染"><a href="#检查Emotet感染" class="headerlink" title="检查Emotet感染"></a>检查Emotet感染</h1><p>本教程适用于调查可疑网络活动并查看数据包捕获（pcaps）的安全专业人员。必须熟悉Wireshark才能理解本教程，该教程侧重于Wireshark版本3.x。</p>
+<p>Emotet是一名信息窃取者，于2014年首次被报告为银行恶意软件。从那以后，它就不断发展，并具有其他功能，例如：dropper，可以分发其他恶意软件家族，如Gootkit，IcedID，Qakbot和Trickbot。</p>
+<p>今天的Wireshark教程回顾了最近的Emotet活动，并提供了一些有关基于流量分析来识别此恶意软件的有用提示。</p>
+<p>您将需要使用包含本教程使用的pcap的ZIP存档访问GitHub存储库。</p>
+<p>警告：本教程使用的某些pcap中包含基于Windows的恶意软件。如果使用Windows计算机，则存在感染的风险。如果可能，我们建议您在非Windows环境（例如BSD，Linux或macOS）中查看这些pcap。</p>
+<h2 id="Emotet感染的事件链"><a href="#Emotet感染的事件链" class="headerlink" title="Emotet感染的事件链"></a>Emotet感染的事件链</h2><p>要了解由Emotet引起的网络流量，您必须首先了解导致感染的事件链。 Emotet通常通过恶意垃圾邮件（malspam）电子邮件进行分发。 Emotet感染链中的关键步骤是一个Microsoft Word文档，其中包含旨在感染易受攻击的Windows主机的宏。</p>
+<p>所示的Word文档被用于在2021年1月引起Emotet感染。请注意屏幕快照中的消息：该文档受保护。预览不适用于受保护的文档。您必须按下“启用编辑”和“启用内容”按钮才能预览此文档。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-30.jpeg" alt="This Word document shown was used to cause an Emotet infection in January 2021. Note the message in the screenshot: This document is protected. Previewing is not available for protected documents. You have to press &quot;ENABLE EDITING&quot; and &quot;ENABLE CONTENT&quot; buttons to preview this document. "></p>
+<p>图1. 2021年1月用于引起Emotet感染的Word文档的屏幕截图。<br>传播垃圾邮件Emotet使用不同的技术来分发这些Word文档。</p>
+<p>垃圾邮件可能包含附加的Microsoft Word文档，或者具有包含Word文档的附加ZIP存档。在最近几个月中，我们看到了几个示例，其中这些ZIP存档受密码保护。某些分发Emotet的电子邮件没有任何附件。而是，它们包含下载Word文档的链接。</p>
+<p>在过去的几年中，垃圾邮件推动Emotet还使用带有嵌入式链接的PDF附件来提供这些Emotet Word文档。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-31.jpeg" alt="Distribution paths for Emotet Word document: 1) malspam with attachment to Word doc; 2) malspam with attachment to ZIP archive to Word doc; 3) malspam with link to web traffic to download Word doc to Word doc; 4) malspam with attachment to PDF file to web traffic to download Word doc to Word doc"></p>
+<p>图2说明了这四种分配技术。</p>
+<blockquote>
+<p>Emotet Word文档的分发路径：</p>
+<p>1）带有Word doc附件的垃圾邮件；</p>
+<p> 2）垃圾邮件，并将ZIP存档附加到Word doc； </p>
+<p>3）带有网络流量链接的垃圾邮件，可下载Word doc；</p>
+<p> 4）带有PDF文件附件的垃圾邮件到网络访问量中，以下载Word doc</p>
+</blockquote>
+<p>图2. Emotet Word文档的各种分发路径。<br>交付Word文档后，如果受害者打开文档并在易受攻击的Windows主机上启用了宏，则该主机感染了Emotet。</p>
+<p>从流量的角度来看，我们看到从Emotet Word文档到Emotet感染的以下步骤：</p>
+<p>Web流量检索初始二进制文件。<br>通过HTTP的编码/加密命令和控制（C2）通信。<br>如果Emotet丢弃了后续恶意软件，则额外的感染流量。<br>如果Emotet使用受感染的主机作为垃圾邮件程序，则SMTP流量。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-32.jpeg" alt="Flowchart for an Emotet infection: Word doc to enable macros to web traffic for initial binary to initial binary. From there, encoded C2 traffic over HTTP, which is a hub in the flowchart that can lead to follow-up malware, spambot activity, data exfiltration and updating the binary. ">图3显示了我们在Emotet感染期间可能发现的网络活动的流程图。</p>
+<p>Emotet感染的流程图：Word doc使宏能够将网络流量从初始二进制文件转换为初始二进制文件。从那里开始，通过HTTP进行编码的C2流量，这是流程图中的中心，可导致后续恶意软件，垃圾邮件活动，数据泄露和更新二进制文件。</p>
+<p>自2020年12月21日以来，Emotet的初始二进制文件一直是Windows DLL文件。以前，此二进制文件是Windows EXE文件。</p>
+<p>Emotet C2通信量包含通过HTTP发送的编码或其他加密数据。此C2活动可以使用与HTTP流量关联的标准或非标准TCP端口。此C2活动还包括数据泄漏和更新初始Emotet二进制文件的流量。</p>
+<p>由于Emotet还是一个恶意软件删除程序，因此受害者可能会感染其他恶意软件。分析来自受Emotet感染的主机的流量时，分析师应搜索其他恶意软件的流量。</p>
+<p>最终，受Emotet感染的主机也可能成为垃圾邮件程序，它通过与SMTP相关的TCP端口（如TCP端口25、465和587）生成大量流量。</p>
+<h2 id="Pcaps的Emotet变化感染活动"><a href="#Pcaps的Emotet变化感染活动" class="headerlink" title="Pcaps的Emotet变化感染活动"></a>Pcaps的Emotet变化感染活动</h2><p>五个包含pca的受密码保护的ZIP归档文件在此GitHub存储库<a href="https://github.com/pan-unit42/wireshark-tutorial-Emotet-traffic中提供了有关最近Emotet感染流量的一些信息。进入GitHub页面后，单击每个ZIP归档条目并下载它们。" target="_blank" rel="noopener">https://github.com/pan-unit42/wireshark-tutorial-Emotet-traffic中提供了有关最近Emotet感染流量的一些信息。进入GitHub页面后，单击每个ZIP归档条目并下载它们。</a></p>
+<ul>
+<li>Example-1-2021-01-06-Emotet-infection.pcap</li>
+<li>Example-2-2021-01-05-Emotet-with-spambot-traffic-part-1.pcap</li>
+<li>Example-3-2021-01-05-Emotet-with-spambot-traffic-part-2.pcap</li>
+<li>Example-4-2021-01-05-Emotet-infection-with-Trickbot.pcap</li>
+<li>Example-5-2020-08-18-Emotet-infection-with-Qakbot.pcap</li>
+</ul>
+<p>在Wireshark中打开Example-1-2021-01-06-Emotet-infection.pcap，并使用基本的Web过滤器，如我们先前有关Wireshark过滤器的教程中所述。 Wireshark 3.x的basic</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-35.jpeg" alt="Figure 6. Our first pcap in this tutorial filtered in Wireshark."></p>
+<p>图6.本教程中的第一个pcap在Wireshark中进行了过滤。<br>如图6所示，前五个HTTP GET请求代表用于检索初始Emotet DLL的四个URL。流量为：</p>
+<ul>
+<li>hangarlastik[.]com GET /cgi-bin/Ui4n/</li>
+<li>hangarlastik[.]com GET /cgi-sys/suspendedpage.cgi</li>
+<li>padreescapes[.]com GET /blog/0I/</li>
+<li>sarture[.]com GET /wp-includes/JD8/</li>
+<li>seo.udaipurkart[.]com GET /rx-5700-6hnr7/Sgms/</li>
+</ul>
+<p>前两个URL指示hangarlastik[.]com不再具有它所托管的Emotet DLL文件。跟踪每个请求的TCP流，以查看对每个HTTP GET请求的答复。</p>
+<p>查看HTTP响应的一种更简单的方法是更新Wireshark基本Web过滤器以包含HTTP响应：</p>
+<p>(http.request <strong>or http.response</strong> or tls.handshake.type eq 1) and !(ssdp)</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-36.jpeg" alt="Figure 7. Adding HTTP responses to the Wireshark display filter."></p>
+<p>这将在Info列中显示HTTP响应。</p>
+<p>图7.将HTTP响应添加到Wireshark显示过滤器。</p>
+<p>现在，我们对Word宏尝试检索Emotet DLL时发生的情况有了更清晰的了解：</p>
+<ul>
+<li>hangarlastik[.]com GET /cgi-bin/Ui4n/</li>
+<li>HTTP/1.1 302 Found</li>
+<li>hangarlastik[.]com GET /cgi-sys/suspendedpage.cgi</li>
+<li>HTTP/1.1 200 OK</li>
+<li>padreescapes[.]com GET /blog/0I/</li>
+<li>HTTP/1.1 401 Unauthorized</li>
+<li>sarture[.]com GET /wp-includes/JD8/</li>
+<li>HTTP/1.1 403 Forbidden</li>
+<li>seo.udaipurkart[.]com GET /rx-5700-6hnr7/Sgms/</li>
+</ul>
+<p>唯一可以接受的200回复是来自hangarlastik[.]com的suspendedpage.cgi。</p>
+<p>到seo.udaipurkart[.]com的HTTP GET请求未显示响应，因此请遵循此请求的TCP流。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-37.jpeg" alt="Figure 8. Following TCP stream for the HTTP request to seo.udaipurkart[.]com."></p>
+<p>图8.针对seo.udaipurkart[.]com的HTTP请求的以下TCP流。<br>TCP流显示指示符，指示seo.udaipurkart[.]com返回了Windows DLL文件，如图9所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-38.jpeg" alt="Figure 9. Indicators of a DLL file returned from seo.udaipurkart[.]com.">图9.从seo.udaipurkart[.]com返回的DLL文件的指示器。</p>
+<p>通过使用菜单路径从pcap导出此DLL：File-&gt; Export Objects-&gt; HTTP，如图10所示。与往常一样，我们建议您不要在Windows环境中导出此文件，因为DLL是Windows恶意软件。</p>
+<p>Emotet C2流量是使用HTTP POST请求发送的编码数据。您可以使用以下过滤器在Wireshark中轻松找到这些请求：</p>
+<p>http.request.method eq POST</p>
+<p>结果如图11所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-40.jpeg" alt="Figure 11. Filtering for HTTP POST requests in our first pcap."></p>
+<p>图11.在我们的第一个pcap中过滤HTTP POST请求。</p>
+<p>在我们的第一个pcap中，Emotet C2流量由HTTP POST请求组成，这些请求包括：</p>
+<ul>
+<li>5.2.136[.]90 over TCP port 80</li>
+<li>167.71.4[.]0 over TCP port 8080</li>
+</ul>
+<p>Emotet为其C2流量生成两种类型的HTTP POST请求。第一种POST请求以HTTP / 1.1结尾。第二种POST请求以HTTP/1.1 (application/x-www-form-urlencoded)结尾。</p>
+<p>按照针对初始HTTP请求的TCP流到达UTC 5.2.136 [.] 90（UTC时间16:42:34），以查看第一种C2 POST请求的示例，如图12所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-41.jpeg" alt="Figure 12. The first type of HTTP POST request for Emotet C2 traffic."></p>
+<p>图12.针对Emotet C2流量的第一种HTTP POST请求。<br>图12显示了此POST请求发送了大约6 K数据，似乎是已编码或已加密的二进制文件。向下滚动到HTTP响应以查看从服务器返回的编码数据。图13显示了此编码数据的开始。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-42.jpeg" alt="Figure 13. Encoded data returned from the server in response to the HTTP POST request."><br>图13.从服务器返回的响应HTTP POST请求的编码数据。<br>这种类型的编码或加密数据是Emotet僵尸网络服务器如何与受感染的Windows主机交换数据的方式。这也是Emotet用于更新Emotet DLL并删除后续恶意软件的渠道。</p>
+<p>针对Emotet C2流量的第二种HTTP POST请求看起来与第一种明显不同。在Wireshark中使用以下过滤器可以轻松找到第二种HTTP POST请求：</p>
+<p>编码形式</p>
+<p>这应该通过TCP端口8080将两个HTTP POST请求返回到167.71.4 [.] 0，如图14所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-43.jpeg" alt="Figure 14. Filtering for the second type of HTTP POST request in Emotet C2 traffic."></p>
+<p>图14.过滤Emotet C2通信中的第二种HTTP POST请求。<br>按照这两个HTTP POST请求中第一个的UTC的TCP流进行操作：16：58：43 UTC。查看流量。结果如图15所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-44.jpeg" alt="Figure 15. TCP stream for the second type of HTTP POST request in Emotet C2 traffic."></p>
+<p>图15. Emotet C2通信中第二种HTTP POST请求的TCP流。<br>如图15所示，POST请求中发送的某些数据被编码为具有某些URL编码的base64字符串。例如，％2B表示+，％2F表示/，％3D表示=。</p>
+<p>来自服务器的响应所发送的数据已被编码或以其他方式加密。</p>
+<p>我们的第一个pcap没有后续的恶意软件或其他重要活动。</p>
+<p>唯一的其他活动是通过TCP端口443重复尝试连接到46.101.230 [.] 194。您可以通过过滤作为重传的TCP SYN段来轻松地发现此活动。使用以下Wireshark过滤器：</p>
+<p>tcp.analysis.retransmission and tcp.flags eq 0x0002</p>
+<p>结果如图16所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-45.jpeg" alt="Figure 16. Filtering on retransmissions of TCP SYN segments in Wireshark."></p>
+<p>图16.在Wireshark中对TCP SYN段的重传进行过滤。</p>
+<p>在46.101.230 [.] 194上进行的Internet搜索应该显示此IP地址已用于Emotet C2活动。</p>
+<p>pcap中的剩余流量是由Microsoft Windows 10主机生成的系统流量。</p>
+<p>在下一个pcap中，我们将检查带有垃圾邮件机器人活动的Emotet感染。</p>
+<h2 id="示例2：带有垃圾邮件流量的Emotet，第1部分"><a href="#示例2：带有垃圾邮件流量的Emotet，第1部分" class="headerlink" title="示例2：带有垃圾邮件流量的Emotet，第1部分"></a>示例2：带有垃圾邮件流量的Emotet，第1部分</h2><p>在Wireshark中打开Example-2-2021-01-05-Emotet-with-spambot-traffic-part-1.pcap，并使用基本的Web过滤器，如图17所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-46.jpeg" alt="Figure 17. Traffic from the second pcap filtered in Wireshark using our basic web filter."></p>
+<p>图17.使用我们的基本Web过滤器在Wireshark中过滤的第二个pcap的流量。</p>
+<p>与第一个示例类似，我们在Emotet C2流量之前收到了一些HTTP GET请求。这些GET请求是尝试通过网络流量下载初始Emotet DLL的尝试。列显示的第一帧显示到obob [.] tv的HTTPS流量，这可能是对原始Emotet DLL的Web请求，因为据报此域在2021年1月5日（与该日期相同）托管Emotet二进制文件 pcap中的流量。</p>
+<p>按照TCP流对miprimercamino [.] com的HTTP GET请求进行确认，以确认它返回了Emotet DLL。您应该从我们的第一个pcap中看到类似于图9的指示器。我们可以导出从miprimercamino [.] com返回的Emotet DLL，如图18所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-47.jpeg" alt="Figure 18. Exporting the Emotet DLL from the pcap."></p>
+<p>图18.从pcap导出Emotet DLL。<br>从第二个pcap中提取的DLL的SHA256哈希为：</p>
+<p>963b00584d8d63ea84585f7457e6ddcac9eda54428a432f388a1ffee21137316</p>
+<p>同样，我们发现针对Emotet C2流量的两种HTTP POST请求。要针对每种Emotet C2 HTTP POST请求进行过滤，请使用以下Wireshark过滤器：</p>
+<p>第一种类型：http.request method eq POST and !(urlencoded-form)<br>第二种：urlencoded-form<br>跟踪这些过滤器返回的HTTP POST请求的TCP流，并确认它们遵循在我们的第一个pcap中看到的相同模式。</p>
+<p>在查看了来自此pcap的一些Emotet C2流量示例之后，我们继续进行垃圾邮件机器人活动。</p>
+<p>在此示例中，我们被感染的主机变成了垃圾邮件机器人，因此我们也有SMTP通信。 spambot SMTP流量已加密，但是我们可以使用基本的Web过滤器并向下滚动列显示轻松找到它。</p>
+<p>在20:06:20 UTC，pcap开始显示到与SMTP电子邮件协议相关的TCP端口的SSL / TLS通信，例如TCP端口25、465和587，如图19所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-48.jpeg" alt="Figure 19. Using the basic web filter and scrolling through the column display to find spambot traffic."></p>
+<p>图19.使用基本的Web过滤器并在列显示中滚动来查找spambot流量。<br>在建立加密的SMTP隧道之前，我们可以对smtp进行过滤以查找一些SMTP命令。图20显示了结果。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-49.jpeg" alt="Figure 20. Filtering for SMTP traffic in our second pcap."></p>
+<p>图20.过滤<br>图20.在第二个pcap中过滤SMTP流量。<br>有时，我们可以从受Emotet感染的Windows主机生成的spambot流量中找到未加密的SMTP。未加密的SMTP将显示其邮件内容，但是来自spambot主机的加密SMTP的数量远远大于未加密的SMTP的数量。因此，来自受Emotet感染的主机的大多数spambot邮件都隐藏在加密流量中。</p>
+<p>在此示例中，您应该只看到加密的SMTP通信。</p>
+<p>但是，我们的下一个示例是后来由于相同的感染而来的，当时我们终于看到了一些未加密的SMTP。</p>
+<h2 id="示例3：Emotet和Spambot流量，第2部分"><a href="#示例3：Emotet和Spambot流量，第2部分" class="headerlink" title="示例3：Emotet和Spambot流量，第2部分"></a>示例3：Emotet和Spambot流量，第2部分</h2><p>在Wireshark中打开Example-3-2021-01-05-Emotet-with-spambot-traffic-part-2.pcap，并使用基本的Web过滤器，如图21所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-50.jpeg" alt="Figure 21. Traffic from the third pcap filtered in Wireshark using our basic web filter."></p>
+<p>图21.使用基本的Web过滤器在Wireshark中过滤的第三个pcap的流量。<br>在此pcap中，我们仍然看到对Emotet C2流量的HTTP POST请求，每分钟至少两次。我们还可以找到类似于之前的pcap的加密spambot活动。</p>
+<p>Spambot活动经常产生大量流量。这个pcap包含来自受感染的Windows主机的4分42秒的spambot活动，并且流量超过21 MB。</p>
+<p>通过使用以下Wireshark过滤器，我们可以快速识别任何未加密的SMTP通信：</p>
+<p>smtp.data.fragment</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-51.jpeg" alt="Figure 22. Filtering for indicators of unencrypted SMTP from spambot traffic."></p>
+<p>图22显示了针对第三个pcap的此过滤器的结果。该筛选器揭示了由受感染的Windows主机生成的五个Emotet垃圾邮件示例。图22.从spambot流量过滤未加密SMTP的指示符。<br>遵循TCP流中来自以下位置的最后一封电子邮件：“ Gladisbel Miranda，UTC时间20:19:54。检查这些消息的外观，如图23所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-52.jpeg" alt="Figure 23. TCP stream for an example of Emotet malspam from our third pcap."></p>
+<p>图23. TCP流，这是来自第三个pcap的Emotet恶意垃圾邮件的示例。<br>我们可以使用菜单路径File-&gt; Export Objects-&gt; IMF导出这五个Emotet垃圾邮件，如图24所示。</p>
+<p> Thunderbird是一个免费的电子邮件客户端，您可以使用它查看潜在的受害者如何查看这些电子邮件。</p>
+<p>如前所述，Emotet还是恶意软件下载器。通过Emotet分发的最常见的恶意软件可能是Trickbot。</p>
+<h2 id="实施例4：用Trickbot感染Emotet"><a href="#实施例4：用Trickbot感染Emotet" class="headerlink" title="实施例4：用Trickbot感染Emotet"></a>实施例4：用Trickbot感染Emotet</h2><p>在Wireshark中打开Example-4-2021-01-05-Emotet-infection-with-Trickbot.pcap，并使用基本的Web过滤器，如图25所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-54.jpeg" alt="Figure 25. Traffic from the fourth pcap filtered in Wireshark using our basic web filter."></p>
+<p>图25.使用我们的基本Web过滤器在Wireshark中过滤出的第四个pcap的流量。</p>
+<p>此pcap没有针对初始Emotet DLL的HTTP GET请求。但是，我们列显示的第一帧显示到fathekarim [.] com的HTTPS流量。这可能是对Emotet DLL的Web请求，因为据报道该域在2021年1月5日（与我们pcap中的流量相同）托管Emotet二进制文件。</p>
+<p>您应该找到与Emotet C2关联的两种相同类型的HTTP POST请求，如前两个pcap中所述。</p>
+<p>该pcap还包含Trickbot感染的迹象。使用基本的Web过滤器并向下滚动以查找Trickbot流量，如图26所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-55.jpeg" alt="Figure 26. Scrolling down the column display to find Trickbot indicators in our fourth pcap using a basic web filter."></p>
+<p>图26.向下滚动列显示，使用基本的Web过滤器在第四个pcap中找到Trickbot指示器。<br>我们在之前的Wireshark教程中检查了Trickbot的感染，其中对Trickbot进行了回顾，但是这里有个快速介绍。以下是Trickbot的常见指标：</p>
+<p>在没有关联域或主机名的情况下，通过TCP端口447或449进行的HTTPS通信。<br>通过标准或非标准TCP端口的HTTP POST请求，以/ 81 /，/ 83 /或/ 90结尾的HTTP流量与数据渗透相关联。<br>对于受Emotet感染的Trickbot，上述HTTP POST请求以/ mor开头，后跟一个数字（到目前为止只能看到一个或两个数字）。<br>对以.png结尾的URL的HTTP GET请求，返回其他Trickbot二进制文件。<br>我们可以使用以下Wireshark过滤器轻松找到这些指标：</p>
+<ul>
+<li>tls.handshake.type eq 1 and (tcp.port eq 447 or tcp.port eq 449)</li>
+<li>(http.request.uri contains /81 or http.request.uri contains /83 or http.request.uri contains /90) and http.request.uri contains mor</li>
+<li>http.request.uri contains .png</li>
+</ul>
+<p>图27-29显示了上述每个过滤器的结果。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-56.jpeg" alt="Figure 27.: Filtering for Trickbot HTTPS traffic over TCP port 447 or TCP port 449."></p>
+<p>图27 .:通过TCP端口447或TCP端口449过滤Trickbot HTTPS流量。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-57.jpeg" alt="Figure 28. Filtering for HTTP POST requests associated with Trickbot data exfiltration."><br>图28.筛选与Trickbot数据渗透相关的HTTP POST请求。<br>遵循图28所示的每个HTTP POST请求的TCP流，以查看是否泄露了任何密码数据。最后一个以/ 90结尾的HTTP POST请求包含有关受感染Windows主机及其环境的数据。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-58.jpeg" alt="Figure 29. Filtering for HTTP GET requests ending in .png associated with additional Trickbot binaries."></p>
+<p>图29.筛选以.png结尾的HTTP GET请求，该请求与其他Trickbot二进制文件关联。</p>
+<p>遵循TCP流以处理图29中所示的每个HTTP POST请求，以查看是否返回了Windows二进制文件。这样做应该显示两个Windows可执行文件。然后，您可以使用文件-&gt;导出对象-&gt; HTTP从pcap导出这些二进制文件，如前面的示例中所述。</p>
+<p>Trickbot是Emotet发行的最常见的恶意软件，但并非唯一。 Qakbot是另一种经常在受Emotet感染的Windows主机上丢弃的恶意软件。</p>
+<h2 id="示例5：用Qakbot感染Emotet"><a href="#示例5：用Qakbot感染Emotet" class="headerlink" title="示例5：用Qakbot感染Emotet"></a>示例5：用Qakbot感染Emotet</h2><p>在Wireshark中打开Example-5-2020-08-18-Emotet-infection-with-Qakbot.pcap，并使用基本的Web过滤器，如图30所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-59.jpeg" alt="Figure 30. Traffic from the fifth pcap filtered in Wireshark using our basic web filter."></p>
+<p>图30.使用我们的基本Web过滤器在Wireshark中过滤了来自第五个pcap的流量。<br>在第五封pcap中，在世界标准时间21:23:50从savetpranamam.mysquare [.] in中检索了一个Emotet Word文档，该文档与报告在同一日期托管Emotet Word文档的URL相匹配。如先前示例中所述，使用文件-&gt;导出对象-&gt; HTTP从pcap导出此Word文档。</p>
+<p>此提取的Word文档的SHA256哈希为：</p>
+<p>c7f429dde8986a1b2fc51a9b3f4a78a92311677a01790682120ab603fd3c2fcb<br>我们还在世界标准时间21:24:40看到到samaritantec [.] com的HTTPS流量。据报道，该域在同一日期托管了Emotet二进制文件。</p>
+<p>与前面的示例一样，您应该找到与Emotet C2流量关联的两种相同类型的HTTP POST请求。</p>
+<p>此外，该pcap包含Qakbot感染的指示。使用基本的Web过滤器并向下滚动以查找Qakbot流量，如图31所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-60.jpeg" alt="Figure 31. Scrolling down the column display to find Qakbot indicators in our fifth pcap using a basic web filter."></p>
+<p>图31.向下滚动列显示，使用基本的Web过滤器在第五个pcap中找到Qakbot指示器。<br>我们在之前的Wireshark教程中检查了Qakbot，该教程介绍了如何检查Qakbot感染，但是这里不容赘述。以下是Qakbot的常见指标：</p>
+<p>通过HTTPS的标准和非标准TCP端口进行的HTTPS流量。<br>Qakbot HTTPS流量的证书数据在颁发者字段中具有异常值，并且证书不是由美国的颁发机构颁发的。<br>通过TCP端口65400的TCP流量。<br>2020年11月下旬之前，Qakbot通常生成到cdn.speedof [.] me的HTTPS流量。<br>2020年11月下旬之前，Qakbot通常会向a.strandsglobal [.] com生成HTTP GET请求。<br>我们可以使用以下Wireshark过滤器轻松找到这些指标：</p>
+<ul>
+<li>tls.handshake.type eq 11 and !(x509sat.CountryName == US)</li>
+<li>tcp.port eq 65400</li>
+<li>tls.handshake.extensions_server_name contains speedof</li>
+<li>http.host contains strandsglobal</li>
+</ul>
+<p>图32-35显示了上述每个过滤器的结果。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-61.jpeg" alt="Figure 32. Filtering and searching for unusual certificate issuer data in HTTPS traffic generated by Qakbot."><br>图32.过滤和搜索Qakbot生成的HTTPS通信中的异常证书颁发者数据。<br>在图32中，第一个过滤器的结果在来自71.80.66 [.] 107的流量的列显示中显示了几帧。搜索框架详细信息，并找到异常的证书颁发者数据，如上所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-62.jpeg" alt="Figure 33. Filtering for Qakbot traffic over TCP port 65400.">图33.过滤TCP端口65400上的Qakbot流量。<br>图33.过滤TCP端口65400上的Qakbot流量。<br>在上图中，我们在TCP端口65400上找到了一个Qakbot通信的TCP流。该流包含受感染Qakbot的Windows主机的公共IP地址和一个僵尸网络标识字符串。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-63.jpeg" alt="Figure 34. Filtering for traffic to cdn.speedof[.]me, which is not inherently malicious, but a connectivity check caused by Qakbot prior to late November 2020."><br>图34.过滤到cdn.speedof.me的流量，这不是天生的恶意，而是Qakbot在2020年11月下旬之前引起的连接检查。<br><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-64.jpeg" alt="Figure 35. Filtering for traffic to a.stransglobal[.]com, typically generated by Qakbot prior to late November 2020."><br>图35.过滤到a.stransglobal [.] com的流量，通常由Qakbot在2020年11月下旬之前生成。<br>当Emotet通常会删除Trickbot和Qakbot，请注意，Emotet还删除了其他类型的恶意软件，例如Gootkit和IcedID。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>本教程回顾了如何从感染流量的pcap中识别Emotet活动。我们回顾了五个最近的pcaps，发现由Emotet C2流量引起的HTTP POST请求中的相似之处。这些模式非常独特，可用于识别网络中的Emotet感染。我们还回顾了与Emotet相关的其他感染后活动，例如垃圾邮件程序流量和被感染主机上丢弃的各种恶意软件家族。</p>
+<p>这些知识可以帮助安全专业人员在检查可疑网络活动时更好地检测和捕获Emotet感染。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E8%A7%A3%E5%AF%86https%E6%B5%81%E9%87%8F/" rel="next" title="Wireshark教程：解密https流量">
+                <i class="fa fa-chevron-left"></i> Wireshark教程：解密https流量
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Dridex%E6%84%9F%E6%9F%93%E6%B5%81%E9%87%8F/" rel="prev" title="Wireshark教程：检查Dridex感染流量">
+                Wireshark教程：检查Dridex感染流量 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">万俟思睿</p>
+              <p class="site-description motion-element" itemprop="description">进一寸有一寸的欢喜</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/ytytytytyt6.github.io/archives">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#检查Emotet感染"><span class="nav-number">1.</span> <span class="nav-text">检查Emotet感染</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Emotet感染的事件链"><span class="nav-number">1.1.</span> <span class="nav-text">Emotet感染的事件链</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pcaps的Emotet变化感染活动"><span class="nav-number">1.2.</span> <span class="nav-text">Pcaps的Emotet变化感染活动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例2：带有垃圾邮件流量的Emotet，第1部分"><span class="nav-number">1.3.</span> <span class="nav-text">示例2：带有垃圾邮件流量的Emotet，第1部分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例3：Emotet和Spambot流量，第2部分"><span class="nav-number">1.4.</span> <span class="nav-text">示例3：Emotet和Spambot流量，第2部分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实施例4：用Trickbot感染Emotet"><span class="nav-number">1.5.</span> <span class="nav-text">实施例4：用Trickbot感染Emotet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例5：用Qakbot感染Emotet"><span class="nav-number">1.6.</span> <span class="nav-text">示例5：用Qakbot感染Emotet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">1.7.</span> <span class="nav-text">结论</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">万俟思睿</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/ytytytytyt6.github.io/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

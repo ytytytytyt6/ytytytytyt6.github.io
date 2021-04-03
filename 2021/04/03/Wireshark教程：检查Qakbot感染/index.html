@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/ytytytytyt6.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/ytytytytyt6.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/ytytytytyt6.github.io/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/ytytytytyt6.github.io/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/ytytytytyt6.github.io/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/ytytytytyt6.github.io/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/ytytytytyt6.github.io/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Wireshark教程：检查Qakbot感染概述Qakbot是一个信息窃取者，也称为Qbot。该恶意软件家族已经活跃了很多年，并且Qakbot产生了独特的流量模式。这份Wireshark教程回顾了最近从Qakbot感染中捕获的数据包（pcap）。在检测和调查Qakbot感染时，了解这些流量模式对于安全专业人员至关重要。 Qakbot感染流量  图1.本教程的pcap。 Qakbot分配方法Qakb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wireshark教程：检查Qakbot感染">
+<meta property="og:url" content="https://ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Qakbot%E6%84%9F%E6%9F%93/index.html">
+<meta property="og:site_name" content="思睿&#39;s Blog">
+<meta property="og:description" content="Wireshark教程：检查Qakbot感染概述Qakbot是一个信息窃取者，也称为Qbot。该恶意软件家族已经活跃了很多年，并且Qakbot产生了独特的流量模式。这份Wireshark教程回顾了最近从Qakbot感染中捕获的数据包（pcap）。在检测和调查Qakbot感染时，了解这些流量模式对于安全专业人员至关重要。 Qakbot感染流量  图1.本教程的pcap。 Qakbot分配方法Qakb">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/PB-210-image-01-1024x641.jpg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-29-1024x618.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-30-1024x821.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-31-1024x263.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-33-1024x750.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-35-1024x757.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-36-1024x675.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-39-1024x609.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-42-1024x258.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-43-1024x506.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-44-1024x276.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-45-1024x608.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-46-1024x723.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-47-1024x622.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-48-1024x315.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-49-1024x757.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-50-1024x758.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-51-1024x864.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-52-1024x628.jpeg">
+<meta property="article:published_time" content="2021-04-03T11:43:38.466Z">
+<meta property="article:modified_time" content="2021-04-03T12:40:52.485Z">
+<meta property="article:author" content="万俟思睿">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/PB-210-image-01-1024x641.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/ytytytytyt6.github.io/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ytytytytyt6.github.io/2021/04/03/Wireshark教程：检查Qakbot感染/"/>
+
+
+
+
+
+  <title>Wireshark教程：检查Qakbot感染 | 思睿's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/ytytytytyt6.github.io/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">思睿's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/ytytytytyt6.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Qakbot%E6%84%9F%E6%9F%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Wireshark教程：检查Qakbot感染</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-03T19:43:38+08:00">
+                2021-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Wireshark教程：检查Qakbot感染"><a href="#Wireshark教程：检查Qakbot感染" class="headerlink" title="Wireshark教程：检查Qakbot感染"></a>Wireshark教程：检查Qakbot感染</h1><p>概述<br>Qakbot是一个信息窃取者，也称为Qbot。该恶意软件家族已经活跃了很多年，并且Qakbot产生了独特的流量模式。这份Wireshark教程回顾了最近从Qakbot感染中捕获的数据包（pcap）。在检测和调查Qakbot感染时，了解这些流量模式对于安全专业人员至关重要。</p>
+<p>Qakbot感染流量</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/PB-210-image-01-1024x641.jpg" alt="Qakbot Infection Traffic"></p>
+<p>图1.本教程的pcap。</p>
+<h2 id="Qakbot分配方法"><a href="#Qakbot分配方法" class="headerlink" title="Qakbot分配方法"></a>Qakbot分配方法</h2><p>Qakbot最常通过恶意垃圾邮件（malspam）进行分发，但直到2019年11月，它也已通过漏洞利用工具包进行分发。在某些情况下，Qakbot是由不同的恶意软件（例如Emotet）引起的后续感染，如本示例中所述2019年3月。</p>
+<p>最近针对Qakbot的基于垃圾邮件的分发活动遵循一系列事件，如图2所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-29-1024x618.jpeg" alt="img"></p>
+<p>图2.最近Qakbot分发活动的流程图。<br>来自Malspam中Link的初始Zip存档<br>最近分发Qakbot的恶意垃圾邮件使用伪造的电子邮件链来欺骗合法电子邮件地址。图3显示了一个这样的示例。</p>
+<p>Qakbot感染</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-30-1024x821.jpeg" alt="Qakbot Infections">图3.最近的垃圾邮件示例推动了Qakbot。<br>这些电子邮件的URL以一小段数字结尾，后跟.zip。有关最近在URLhaus和Twitter上报告的来自Qakbot malspam的URL的一些示例，请参见表1。</p>
+<p>最初的zip存档的第一个报告URL<br>![image-20210403203244456](/Users/yueting/Library/Application Support/typora-user-images/image-20210403203244456.png)<br>表1.用于启动Qakbot感染链的初始zip存档的URL。</p>
+<p>在我们的pcap中，您可以使用Wireshark过滤器中的http.request.uri包含.zip的zip存档找到HTTP请求，如图4所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-31-1024x263.jpeg" alt="Qakbot Infections"><br>图4.查找初始zip存档的URL。<br>按照TCP流确认这是一个zip存档，如图5和图6所示，然后尝试从pcap导出zip存档，如图7所示。<br>在大多数情况下，“文件”→“导出对象”→“ HTTP”菜单应导出通过HTTP发送的zip存档。不幸的是，如图8所示，我们无法导出名为9312.zip的文件，因为它在导出HTTP对象列表中被分成数百个较小的部分。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-33-1024x750.jpeg" alt="img"></p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-35-1024x757.jpeg" alt="img"></p>
+<p>图8. 9312.zip在列表中被分解为数百个对象，因此我们无法以这种方式导出它。<br>幸运的是，我们可以从TCP流窗口中导出数据，并在十六进制编辑器中编辑二进制文件以删除任何hxxP响应标头。使用以下步骤从该pcap中提取zip存档：</p>
+<p>跟随TCP流以获取对9312.zip的HTTP请求。<br>仅显示TCP中的响应流量流窗口。<br>将“显示和保存数据为”从ASCII更改为Raw。<br>将数据另存为二进制文件（我选择将其另存为：9312.zip.bin）<br><strong>在十六进制编辑器中打开二进制文件，并删除zip归档文件的前两个字节（以ASCII形式显示为PK）之前的HTTP请求标头。</strong><br><strong>将文件另存为zip存档（我选择将其另存为9312.zip）</strong><br>检查文件以确保它是zip存档。<br>有关此过程的直观指南，请参见图9至14。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-36-1024x675.jpeg" alt="Qakbot Infections"></p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-39-1024x609.jpeg" alt="Qakbot Infections">图14.步骤7-确认编辑的文件是zip存档，然后解压缩VBS文件并检查文件哈希。<br>图14显示了如何使用基于Debian的Linux发行版中的终端窗口来检查文件。从我们的pcap中，zip存档应与提交给VirusTotal的该文件相同。我们提取的VBS文件应与还提交给VirusTotal的该文件相同。</p>
+<p>对提取的VBS文件进行的公共沙盒分析表明，它会在感染链中生成与Qakbot相关的下一个URL：该URL返回Qakbot的Windows可执行文件。</p>
+<h2 id="适用于Qakbot的Windows可执行文件"><a href="#适用于Qakbot的Windows可执行文件" class="headerlink" title="适用于Qakbot的Windows可执行文件"></a>适用于Qakbot的Windows可执行文件</h2><p>这些提取的VBS文件生成URL，这些URL返回Qakbot的Windows可执行文件。自2019年12月以来，用于Qakbot可执行文件的URL以44444.png或444444.png结尾。有关我们使用AutoFocus威胁情报服务发现的这些Qakbot URL的最新示例，请参见表2。</p>
+<p>Qakbot可执行文件的首次看到的URL<br>![image-20210403203603337](/Users/yueting/Library/Application Support/typora-user-images/image-20210403203603337.png)<br>表2. Qakbot可执行文件的URL。</p>
+<p>在我们的pcap中，使用Wireshark过滤器中的hxxp.request.uri包含.png的Qakbot可执行文件找到HTTP GET请求，如图15所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-42-1024x258.jpeg" alt="Qakbot Infections"><br>图15.查找我们的Qakbot可执行文件的URL。<br>使用File→Export Objects→HTTP菜单路径从pcap导出该对象，如图16所示，并检查结果，如图17所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-43-1024x506.jpeg" alt="Qakbot Infections"><br>图17.在基于Debian的Linux终端窗口中检查导出的文件。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-44-1024x276.jpeg" alt="Qakbot Infections">从我们的pcap中，Qakbot可执行文件应该是将此文件提交给VirusTotal。对该文件的公共沙箱分析生成了多个Qakbot指标（标识为Qbot）。</p>
+<h2 id="感染后HTTPS活动"><a href="#感染后HTTPS活动" class="headerlink" title="感染后HTTPS活动"></a>感染后HTTPS活动</h2><p>使用您的基本过滤器（在上一本Wireshark教程中可以找到）来快速查看pcap中的网络流量。向alphaenergyeng . com发送HTTP GET请求后，向下滚动到活动，该活动返回了我们的Qakbot可执行文件。您应该看到一些指向68.1.115 . 106的HTTPS或SSL / TLS流量的指示器，没有相关的域，如图18所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-45-1024x608.jpeg" alt="Qakbot Infections"><br>图18. Qakbot引起的HTTPS或SSL / TLS流量。<br>此流量具有在Qakbot感染期间通常注意到的异常证书颁发者数据。我们在以前的有关Ursnif的WIreshark教程中回顾了异常的证书颁发者数据，因此应该很容易找到。</p>
+<p>让我们使用以下Wireshark过滤器查看我们的Qakbot证书颁发者数据：</p>
+<p>ip.addr eq 68.1.115.186 and ssl.handshake.type eq 11</p>
+<p>对于Wireshark 3.0或更高版本，请使用tls.handshake.type而不是ssl.handshake.type。选择结果中的第一帧，然后展开帧详细信息窗口，直到找到证书颁发者数据为止，如图19所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-46-1024x723.jpeg" alt="Qakbot Infections"><br>图19.从Qakbot流量查看证书颁发者数据。<br>区域名称，组织名称和通用名称的模式非常不常见，通常不会在来自合法HTTPS，SSL或TLS流量的证书中找到。我们的前下面列出了很多此发行者数据：</p>
+<ul>
+<li>id-at-countryName=<strong>ES</strong></li>
+<li>id-at-stateOrProvinceName=<strong>IA</strong></li>
+<li>id-at-localityName=<strong>Uorh Ofwa</strong></li>
+<li>id-at-organizationName=<strong>Coejdut Mavmtko Qxyemk Dxsjie LLC.</strong></li>
+<li>id-at-commonName=<strong>gaevietovp.mobi</strong></li>
+</ul>
+<h2 id="其他感染后流量"><a href="#其他感染后流量" class="headerlink" title="其他感染后流量"></a>其他感染后流量</h2><p>我们的pcap包含与Qakbot感染相关的其他活动。每种活动本身都不具有固有的恶意性，但结合我们先前的发现，我们可以假定完全受到Qakbot感染。</p>
+<p>Qakbot感染的另一个指标是到cdn.speedof . me的HTTPS流量。合法的Internet速度测试服务使用domain speedof . me。尽管这不是恶意流量，但在Qakbot感染期间，我们经常看到到cdn.speedof . me的流量。图20从我们的pcap中显示了此活动。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-47-1024x622.jpeg" alt="img"></p>
+<p>图20. Qakbot通信中的域cdn.speedof . me。<br>Qakbot还会从受感染的Windows主机上的所有浏览器中打开窗口。在进行此沙箱分析的大约13分5秒时，视频播放显示Qakbot在Windows 7主机上打开Chrome，然后是Firefox，然后是Internet Explorer。该分析显示了Qakbot生成的访问以下URL的流量：<br>hxxp：//store.nvprivateoffice . com / redir_chrome.html<br>hxxp：//store.nvprivateoffice . com / redir_ff.html<br>hxxp：//store.nvprivateoffice . com / redir_ie.html</p>
+<p>自2012年以来，域nvprivateoffice . com已通过GoDaddy注册，并且store.nvprivateoffice . com在Fedora服务器上显示nginx的默认网页。</p>
+<p>本教程的pcap来自未安装Chrome或Firefox的Windows 10主机上的Qakbot感染。我们的pcap仅显示Internet Explorer和新的基于Chromium的Microsoft Edge的网络流量。两次，Qakbot生成的URL为hxxp：//store.nvprivateoffice . com / redir_ie.html。</p>
+<p>要查找此流量，请使用以下Wireshark过滤器，如图21所示：</p>
+<p>http.request.full_uri contains store.nvprivateoffice</p>
+<p><strong><em>http.request.full_uri contains store.nvprivateoffice</em></strong></p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-48-1024x315.jpeg" alt="img"></p>
+<p>图21.查找在受感染的Windows主机上打开Web浏览器的Qakbot通信。<br>按照两个以redir_ie.html结尾的HTTP GET请求中的每一个的TCP流。第一个请求在Internet Explorer的HTTP标头中具有一个User-Agent，如图22所示。对于同一URL的第二个请求在新的基于Chromium的Microsoft Edge的HTTP标头中具有一个User-Agent，如图23所示。 </p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-49-1024x757.jpeg" alt="img"></p>
+<p>图22.使用Internet Explorer 11到Qakbot到store.nvprivateoffice . com的流量。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-50-1024x758.jpeg" alt="img"></p>
+<p>图23.使用新的基于Chromium的Microsoft Edge到Qakbot到store.nvprivateoffice . com的流量。<br>最后，来自受Qakbot感染的主机的pcap还具有与电子邮件相关的TCP流量，该TCP流量到各种端口的各种端口，例如SMTP，IMAP和POP3。要了解与网络无关的流量，请使用以下Wireshark过滤器，如图25所示：<br>tcp.flags eq 0x0002 and !(tcp.port eq 80) and !(tcp.port eq 443)</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-51-1024x864.jpeg" alt="img"></p>
+<p>图25.了解来自此Qakbot感染的非Web流量。<br>图25显示了到不同电子邮件协议通常使用的各种端口（如25、110、143、465、587、993和995）的TCP连接和尝试的TCP连接。结果的前两行显示了到TCP端口65400的流量，但是查看关联的TCP流则表明这也是与电子邮件相关的流量。</p>
+<p>使用以下Wireshark筛选器可以更好地了解受感染主机的电子邮件相关流量，如图26所示：</p>
+<p>smtp or imap or pop</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-52-1024x628.jpeg" alt="img"></p>
+<p>图26.在此pcap中查找由Qakbot引起的与电子邮件相关的流量。<br>遵循一些TCP流，以更好地了解此类电子邮件流量。通常，我们不会看到从Windows客户端到公用IP地址的这种未加密电子邮件流量。连同其他指示器一起，此smtp或imap或pop过滤器可能会揭示Qakbot的活动。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>本教程提供了有关使用Qakbot恶意软件检查Windows感染的提示。可以在malware-traffic-analysis.net上找到更多带有Qakbot活动示例的pcap。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Dridex%E6%84%9F%E6%9F%93%E6%B5%81%E9%87%8F/" rel="next" title="Wireshark教程：检查Dridex感染流量">
+                <i class="fa fa-chevron-left"></i> Wireshark教程：检查Dridex感染流量
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Ursnif%E6%84%9F%E6%9F%93/" rel="prev" title="Wireshark教程：检查Ursnif感染">
+                Wireshark教程：检查Ursnif感染 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">万俟思睿</p>
+              <p class="site-description motion-element" itemprop="description">进一寸有一寸的欢喜</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/ytytytytyt6.github.io/archives">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Wireshark教程：检查Qakbot感染"><span class="nav-number">1.</span> <span class="nav-text">Wireshark教程：检查Qakbot感染</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Qakbot分配方法"><span class="nav-number">1.1.</span> <span class="nav-text">Qakbot分配方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#适用于Qakbot的Windows可执行文件"><span class="nav-number">1.2.</span> <span class="nav-text">适用于Qakbot的Windows可执行文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#感染后HTTPS活动"><span class="nav-number">1.3.</span> <span class="nav-text">感染后HTTPS活动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他感染后流量"><span class="nav-number">1.4.</span> <span class="nav-text">其他感染后流量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">1.5.</span> <span class="nav-text">结论</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">万俟思睿</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/ytytytytyt6.github.io/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

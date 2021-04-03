@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/ytytytytyt6.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/ytytytytyt6.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/ytytytytyt6.github.io/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/ytytytytyt6.github.io/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/ytytytytyt6.github.io/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/ytytytytyt6.github.io/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/ytytytytyt6.github.io/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Wireshark教程：检查Ursnif感染Ursnif是一种银行恶意软件，有时也称为Gozi或IFSB。 Ursnif恶意软件家族已经活跃了很多年，当前的样本产生了不同的流量模式。 本教程使用Wireshark回顾感染Ursnif流量的数据包捕获（pcaps）。在检测和调查Ursnif感染时，了解这些流量模式对于安全专业人员至关重要。 Ursnif分配方法Ursnif可以通过基于Web的感染链和">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wireshark教程：检查Ursnif感染">
+<meta property="og:url" content="https://ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Ursnif%E6%84%9F%E6%9F%93/index.html">
+<meta property="og:site_name" content="思睿&#39;s Blog">
+<meta property="og:description" content="Wireshark教程：检查Ursnif感染Ursnif是一种银行恶意软件，有时也称为Gozi或IFSB。 Ursnif恶意软件家族已经活跃了很多年，当前的样本产生了不同的流量模式。 本教程使用Wireshark回顾感染Ursnif流量的数据包捕获（pcaps）。在检测和调查Ursnif感染时，了解这些流量模式对于安全专业人员至关重要。 Ursnif分配方法Ursnif可以通过基于Web的感染链和">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-42.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-43.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-44.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-45.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-46.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-47.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-48.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-49.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-50.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-51.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-52.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-53.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-54.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-55.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-56.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-57.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-58.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-59.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-60.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-61.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-62.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-63.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-64.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-65.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-66.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-67.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-68.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-69.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-70.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-71.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-72.jpeg">
+<meta property="article:published_time" content="2021-04-03T11:44:41.974Z">
+<meta property="article:modified_time" content="2021-04-03T12:30:40.650Z">
+<meta property="article:author" content="万俟思睿">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-42.jpeg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/ytytytytyt6.github.io/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ytytytytyt6.github.io/2021/04/03/Wireshark教程：检查Ursnif感染/"/>
+
+
+
+
+
+  <title>Wireshark教程：检查Ursnif感染 | 思睿's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/ytytytytyt6.github.io/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">思睿's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/ytytytytyt6.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Ursnif%E6%84%9F%E6%9F%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Wireshark教程：检查Ursnif感染</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-03T19:44:41+08:00">
+                2021-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Wireshark教程：检查Ursnif感染"><a href="#Wireshark教程：检查Ursnif感染" class="headerlink" title="Wireshark教程：检查Ursnif感染"></a>Wireshark教程：检查Ursnif感染</h1><p>Ursnif是一种银行恶意软件，有时也称为Gozi或IFSB。 Ursnif恶意软件家族已经活跃了很多年，当前的样本产生了不同的流量模式。</p>
+<p>本教程使用Wireshark回顾感染Ursnif流量的数据包捕获（pcaps）。在检测和调查Ursnif感染时，了解这些流量模式对于安全专业人员至关重要。</p>
+<h2 id="Ursnif分配方法"><a href="#Ursnif分配方法" class="headerlink" title="Ursnif分配方法"></a>Ursnif分配方法</h2><p>Ursnif可以通过基于Web的感染链和恶意垃圾邮件（malspam）进行分发。在某些情况下，Ursnif是由不同的恶意软件家族（如Hancitor）引起的后续感染，如最近的示例中所述。</p>
+<p>我们经常在基于垃圾邮件的分发活动中找到Ursnif的示例，例如图1中的示例。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-42.jpeg" alt="img"></p>
+<p>图1.来自更常见的Ursnif分发活动之一的流程图。</p>
+<p>Ursnif流量类别<br>本教程涵盖了Ursnif感染流量的两类：</p>
+<p>没有HTTPS感染后流量的Ursnif<br>具有HTTPS感染后流量的Ursnif<br>这些类别之一的恶意软件样本都会在受感染的Windows主机上创建相同类型的伪像。例如，通过更新Windows注册表，这两种类型的Ursnif都可以在Windows主机上保持持久性，如图2所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-43.jpeg" alt="img"></p>
+<p>图2.由Ursnif样本引起的Windows注册表更新示例，带有或不带有HTTPS感染后流量。</p>
+<h2 id="示例1：没有HTTPS的Ursnif"><a href="#示例1：没有HTTPS的Ursnif" class="headerlink" title="示例1：没有HTTPS的Ursnif"></a>示例1：没有HTTPS的Ursnif</h2><p>本教程的第一个pcap Ursnif-traffic-example-1.pcap在此处提供。此流量背后的事件链在此处发布了推文。实例1已删除与Ursnif感染没有直接关系的所有流量。</p>
+<p>在Wireshark中打开pcap，然后对http.request进行过滤，如图3所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-44.jpeg" alt="img"></p>
+<p>图3.示例1的pcap在Wireshark中进行了过滤。</p>
+<p>在此示例中，受Ursnif感染的主机使用各种以.at结尾的域名生成到8.208.24.139的感染后流量。此类Ursnif导致以下流量：</p>
+<p>由最初的Ursnif二进制文件引起的HTTP GET请求<br>后续数据的HTTP GET请求，URL以.dat结尾<br>Ursnif之后在Windows注册表中持续存在的HTTP GET和POST请求</p>
+<p>在我们的第一个示例中，在通信过程中使用了以下HTTP数据：</p>
+<p>初始GET请求的域：w8.wensa.at<br>请求后续数据：hxxp：//api2.casys.at / jvassets / xI / t64.dat<br>Ursnif之后GET和POST请求的域是持久的：h1.wensa.at</p>
+<p>在20:13:09 UTC跟随TCP流进行第一个HTTP GET请求。 TCP流窗口显示完整的URL。请注意，GET请求如何以/ api1 /开头，后跟一串长的带有反斜杠和下划线的字母数字字符。图4突出显示了GET请求。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-45.jpeg" alt="img"></p>
+<p>图4.由我们的第一个Ursnif示例引起的HTTP GET请求示例。</p>
+<p>我们可以从2019年12月10日的Hancitor感染引起的Ursnif活动中找到相同的模式。 pcap在这里可用。 12月10日的示例与其他恶意软件活动混合在一起，包含有关Ursnif的以下指标：</p>
+<p>初始GET请求的域：foo.fulldin.at<br>要求提供后续数据：hxxp：//one.ahah100.at / jvassets / o1 / s64.dat<br>Ursnif之后用于GET和POST请求的域是持久的：api.ahah100.at</p>
+<p>请注意，12月10日示例中来自Ursnif流量的模式与我们在示例1中发现的模式如何相似。这些模式通常可以从不使用HTTPS流量的Ursnif样本中看到。</p>
+<h2 id="示例2：带有HTTPS的Ursnif"><a href="#示例2：带有HTTPS的Ursnif" class="headerlink" title="示例2：带有HTTPS的Ursnif"></a>示例2：带有HTTPS的Ursnif</h2><p>本教程的第二个pcap Ursnif-traffic-example-2.pcap在此处提供。像我们的第一个pcap一样，也被剥夺了与Ursnif感染无关的所有流量。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-46.jpeg" alt="img"></p>
+<p>如图5所示，在Wireshark中打开pcap并在http.request or ssl.handshake.type == 1上进行过滤。如果使用的是Wireshark 3.0或更高版本，则对http.request or tls.handshake.type == 1进行过滤正确的结果。</p>
+<p>本示例具有以下事件序列：</p>
+<p>返回初始Ursnif二进制文件的HTTP GET请求<br>由最初的Ursnif二进制文件引起的HTTP GET请求<br>Ursnif之后Windows注册表中的HTTPS通信持续存在</p>
+<p>跟着到ghinatronx.com的第一个HTTP GET请求的TCP流。这个TCP流显示了Windows可执行文件或DLL文件，如图6所示。我们可以按照上一教程中的描述从pcap导出Ursnif二进制文件。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-47.jpeg" alt="img"></p>
+<p>图6.第一个HTTP GET请求返回Ursnif的二进制文件。</p>
+<p>接下来的四个对bjanicki.com的HTTP请求是由Ursnif二进制文件引起的。在世界标准时间18:46:21，跟随TCP流向bjanicki.com发送第一个HTTP GET请求。此TCP流显示完整的URL。请注意，GET请求如何以/ images /开头，后跟一串长的带有反斜杠和下划线的字母数字字符，然后以.avi结尾。此网址格式与我们第一个pcap中的Ursnif流量有些相似。图7突出显示了来自第二个pcap的GET请求。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-48.jpeg" alt="img"></p>
+<p>图7.来自第二个Ursnif示例的HTTP GET请求示例。</p>
+<p>与我们的第一个示例不同，第二个pcap中的Ursnif在被感染的Windows主机上变得持久后会生成HTTPS流量。使用此上一教程中描述的基本Web过滤器可以快速查看HTTPS流量。注意到prodrigo29lbkf20.com的HTTPS流量，如图8所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-49.jpeg" alt="img"></p>
+<p>图8.在Wireshark中过滤Web流量，突出显示Ursnif生成的HTTPS流量。</p>
+<p>此Ursnif变体生成的HTTPS通信揭示了用于建立加密通信的证书中的独特特征。为了更仔细地研究，请对ssl.handshake.type == 11（或在Wireshark 3.0或更高版本中为tls.handshake.type == 11）进行过滤。选择结果中的第一帧，然后转到帧详细信息窗口。在那里，我们可以扩展行并以自己的方式处理证书颁发者数据。图9显示了如何开始。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-50.jpeg" alt="img"></p>
+<p>图9.找到我们的证书颁发者数据的方式。</p>
+<p>如图9所示，我们在框架详细信息窗口中展开“安全套接字层”的行。对于Wireshark 3.0，此行显示为“传输层安全性”。然后，我们展开标记为TLSv1.2记录层：握手协议：证书的行。然后，我们展开标记为“握手协议：证书”的行。</p>
+<p>我们一直在扩展，直到找到通往证书颁发者数据的方式为止，如图10所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-51.jpeg" alt="img"></p>
+<p>图10.来自Ursnif导致的HTTPS流量中的证书颁发者数据。</p>
+<p>在“握手协议：证书”行下显示的图10中，我们逐步完成以下各项：</p>
+<ul>
+<li>Certificates (615 bytes)</li>
+<li>Certificate: 30820260308201c9a003020102020900c692c94106d77dfc…</li>
+<li>signedCertificate</li>
+<li>Issuer: rdnSequence (6)</li>
+<li>rdnSequence: 6 items (id-at-commonName=*,id-at-organizationalUnitN…</li>
+</ul>
+<p>rdnSequence行下的各个项目显示证书颁发者的属性。这些具有以下特征：</p>
+<ul>
+<li>countryName=<strong>XX</strong></li>
+<li>stateOrProvinceName=<strong>1</strong></li>
+<li>localityName=<strong>1</strong></li>
+<li>organizationName=<strong>1</strong></li>
+<li>organizationalUnitName=<strong>1</strong></li>
+<li>commonName=*****</li>
+</ul>
+<p>该发行者数据无效，这些模式在Ursnif感染中很常见。但是合法的证书数据是什么样的？图11显示了DigiCert颁发的证书中的有效数据。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-52.jpeg" alt="img"></p>
+<p>图11.有效的证书颁发者数据。</p>
+<p>关于Ursnif的最后一件事是由受Ursnif感染的主机检查IP地址。这是通过DNS使用opendns.com上的解析器进行的。像其他IP地址标识符一样，这是一项合法服务。但是，这些服务通常被恶意软件使用。</p>
+<p>要查看此IP地址检查，dns.qry.name contains opendns.com过滤并查看结果，如图12所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-53.jpeg" alt="img"></p>
+<p>图12.由受Ursnif感染的Windows主机检查IP地址。</p>
+<p>如图12所示，Window主机生成了对resolver1.opendns.com的dns查询，然后是对myip.opendns.com的208.67.222.222的DNS查询。对myip.opendns.com的DNS查询返回了受感染Windows主机的公共IP地址。</p>
+<h2 id="示例3：带有后续恶意软件的Ursnif"><a href="#示例3：带有后续恶意软件的Ursnif" class="headerlink" title="示例3：带有后续恶意软件的Ursnif"></a>示例3：带有后续恶意软件的Ursnif</h2><p>我们的第三个pcap Ursnif-traffic-example-3.pcap可在此处获得。这个pcap也从流量中剥离了无关的活动，但是它建立在我们的上一个示例的基础上。我们的第三个pcap包括看似诱骗的流量，还包括针对后续恶意软件的HTTP GET请求。事件的顺序是：</p>
+<p>返回初始Ursnif二进制文件的HTTP GET请求<br>由最初的Ursnif二进制文件（包括诱骗URL）引起的HTTP GET请求<br>Ursnif之后Windows注册表中的HTTPS通信持续存在<br>针对后续恶意软件的HTTP GET请求<br>使用本上一教程中描述的基本Web过滤器可以快速查看基于Web的流量，如图13所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-54.jpeg" alt="img"></p>
+<p>图13.在Wireshark中过滤第三个pcap以进行Web流量。</p>
+<p>在图13中，对sinicaleer.com的初始HTTP请求为Ursnif返回了Windows可执行文件。图13中可见的剩余流量是由Ursnif可执行文件引起的，直到它变得持久为止。</p>
+<p>对google.com的三个HTTP请求遵循与Ursnif流量相似的URL模式，即与ghdy656262oe.com的实际恶意域的通信。这些对google.com的HTTP GET请求似乎是诱饵流量，因为它们不起作用感染。通过TCP端口443到达gmail.com和<a href="http://www.google.com的HTTPS流量也没有直接的感染目的，该活动也可以归类为诱骗流量。图14显示了对google.com的诱骗HTTP" target="_blank" rel="noopener">www.google.com的HTTPS流量也没有直接的感染目的，该活动也可以归类为诱骗流量。图14显示了对google.com的诱骗HTTP</a> GET请求的示例。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-55.jpeg" alt="img"></p>
+<p>图14.受Ursnif感染的主机诱骗HTTP GET请求到Google域。</p>
+<p>请注意ghdy656262oe.com的HTTP流量。对ghdy656262oe.com的前两个GET请求返回404 Not Found响应，如图15所示。第三个HTTP GET请求返回200 OK响应，并且感染继续，如图16所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-56.jpeg" alt="img"></p>
+<p>图15.对恶意Ursnif域的前两个HTTP GET请求返回404 Not Found响应。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-57.jpeg" alt="img"></p>
+<p>图16.在Ursnif感染继续之前，一些错误的开始。</p>
+<p>由于对ghdy656262oe.com的第一个HTTP GET请求不是200 OK，因此，受感染的Windows主机循环遍历其他恶意域以继续感染。这两个域是tnzf3380au [.top]和xijamaalj.com。但是，对这些域的DNS查询返回“ No such name”（无此名称）作为响应，因此受感染的Windows主机又返回尝试ghdy656262oe.com。</p>
+<p>使用以下Wireshark筛选器可以更好地查看此事件序列：</p>
+<p>((http.request or http.response) and ip.addr eq 194.1.236.191) or dns.qry.name contains tnzf3380au or dns.qry.name contains xijamaalj</p>
+<p>结果应类似于图17中的列显示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-58.jpeg" alt="img"></p>
+<p>图17.过滤以显示受感染的Windows主机如何在HTTP流量达到200 OK之前尝试与Ursnif相关的域。</p>
+<p>要查看其余感染，请使用基本的Web过滤器并滚动到结果的结尾。图18显示了Ursnif持续存在后的感染后流量。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-59.jpeg" alt="img"></p>
+<p>图18. Ursnif在受害者的Windows主机上持续存在后的感染后流量。</p>
+<p>在图18中，在对ghdy656262oe.com进行了五个HTTP GET请求之后，我们发现在Ursnif变得持久之后，被感染的Windows主机生成的流量。这包括到google.com和gmail.com的HTTPS流量。</p>
+<p>进入vnt69tnjacynthe [.com]的流量应与我们在第二封pcap中看到的类型相同的证书颁发者数据。但是，此流量包括对以.rar结尾的carresqautomotive.com的HTTP GET请求。</p>
+<p>以.rar结尾的URL返回了后续恶意软件。但是，这种后续恶意软件在通过网络发送时会被编码或以其他方式加密。在受感染的Windows主机上解码的二进制文件，在感染流量中看不到。按照TCP流对carresqautomotive.com的HTTP GET请求进行操作，您应该看到与图19相同的数据。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-60.jpeg" alt="img"></p>
+<p>图19.发送到受Ursnif感染的Windows主机的后续恶意软件。</p>
+<p>此数据已加密，因此我们无法从pcap导出后续恶意软件的副本。因此，我们必须依靠其他感染后流量来确定将哪种类型的恶意软件发送给受Ursnif感染的主机。</p>
+<p>我们已经看到来自Ursnif感染的各种后续恶意软件，包括Dridex，IcedID，Nymain，Pushdo和Trickbot。</p>
+<p>我们的下一个示例是使用Dridex作为后续恶意软件的Ursnif感染。</p>
+<h2 id="实施例4：用Dridex感染Ursnif"><a href="#实施例4：用Dridex感染Ursnif" class="headerlink" title="实施例4：用Dridex感染Ursnif"></a>实施例4：用Dridex感染Ursnif</h2><p>我们的第四个pcap Ursnif-traffic-example-4.pcap可在此处获得。与前三个示例不同，此pcap不会从流量中剥离无关的活动。</p>
+<p>使用基本的Web过滤器可以更好地了解流量。您的结果应类似于图20。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-61.jpeg" alt="img"></p>
+<p>图20.来自第四个pcap的流量在Wireshark中进行了过滤。</p>
+<p>这个pcap的事件序列与我们之前的示例相同，但是它增加了后续恶意软件的感染后活动：</p>
+<p>返回初始Ursnif二进制文件的HTTP GET请求<br>由最初的Ursnif二进制文件（包括诱骗URL）引起的HTTP GET请求<br>Ursnif之后Windows注册表中的HTTPS通信持续存在<br>针对后续恶意软件的HTTP GET请求<br>后续恶意软件的感染后活动<br>在第四个示例中，初始Ursnif二进制文件的HTTP GET请求是oklogallem.com。在感染持续存在之前，Ursnif导致对kh2714ldb.com的HTTP GET请求。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-62.jpeg" alt="img"></p>
+<p>图21显示了Ursnif持久后的活动，其中Ursnif导致到s9971kbjjessie.com的HTTPS通信。然后，我们看到对startuptshirt.my的HTTP GET请求，以获取后续恶意软件。最后，我们发现了由后续恶意软件引起的感染后流量。</p>
+<p>我们的第四个示例遵循与我们的第三个pcap相同的感染模式，但是现在我们还具有到94.140.114.6和5.61.34.51的HTTPS / SSL / TLS流量，而没有任何关联的域名。这是Dridex感染后的流量。</p>
+<p>Dridex的证书颁发者数据与Ursnif的证书颁发者数据不同。使用以下过滤器查看第四个pcap中的Dridex证书数据：</p>
+<p>（ip.addr eq 94.140.114.6 or ip.addr eq 5.61.34.51）and ssl.handshake.type eq 11</p>
+<p>注意：如果您使用的是Wireshark 3.0或更高版本，请使用tls.handshake.type而不是ssl.handshake.type。</p>
+<p>选择结果中的第一帧，转到帧详细信息窗口，并展开与证书相关的行，如图9和10中的第二个示例所示。从我们的第四个pcap中检查证书颁发者数据应类似于图22和23。 </p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-63.jpeg" alt="img"></p>
+<p>图22.在Dridex通信中处理证书颁发者数据的方式。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-64.jpeg" alt="img"></p>
+<p>图23.从Dridex IP地址之一到达证书颁发者数据。</p>
+<p>在rdnSequence行下，我们找到证书颁发者的属性。以下是94.140.114.6的HTTPS / SSL / TLS通信的证书颁发者特征：</p>
+<ul>
+<li>countryName=<strong>NP</strong></li>
+<li>localityName=<strong>Kathmandu</strong></li>
+<li>organizationName=<strong>Buvecoww Fftaites O.V.E.E.</strong></li>
+<li>organizationalUnitName=<strong>Olfo Dusar Latha</strong></li>
+<li>commonName=<strong>ndltman-dsamutb.spiegel</strong></li>
+</ul>
+<p>证书颁发者数据对于5.61.34.51是不同的，但是它遵循类似的样式：</p>
+<ul>
+<li>countryName=<strong>MU</strong></li>
+<li>localityName=<strong>Port Louis</strong></li>
+<li>organizationName=<strong>Ppoffi Sourinop Cooperative</strong></li>
+<li>organizationalUnitName=<strong>ipeepstha and thicioi</strong></li>
+<li>commonName=<strong>plledsaprell.Byargt9wailen.voting</strong></li>
+</ul>
+<p>对于Dridex感染后流量，通常会看到这种类型的发行者数据。在我们的下一个示例中，您可以进一步练习查看Dridex的证书颁发者数据。</p>
+<h2 id="示例5：评估"><a href="#示例5：评估" class="headerlink" title="示例5：评估"></a>示例5：评估</h2><p>本教程的第五篇pcap Ursnif-traffic-example-5.pcap在此处提供。像我们之前的示例一样，此pcap感染了Ursnif，然后是Dridex，因此，我们可以练习本教程到目前为止介绍的技能。</p>
+<p>根据到目前为止的经验，在Wireshark中打开第五个pcap，然后回答以下问题：</p>
+<p>对于最初的Ursnif二进制文件，哪个URL返回了Windows可执行文件？<br>发送初始Ursnif二进制文件后，受感染的Windows主机联系了其他域以获取HTTP GET请求。流量成功进入哪个域并允许感染继续进行？<br>Ursnif在受感染的Windows主机上持续存在之后，HTTPS流量中使用了哪个域？<br>以.rar结尾的URL用于将后续恶意软件发送到受感染的Windows主机？<br>Dridex感染后流量使用了哪些IP地址？<br>答案如下。</p>
+<p>问：对于最初的Ursnif二进制文件，哪个URL返回了Windows可执行文件？</p>
+<p>答：hxxp：// ritalislum.com / obedle / zarref.php？l = sopopf8.cab</p>
+<p>此pcap中唯一的Windows可执行文件是Ursnif的初始Windows可执行文件。使用以下Wireshark搜索过滤器可以快速找到此可执行文件：</p>
+<p><strong><em>ip contains “This program”\</em></strong></p>
+<p>此过滤器应仅在结果中提供一帧。遵循此帧的TCP流，如图24所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-65.jpeg" alt="img"></p>
+<p>图24.进行筛选以找到带有Windows可执行文件并遵循TCP流的框架。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-66.jpeg" alt="img"></p>
+<p>TCP流窗口包含来自GET请求的域和URL，如图25所示。</p>
+<p>图25.来自TCP流的URL信息。</p>
+<p>问：最初的Ursnif二进制文件发送后，受感染的Windows主机就HTTP GET请求联系了不同的域。流量成功通过了哪个域并允许感染继续进行？</p>
+<p>答：k55gaisi.com</p>
+<p>使用基本的Web过滤器可大致了解Web流量。由Ursnif的这种变体引起的HTTP请求以GET / images /开头，如本教程的示例2、3和4所示。 UTC在15:36 UTC向k55gaisi.com发出的第一个HTTP请求记录在图26中。但是，如果您遵循TCP流，它将显示404 Not Found作为响应。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-67.jpeg" alt="img"></p>
+<p>图26.在Web流量中搜索Ursnif引起的HTTP GET请求。</p>
+<p>如图26所示，下一个针对Ursnif样式的URL的HTTP GET请求是在世界标准时间15:37向bon11ljgarry.com发送。该请求的HTTP流显示了到<a href="http://www.search-error.com上URL的重定向。" target="_blank" rel="noopener">www.search-error.com上URL的重定向。</a></p>
+<p>向下滚动，以获取与leinwqoa.com类似的流量，如图27所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-68.jpeg" alt="img"></p>
+<p>图27.查找另一个Ursnif风格的URL，该URL重定向到搜索错误页面。</p>
+<p>进一步向下滚动以找到四个k55gaisi.com的HTTP GET请求，这些请求返回200 OK响应。从这一点开始，Ursnif感染继续进行，我们发现没有其他以GET / images /开头的Ursnif样式的HTTP请求。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-69.jpeg" alt="img"></p>
+<p>图28.查找返回200 OK的Ursnif风格的HTTP GET请求。</p>
+<p>问：Ursnif在受感染的Windows主机上持续存在之后，HTTPS流量中使用了哪个域？</p>
+<p>答：n9maryjanef.com</p>
+<p>当Ursnif是永久性的时，我们不再看到以GET / images /开头的Ursnif样式的HTTP请求。相反，我们找到了与Ursnif相关的HTTPS流量。在最后的Ursnif样式的HTTP GET请求之后不久，到n9maryjanef.com的HTTPS流量从185.118.165.109开始，如图29突出显示。这是Ursnif流量。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-70.jpeg" alt="img"></p>
+<p>图29. Ursnif引起的HTTPS流量。</p>
+<p>您可以通过过滤ip.addr eq 185.118.165.109和ssl.handshake.type == 11并查看证书颁发者数据来确认这是Ursnif流量。证书颁发者的数据应与图10中的第二个示例相同。</p>
+<p>问：以.rar结尾的URL用于将后续恶意软件发送到受感染的Windows主机吗？</p>
+<p>答：hxxps：// testedsolutionbe.com / wp-content / plugins / apikey / uaasdqweeeeqsd.rar</p>
+<p>Ursnif对后续恶意软件引起的HTTP GET请求以.rar结尾，因此请使用以下过滤器在我们的pcap中找到此URL：</p>
+<p>http.request和ip包含.rar</p>
+<p>结果应该类似于我们在图30中看到的结果。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-71.jpeg" alt="img"></p>
+<p>图30.从Ursnif感染中查找后续恶意软件的URL。</p>
+<p>注意，在图30中，图30中的HTTP GET请求如何重定向到HTTPS URL。</p>
+<p>问：Dridex感染后流量使用了哪些IP地址？</p>
+<p>A：185.99.133.38和5.61.34.51</p>
+<p>这些IP地址之一与我们的第四个pcap中的Dridex相同，并且具有相同的证书颁发者数据。到185.99.133.38的Dridex流量具有与示例4相同的证书颁发者数据样式。到两个IP地址的流量均不涉及域名。</p>
+<p>如果在以.rar结尾的HTTP GET请求之后查找没有域的任何HTTPS / SSL / TLS通信，则在此示例中很容易发现Dridex感染后通信，如图31所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/12/word-image-72.jpeg" alt="img"></p>
+<p>图31.在第五个pcap中查找Dridex流量。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>本教程提供了有关检查Ursnif恶意软件Windows感染的提示。可以在恶意软件traffic-analysis.net上找到有关Ursnif活动示例的更多内容。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Qakbot%E6%84%9F%E6%9F%93/" rel="next" title="Wireshark教程：检查Qakbot感染">
+                <i class="fa fa-chevron-left"></i> Wireshark教程：检查Qakbot感染
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Trickbot%E6%84%9F%E6%9F%93/" rel="prev" title="Wireshark教程：检查Trickbot感染">
+                Wireshark教程：检查Trickbot感染 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">万俟思睿</p>
+              <p class="site-description motion-element" itemprop="description">进一寸有一寸的欢喜</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/ytytytytyt6.github.io/archives">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Wireshark教程：检查Ursnif感染"><span class="nav-number">1.</span> <span class="nav-text">Wireshark教程：检查Ursnif感染</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ursnif分配方法"><span class="nav-number">1.1.</span> <span class="nav-text">Ursnif分配方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例1：没有HTTPS的Ursnif"><span class="nav-number">1.2.</span> <span class="nav-text">示例1：没有HTTPS的Ursnif</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例2：带有HTTPS的Ursnif"><span class="nav-number">1.3.</span> <span class="nav-text">示例2：带有HTTPS的Ursnif</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例3：带有后续恶意软件的Ursnif"><span class="nav-number">1.4.</span> <span class="nav-text">示例3：带有后续恶意软件的Ursnif</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实施例4：用Dridex感染Ursnif"><span class="nav-number">1.5.</span> <span class="nav-text">实施例4：用Dridex感染Ursnif</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例5：评估"><span class="nav-number">1.6.</span> <span class="nav-text">示例5：评估</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">1.7.</span> <span class="nav-text">结论</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">万俟思睿</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/ytytytytyt6.github.io/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

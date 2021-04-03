@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/ytytytytyt6.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/ytytytytyt6.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/ytytytytyt6.github.io/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/ytytytytyt6.github.io/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/ytytytytyt6.github.io/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/ytytytytyt6.github.io/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/ytytytytyt6.github.io/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="使用Wireshark寻找主机信息网络中产生流量的任何主机都应具有三个标识符：MAC地址，IP地址和主机名。 我们如何使用Wireshark查找此类主机信息？我们对两种活动进行过滤：DHCP或NBNS。 DHCP流量可以帮助识别连接到网络的几乎所有类型的计算机的主机。 NBNS流量主要由运行Microsoft Windows的计算机或运行MacOS的Apple主机生成。 实验一来自DHCP流量的主">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wireshark教程：使用Wireshark寻找主机信息">
+<meta property="og:url" content="https://ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E4%BD%BF%E7%94%A8Wireshark%E5%AF%BB%E6%89%BE%E4%B8%BB%E6%9C%BA%E4%BF%A1%E6%81%AF/index.html">
+<meta property="og:site_name" content="思睿&#39;s Blog">
+<meta property="og:description" content="使用Wireshark寻找主机信息网络中产生流量的任何主机都应具有三个标识符：MAC地址，IP地址和主机名。 我们如何使用Wireshark查找此类主机信息？我们对两种活动进行过滤：DHCP或NBNS。 DHCP流量可以帮助识别连接到网络的几乎所有类型的计算机的主机。 NBNS流量主要由运行Microsoft Windows的计算机或运行MacOS的Apple主机生成。 实验一来自DHCP流量的主">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-04-03T10:00:53.622Z">
+<meta property="article:modified_time" content="2021-04-03T10:00:53.622Z">
+<meta property="article:author" content="万俟思睿">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/ytytytytyt6.github.io/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ytytytytyt6.github.io/2021/04/03/Wireshark教程：使用Wireshark寻找主机信息/"/>
+
+
+
+
+
+  <title>Wireshark教程：使用Wireshark寻找主机信息 | 思睿's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/ytytytytyt6.github.io/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">思睿's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/ytytytytyt6.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E4%BD%BF%E7%94%A8Wireshark%E5%AF%BB%E6%89%BE%E4%B8%BB%E6%9C%BA%E4%BF%A1%E6%81%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Wireshark教程：使用Wireshark寻找主机信息</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-03T18:00:53+08:00">
+                2021-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="使用Wireshark寻找主机信息"><a href="#使用Wireshark寻找主机信息" class="headerlink" title="使用Wireshark寻找主机信息"></a>使用Wireshark寻找主机信息</h1><p>网络中产生流量的任何主机都应具有三个标识符：MAC地址，IP地址和主机名。</p>
+<p>我们如何使用Wireshark查找此类主机信息？我们对两种活动进行过滤：DHCP或NBNS。 DHCP流量可以帮助识别连接到网络的几乎所有类型的计算机的主机。 NBNS流量主要由运行Microsoft Windows的计算机或运行MacOS的Apple主机生成。</p>
+<h2 id="实验一来自DHCP流量的主机信息"><a href="#实验一来自DHCP流量的主机信息" class="headerlink" title="实验一来自DHCP流量的主机信息"></a>实验一来自DHCP流量的主机信息</h2><p>![image-20210403144915421](/Users/yueting/Library/Application Support/typora-user-images/image-20210403144915421.png)</p>
+<p>DHCP traffic can help identify hosts for almost any type of computer connected to your network.</p>
+<p> DHCP Request &gt;Bootstrap Protocol (Request)&gt; Client Identifier and Host Name</p>
+<p>![image-20210403145148267](/Users/yueting/Library/Application Support/typora-user-images/image-20210403145148267.png)</p>
+<p>通过这里 似乎是一个ipad，但是不能仅凭一个主机名确定</p>
+<p>在这种情况下，172.16.1 [.] 207的主机名是Rogers-iPad，MAC地址是7c：6d：62：d2：e3：4f。此MAC地址已分配给Apple。根据主机名，此设备可能是iPad，但我们无法仅通过主机名进行确认。</p>
+<p>MAC address and IP address（找相关的）</p>
+<p>![image-20210403145658069](/Users/yueting/Library/Application Support/typora-user-images/image-20210403145658069.png)</p>
+<h2 id="实验二-来自NetBIOS名称服务（NBNS）流量的主机信息"><a href="#实验二-来自NetBIOS名称服务（NBNS）流量的主机信息" class="headerlink" title="实验二 来自NetBIOS名称服务（NBNS）流量的主机信息"></a>实验二 来自NetBIOS名称服务（NBNS）流量的主机信息</h2><p> NBNS traffic is generated primarily by computers running Microsoft Windows or Apple hosts running MacOS.</p>
+<p>根据更新DHCP租约的频率，您的pcap中可能没有DHCP流量。幸运的是，我们可以使用NBNS流量来标识运行Microsoft Windows的计算机或运行MacOS的Apple主机的主机名。</p>
+<p>NBNS(NetBIOS Name Server)是动态DNS的一种，Microsoft的NBNS实现称为WINS</p>
+<p>![image-20210403150214758](/Users/yueting/Library/Application Support/typora-user-images/image-20210403150214758.png)</p>
+<p>该主机使用内部IP地址10.2.4.101。在Wireshark中打开pcap，然后在nbns上进行过滤。这应该显示NBNS流量。选择第一帧，您可以快速将IP地址与MAC地址和主机名相关联，如图所示。</p>
+<p>从这里也可以看到一些细节</p>
+<p>![image-20210403150323755](/Users/yueting/Library/Application Support/typora-user-images/image-20210403150323755.png)</p>
+<h2 id="实验三-来自HTTP流量的设备模型和操作系统"><a href="#实验三-来自HTTP流量的设备模型和操作系统" class="headerlink" title="实验三 来自HTTP流量的设备模型和操作系统"></a>实验三 来自HTTP流量的设备模型和操作系统</h2><p>来自HTTP通信头的用户代理字符串可以显示操作系统。如果HTTP流量来自Android设备，那么还可以确定设备的制造商和型号。</p>
+<p>过滤： http.request and !(ssdp)</p>
+<p>此pcap来自Windows主机，使用内部IP地址192.168.1 .97。在Wireshark中打开pcap，然后对http.request and !(ssdp)进行过滤。选择第二个帧，这是对<a href="http://www.ucla" target="_blank" rel="noopener">www.ucla</a> . edu的第一个HTTP请求，并跟踪TCP流，如图所示。</p>
+<p>![image-20210403150601328](/Users/yueting/Library/Application Support/typora-user-images/image-20210403150601328.png)</p>
+<p>![image-20210403150645206](/Users/yueting/Library/Application Support/typora-user-images/image-20210403150645206.png)</p>
+<p>该TCP流具有HTTP请求标头，如图所示。User-Agent行表示在Microsoft Windows 7 x64操作系统上运行的Google Chrome浏览器Web版本72.0.3626. 81。</p>
+<p>Note the following string in the User-Agent line from Figure 8:</p>
+<p>(Windows NT 6.1; Win64; x64)</p>
+<ul>
+<li><pre><code>NT字符串表示以下版本的Microsoft Windows
+- Windows NT 5.1: Windows XP
+- Windows NT 6.0: Windows Vista
+- Windows NT 6.1: Windows 7
+- Windows NT 6.2: Windows 8
+- Windows NT 6.3: Windows 8.1
+- Windows NT 10.0: Windows 10
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 实验四 DHCP流量中的主机信息</span><br><span class="line"></span><br><span class="line">使用来自Windows主机的基于HTTP的web浏览流量，可以确定操作系统和浏览器。来自Android设备的相同类型的流量可以揭示设备的品牌和型号。</span><br><span class="line"></span><br><span class="line">此pcap来自使用内部IP地址172.16.4.119的Android主机。在Wireshark中打开pcap，然后对http.request进行过滤。选择第二个框架，这是对&#x2F;blank.html的www.google.com的HTTP请求。跟踪TCP流。</span><br><span class="line"></span><br><span class="line">![image-20210403151129755](&#x2F;Users&#x2F;yueting&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20210403151129755.png)</span><br><span class="line"></span><br><span class="line">User-Agent行显示了Android 7.1.2，它是2017年4月发布的Android操作系统的较旧版本。LM-X210APM表示此Android设备的型号。 Google进行了快速搜索，发现该型号是LG Phoenix 4 Android智能手机。</span><br><span class="line"></span><br><span class="line">来自iPhone或其他苹果移动设备的HTTP流量的用户代理行将为您提供操作系统，并提供设备类型。我们只能确定苹果的设备是iPhone、iPad还是iPod</span><br><span class="line"></span><br><span class="line">## 实验五 </span><br><span class="line"></span><br><span class="line">此pcap来自使用内部IP地址为10.0.0.114的iPhone主机。在Wireshark中打开pcap，然后对http.request进行过滤。选择对web.mta.info的第一个HTTP请求的帧，并遵循TCP流</span><br><span class="line"></span><br><span class="line">![image-20210403151440508](&#x2F;Users&#x2F;yueting&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20210403151440508.png)</span><br><span class="line"></span><br><span class="line">(iPhone; CPU iPhone OS 12_1_3 like Mac OS X</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">关于HTTP流量和用户代理字符串的最后一点说明：并非所有HTTP活动都是web浏览流量。某些HTTP请求不会显示浏览器或操作系统。当您在流量中搜索以识别主机时，在查找web浏览器流量之前，可能需要尝试几个不同的HTTP请求。</span><br><span class="line">由于越来越多的网站使用HTTPS，这种主机识别方法可能很困难。HTTP头和内容在HTTPS通信中不可见。然而，对于那些有幸在调查期间发现HTTP web浏览流量的人来说，这种方法可以提供更多关于主机的信息。</span><br><span class="line"></span><br><span class="line">## 实验六Windows用户帐户来自Kerberos流量</span><br><span class="line"></span><br><span class="line">对于Active Directory（AD）环境中的Windows主机，我们可以从Kerberos通信中找到用户帐户名。</span><br></pre></td></tr></table></figure>
+Domain: happycraft[.]org
+Network segment: 172.16.8.0/24 (172.16.8[.]0 - 172.16.8[.]255)
+Domain controller IP: 172.16.8[.]8
+Domain controller hostname: Happycraft-DC
+Segment gateway: 172.16.8[.]1
+Broadcast address: 172.16.8[.]255
+Windows client: 172.16.8[.]201</code></pre><p>kerberos.CNameString</p>
+</li>
+</ul>
+<p>在Wireshark中打开pcap，并在kerberos.CNameString上进行过滤。选择第一帧。转到frame details部分，然后展开行，如图13所示。选择带有CNameString的行：johnson-pc $并将其作为一列应用。</p>
+<p>![image-20210403151646754](/Users/yueting/Library/Application Support/typora-user-images/image-20210403151646754.png)</p>
+<p>这将创建一个名为CNameString的新列。向下滚动到列显示中的最后一帧。您应该在域控制器172.16.8 [。] 8和Windows客户端172.16.8 [。] 201之间的通信中找到Theresa.johnson的用户帐户名，如图14所示。</p>
+<p>![image-20210403151802871](/Users/yueting/Library/Application Support/typora-user-images/image-20210403151802871.png)</p>
+<p>主机名的CNameString值总是以$（美元符号）结尾，而用户帐户名则不是。要根据用户帐户名进行筛选，请使用以下Wireshark表达式消除带有美元符号的CNameString结果：</p>
+<p>kerberos.CNameString and !(kerberos.CNameString contains $)</p>
+<p>![image-20210403151917676](/Users/yueting/Library/Application Support/typora-user-images/image-20210403151917676.png)</p>
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ytytytytyt6.github.io/2021/04/03/wireshark%E5%88%9D%E6%AD%A5%E5%85%A5%E9%97%A8/" rel="next" title="wireshark初步入门">
+                <i class="fa fa-chevron-left"></i> wireshark初步入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E8%AE%BE%E7%BD%AE%E8%BF%87%E6%BB%A4/" rel="prev" title="Wireshark教程：设置过滤">
+                Wireshark教程：设置过滤 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">万俟思睿</p>
+              <p class="site-description motion-element" itemprop="description">进一寸有一寸的欢喜</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/ytytytytyt6.github.io/archives">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#使用Wireshark寻找主机信息"><span class="nav-number">1.</span> <span class="nav-text">使用Wireshark寻找主机信息</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实验一来自DHCP流量的主机信息"><span class="nav-number">1.1.</span> <span class="nav-text">实验一来自DHCP流量的主机信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验二-来自NetBIOS名称服务（NBNS）流量的主机信息"><span class="nav-number">1.2.</span> <span class="nav-text">实验二 来自NetBIOS名称服务（NBNS）流量的主机信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验三-来自HTTP流量的设备模型和操作系统"><span class="nav-number">1.3.</span> <span class="nav-text">实验三 来自HTTP流量的设备模型和操作系统</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#"><span class="nav-number">2.</span> <span class="nav-text"></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">万俟思睿</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/ytytytytyt6.github.io/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/ytytytytyt6.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/ytytytytyt6.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/ytytytytyt6.github.io/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/ytytytytyt6.github.io/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/ytytytytyt6.github.io/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/ytytytytyt6.github.io/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/ytytytytyt6.github.io/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="检查Trickbot感染当主机被感染或以其他方式受到威胁时，有权访问网络流量的数据包捕获（pcap）的安全专业人员需要了解活动并确定感染的类型。 本教程提供了有关如何识别Trickbot的提示，Trickbot是自2016年以来一直感染受害者的信息窃取者和银行恶意软件。Trickbot通过恶意垃圾邮件（malspam）分发，并且还由其他恶意软件（例如Emotet，IcedID或Ursnif）分发。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wireshark教程：检查Trickbot感染">
+<meta property="og:url" content="https://ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Trickbot%E6%84%9F%E6%9F%93/index.html">
+<meta property="og:site_name" content="思睿&#39;s Blog">
+<meta property="og:description" content="检查Trickbot感染当主机被感染或以其他方式受到威胁时，有权访问网络流量的数据包捕获（pcap）的安全专业人员需要了解活动并确定感染的类型。 本教程提供了有关如何识别Trickbot的提示，Trickbot是自2016年以来一直感染受害者的信息窃取者和银行恶意软件。Trickbot通过恶意垃圾邮件（malspam）分发，并且还由其他恶意软件（例如Emotet，IcedID或Ursnif）分发。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/11/word-image-61-1024x554.png">
+<meta property="og:image" content="https://ytytytytyt6.github.io/Users/yueting/Library/ApplicationSupport/typora-user-images/image-20210403190439146.png">
+<meta property="og:image" content="https://ytytytytyt6.github.io/Users/yueting/Library/ApplicationSupport/typora-user-images/image-20210403190615383.png">
+<meta property="og:image" content="https://ytytytytyt6.github.io/Users/yueting/Library/ApplicationSupport/typora-user-images/image-20210403190923101.png">
+<meta property="og:image" content="https://ytytytytyt6.github.io/Users/yueting/Library/ApplicationSupport/typora-user-images/image-20210403191102789.png">
+<meta property="og:image" content="https://ytytytytyt6.github.io/Users/yueting/Library/ApplicationSupport/typora-user-images/image-20210403191244624.png">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/11/word-image-88-1024x382.png">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/11/word-image-89-1024x588.png">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/11/word-image-90-1024x586.png">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/11/word-image-91-1024x535.png">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/11/word-image-92-1024x703.png">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/11/word-image-93-1024x725.png">
+<meta property="article:published_time" content="2021-04-03T12:17:30.236Z">
+<meta property="article:modified_time" content="2021-04-03T12:17:30.236Z">
+<meta property="article:author" content="万俟思睿">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/11/word-image-61-1024x554.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/ytytytytyt6.github.io/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ytytytytyt6.github.io/2021/04/03/Wireshark教程：检查Trickbot感染/"/>
+
+
+
+
+
+  <title>Wireshark教程：检查Trickbot感染 | 思睿's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/ytytytytyt6.github.io/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">思睿's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/ytytytytyt6.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Trickbot%E6%84%9F%E6%9F%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Wireshark教程：检查Trickbot感染</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-03T20:17:30+08:00">
+                2021-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="检查Trickbot感染"><a href="#检查Trickbot感染" class="headerlink" title="检查Trickbot感染"></a>检查Trickbot感染</h1><p>当主机被感染或以其他方式受到威胁时，有权访问网络流量的数据包捕获（pcap）的安全专业人员需要了解活动并确定感染的类型。</p>
+<p>本教程提供了有关如何识别Trickbot的提示，Trickbot是自2016年以来一直感染受害者的信息窃取者和银行恶意软件。Trickbot通过恶意垃圾邮件（malspam）分发，并且还由其他恶意软件（例如Emotet，IcedID或Ursnif）分发。</p>
+<p>Trickbot具有独特的流量模式。本教程回顾了由两种不同方法引起的Trickbot感染的摘要：恶意垃圾邮件的Trickbot感染和通过其他恶意软件分发的Trickbot。</p>
+<h2 id="0x01恶意垃圾邮件的Trickbot"><a href="#0x01恶意垃圾邮件的Trickbot" class="headerlink" title="0x01恶意垃圾邮件的Trickbot"></a>0x01恶意垃圾邮件的Trickbot</h2><p>Trickbot通常通过垃圾邮件进行分发。来自这些活动的电子邮件包含下载伪装成发票或文档的恶意文件的链接。这些文件可能是Trickbot的Windows可执行文件，也可能是Trickbot可执行文件的某种下载器。在某些情况下，这些电子邮件中的链接会返回一个包含Trickbot可执行文件或下载程序的zip存档。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/11/word-image-61-1024x554.png" alt="img"></p>
+<p>图1显示了2019年9月的示例。在此示例中，电子邮件中包含一个返回zip存档的链接。zip存档包含一个Windows快捷方式文件，该文件下载了Trickbot可执行文件。有关相关的Trickbot感染的pcap信息，请参见此处。</p>
+<p>图1：2019年9月来自垃圾邮件的Trickbot感染的流程图。</p>
+<p>从此<a href="https://www.malware-traffic-analysis.net/2019/09/25/index.html下载pcap。" target="_blank" rel="noopener">https://www.malware-traffic-analysis.net/2019/09/25/index.html下载pcap。</a></p>
+<p>查看流量，您会发现以下最新活动是Trickbot感染中常见的：</p>
+<p>由受感染的Windows主机检查IP地址<br>通过TCP端口447和449的HTTPS/SSL/TLS流量<br>通过TCP端口8082的HTTP流量<br>以.png结尾的HTTP请求返回Windows可执行文件</p>
+<p>这种Trickbot感染的独特之处在于，它向<a href="http://www.dchristjan.com发送了一个HTTP请求，该请求返回了一个zip归档文件；向144.91.69.195发送了一个HTTP请求，返回了一个Windows可执行文件。按照HTTP流向www.dchristjan.com的请求，如图3所示，以检查流量。在HTTP流中，您将找到指示已返回zip归档文件的指示符，如图4所示。" target="_blank" rel="noopener">www.dchristjan.com发送了一个HTTP请求，该请求返回了一个zip归档文件；向144.91.69.195发送了一个HTTP请求，返回了一个Windows可执行文件。按照HTTP流向www.dchristjan.com的请求，如图3所示，以检查流量。在HTTP流中，您将找到指示已返回zip归档文件的指示符，如图4所示。</a></p>
+<p><img src="/Users/yueting/Library/ApplicationSupport/typora-user-images/image-20210403190439146.png" alt="image-20210403190439146"></p>
+<p><img src="/Users/yueting/Library/ApplicationSupport/typora-user-images/image-20210403190615383.png" alt="image-20210403190615383"></p>
+<p>图3：遵循HTTP流向<a href="http://www.dchristjan.com的请求。" target="_blank" rel="noopener">www.dchristjan.com的请求。</a></p>
+<p>图4：指示HTTP请求返回了一个zip归档文件。<em>**InvoiceAndStatement.lnk\</em></p>
+<p>从pcap导出zip存档。</p>
+<p>在BSD，Linux或Mac环境中，您可以轻松地确认提取的文件是zip归档文件，获取文件的SHA256哈希，并在命令行环境中提取归档文件的内容。在这种情况下，内容是Windows快捷方式文件，您也可以确认并获取SHA256哈希</p>
+<p><img src="/Users/yueting/Library/ApplicationSupport/typora-user-images/image-20210403190923101.png" alt="image-20210403190923101"></p>
+<p>对144.91.69.195的HTTP请求返回了Windows可执行文件。这是Trickbot的初始Windows可执行文件。您可以遵循此HTTP请求的HTTP流，并找到指示符，它是一个可执行文件。您可以从pcap中提取可执行文件。</p>
+<p><img src="/Users/yueting/Library/ApplicationSupport/typora-user-images/image-20210403191102789.png" alt="image-20210403191102789"></p>
+<p>导出该文件。</p>
+<p><img src="/Users/yueting/Library/ApplicationSupport/typora-user-images/image-20210403191244624.png" alt="image-20210403191244624"></p>
+<p>感染后流量最初包括通过TCP端口443、447或449的HTTPS/SSL/TLS流量以及受感染Windows主机进行的IP地址检查。在这种感染中，HTTP请求Trickb之后不久执行文件，在通过TCP端口449成功连接到187.58.56.26之前，我们可以看到通过端口443尝试到不同IP地址的多个TCP连接。如果使用basic+过滤器，则可以看到这些尝试的连接，如图所示在图11和图12中。</p>
+<p>![image-20210403191520797](/Users/yueting/Library/Application Support/typora-user-images/image-20210403191520797.png)</p>
+<p>图11：被感染的Windows主机尝试通过端口443进行TCP连接。</p>
+<p>![image-20210403191551565](/Users/yueting/Library/Application Support/typora-user-images/image-20210403191551565.png)</p>
+<p>图12：向下滚动以查看通过端口443进行的更多TCP连接，然后再通过TCP端口449成功连接至187.58.56.26。</p>
+<p>通过TCP端口447和TCP端口449到各种IP地址的HTTPS/SSL/TLS通信具有异常的证书数据。当使用Wireshark2.x时，我们可以通过对ssl.handshake.type==11进行过滤来检查证书颁发者；如果使用Wireshark3.x，则可以通过tls.handshake.type==11进行过滤。然后转到框架详细信息部分并展开信息，找到通往证书颁发者数据的方式，如图13和图14所示。</p>
+<p>![image-20210403191730201](/Users/yueting/Library/Application Support/typora-user-images/image-20210403191730201.png)</p>
+<p>图13：过滤HTTPS/SSL/TLS通信中的证书数据，然后展开行以显示TCP端口449下第一个结果的帧详细信息。</p>
+<p>图14：通过TCP端口449向下钻取证书颁发者数据的第一个结果。</p>
+<p>在图14中，我们看到以下证书颁发者数据用于通过TCP端口449到187.85.56.26的HTTPS/SSL/TLS通信中：</p>
+<p>![image-20210403191919589](/Users/yueting/Library/Application Support/typora-user-images/image-20210403191919589.png)</p>
+<p>id-at-countryName=AU<br>id-at-stateOrProvinceName=Some-State<br>id-at-organizationName=Internet Widgits Pty Ltd<br>州或省名（Some-State）和组织名（InternetWidgitsPtyLtd）不用于合法的HTTPS/SSL/TLS通信。<strong>这是恶意流量的指示，并且这种类型的异常证书颁发者数据不仅限于Trickbot。</strong>普通的证书颁发者在合法的HTTPS/SSL/TLS通信中是什么样的？如果我们查看通过TCP端口443到Microsoft域的早期通信（72.21.81.200），则会发现以下内容，如图15所示。</p>
+<p>id-at-countryName=US<br>id-at-stateOrProvinceName=Washington<br>id-at-localityName=Redmond<br>id-at-organizationName=Microsoft Corporation<br>id-at-organizationUnitName=Microsoft IT<br>id-at-commonName=Microsoft IT TLS CA 2</p>
+<p>![image-20210403192104205](/Users/yueting/Library/Application Support/typora-user-images/image-20210403192104205.png)</p>
+<p>图15：从合法HTTPS流量到Microsoft域的证书数据。</p>
+<p>受Trickbot感染的Windows主机将使用许多不同的IP地址检查站点来检查其IP地址。这些站点不是恶意的，流量本身也不是恶意的。但是，这种类型的IP地址检查在Trickbot和其他恶意软件家族中很常见。Trickbot使用的各种合法IP地址检查服务包括：</p>
+<p>api.ip.sb<br>checkip.amazonaws.com<br>icanhazip.com<br>ident.me<br>ip.anysrc.net<br>ipecho.net<br>ipinfo.io<br>myexternalip.com<br>wtfismyip.com<br>同样，仅靠IP地址检查也不是恶意的。但是，这种活动与其他网络流量相结合可以提供感染迹象，就像我们在这种情况下看到的那样。</p>
+<p>![image-20210403192159959](/Users/yueting/Library/Application Support/typora-user-images/image-20210403192159959.png)</p>
+<p>图16：在通过TCP端口449进行HTTPS/SSL/TLS通信之后，受感染的Windows主机进行IP地址检查。并不是天生的恶意，但这是Trickbot感染的一部分。</p>
+<p>Trickbot感染当前通过TCP端口8082生成HTTP通信，此通信从受感染的主机发送信息，例如来自浏览器缓存和电子邮件客户端的系统信息和密码。此信息从受感染的主机发送到Trickbot使用的命令和控制服务器。</p>
+<p>要查看此流量，请使用以下Wireshark过滤器：</p>
+<p>http.request and tcp.port eq 8082</p>
+<p>这显示了以下HTTP请求，如图17所示：</p>
+<p>![image-20210403192254064](/Users/yueting/Library/Application Support/typora-user-images/image-20210403192254064.png)</p>
+<p>图17：由Trickbot导致的TCP端口8082上的HTTP流量。</p>
+<p>以81结尾的HTTP POST请求从Web浏览器，电子邮件客户端和其他应用程序发送缓存的密码数据。以83结尾的HTTP POST请求发送由Web浏览器之类的应用程序提交的表单数据。我们可以找到通过以90结尾的HTTP POST请求发送的系统信息。对于这些HTT PPOST请求中的任何一个，请遵循TCP或HTTP流，以检查此感染所窃取的数据。</p>
+<p>![image-20210403192545101](/Users/yueting/Library/Application Support/typora-user-images/image-20210403192545101.png)</p>
+<p>图18：Trickbot从Chrome网络浏览器窃取的登录凭据。该数据是由受Trickbot感染的主机通过TCP端口8082通过HTTP流量发送的。</p>
+<p>![image-20210403192817170](/Users/yueting/Library/Application Support/typora-user-images/image-20210403192817170.png)</p>
+<p>图19：感染了Trickbot的主机通过TCP端口8082使用HTTP流量发送的系统数据。它开始与正在运行的进程列表。</p>
+<p>![image-20210403192907940](/Users/yueting/Library/Application Support/typora-user-images/image-20210403192907940.png)</p>
+<p>图20：感染了Trickbot的主机通过TCP端口8082使用HTTP流量发送的更多系统数据。该数据随后来自图19中启动的同一HTTP流。</p>
+<p>Trickbot通过以.png结尾的HTTP GET请求发送更多Windows可执行文件。当受感染的Windows主机是Active Directory环境中的客户端时，这些后续Trickbot可执行文件用于感染易受攻击的域控制器（DC）。</p>
+<p>您可以使用以下Wireshark过滤器在pcap中找到这些URL：</p>
+<p>http.request and ip contains .png</p>
+<p>![image-20210403192953711](/Users/yueting/Library/Application Support/typora-user-images/image-20210403192953711.png)</p>
+<p>图21：过滤以查找使用以.png结尾的URL发送的后续TrickbotEXE文件。</p>
+<p>在三个请求中的每个请求中遵循TCP或HTTP流，如图21所示。您应该看到类似于图9所示的Windows可执行文件指示符。但是，在这种情况下，HTTP响应标头将返回的文件标识为image/png，即使它显然是Windows可执行文件或DLL文件。</p>
+<p>![image-20210403193047527](/Users/yueting/Library/Application Support/typora-user-images/image-20210403193047527.png)</p>
+<p>图22：通过以.png结尾的URL发送的Windows可执行文件。</p>
+<p>您可以从Wireshark导出这些文件，确认它们是Windows可执行文件，并获得本教程前面介绍的SHA256文件哈希。</p>
+<h2 id="通过其他恶意软件分发的Trickbot"><a href="#通过其他恶意软件分发的Trickbot" class="headerlink" title="通过其他恶意软件分发的Trickbot"></a>通过其他恶意软件分发的Trickbot</h2><p>Trickbot经常通过其他恶意软件进行分发。Trickbot通常被视为Emotet感染的后续恶意软件，但我们也将其视为来自IcedID和Ursnif感染的后续恶意软件。</p>
+<p>由于Emotet经常分发Trickbot，因此让我们在此处记录2019年9月的Emotet感染Trickbot的情况。去年我们在PaloAltoNetworks博客文章中已经将Emotet感染了Trickbot，因此本教程将重点介绍Trickbot的活动。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/11/word-image-88-1024x382.png" alt="img"></p>
+<p>图23：带有Trickbot活动的Emotet的简化流程图。</p>
+<p>从此<a href="https://www.malware-traffic-analysis.net/2019/11/13/index.html下载pcap。" target="_blank" rel="noopener">https://www.malware-traffic-analysis.net/2019/11/13/index.html下载pcap。</a></p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/11/word-image-89-1024x588.png" alt="img"></p>
+<p>图24：过滤Emotet+Trickbot感染中的Web流量。</p>
+<p>经验丰富的分析师通常可以识别Emotet生成的流量和Trickbot生成的流量。感染后的Emotet活动由HTTP流量和服务器返回的编码数据组成。这与感染后Trickbot活动明显不同，后者通常依赖HTTPS/SSL/TLS通信进行命令和控制通信。图25指出了该特定感染在Emotet和Trickbot之间的不同感染流量。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/11/word-image-90-1024x586.png" alt="img"></p>
+<p>图25：Emotet和Trickbot流量的差异。</p>
+<p>此感染发生在Active Directory环境中，其中10.9.25.102作为受感染的Windows客户端，而10.9.25.9作为DC。在稍后的流量中，我们看到DC表现出Trickbot感染的迹象，如图26所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/11/word-image-91-1024x535.png" alt="img"></p>
+<p>图26：DC上的Trickbot活动。</p>
+<p>感染是如何从客户转移到DC的？Trickbot使用一种版本的Eternal Blue漏洞利用Microsoft的SMB协议横向移动。在这种情况下，受感染的Windows客户端通过TCP端口445向DC的10.9.25.9发送了几次信息，然后DC从185.98.87.185/wredneg2.png中检索了Trickbot可执行文件。在DC呼出至185.98.87.185之前，使用basic+过滤器查看10.9.25.102处的客户端与10.9.25.9处的DC之间的通信的SYN段，如图27所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/11/word-image-92-1024x703.png" alt="img"></p>
+<p>图27：在DC从196.98.87.185/wredneg2.png检索到Trickbot EXE之前，找到从10.9.25.102处的客户端到10.9.25.9处的DC（以灰色显示）的流量。</p>
+<p>遵循以下TCP流之一，例如，该行在TCP端口49321上的源为10.9.25.102，在TCP端口445上的目标为10.9.35.9。这对于客户端发送到DC是非常不寻常的流量，因此它是可能与EternalBlue漏洞利用有关。有关此流量的示例，请参见图28。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/11/word-image-93-1024x725.png" alt="img"></p>
+<p>图28：从客户端到TCP端口445到DC的异常流量的示例，可能与基于EternalBlue的利用有关。</p>
+<p>除了这种异常的SMB流量和DC被感染之外，此pcap中任何Trickbot特定的活动都与我们之前的示例非常相似。</p>
+<p>结论<br>本教程通过回顾从2019年9月开始的两个pcap提供了检查Trickbot恶意软件的Windows感染的技巧。可以在malware-traffic-analysis.net上找到更多包含Trickbot活动示例的pcap。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Ursnif%E6%84%9F%E6%9F%93/" rel="next" title="Wireshark教程：检查Ursnif感染">
+                <i class="fa fa-chevron-left"></i> Wireshark教程：检查Ursnif感染
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">万俟思睿</p>
+              <p class="site-description motion-element" itemprop="description">进一寸有一寸的欢喜</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/ytytytytyt6.github.io/archives">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#检查Trickbot感染"><span class="nav-number">1.</span> <span class="nav-text">检查Trickbot感染</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01恶意垃圾邮件的Trickbot"><span class="nav-number">1.1.</span> <span class="nav-text">0x01恶意垃圾邮件的Trickbot</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过其他恶意软件分发的Trickbot"><span class="nav-number">1.2.</span> <span class="nav-text">通过其他恶意软件分发的Trickbot</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">万俟思睿</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/ytytytytyt6.github.io/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

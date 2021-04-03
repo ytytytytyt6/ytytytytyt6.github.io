@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/ytytytytyt6.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/ytytytytyt6.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/ytytytytyt6.github.io/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/ytytytytyt6.github.io/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/ytytytytyt6.github.io/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/ytytytytyt6.github.io/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/ytytytytyt6.github.io/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Wireshark教程：检查Dridex感染流量本教程适用于调查可疑网络活动并查看网络数据包捕获（pcaps）的安全专业人员。必须熟悉Wireshark才能理解本教程，该教程侧重于Wireshark版本3.x。 Dridex是一类信息窃取恶意软件的名称，也被称为银行木马。该恶意软件于2014年首次出现，并一直活跃至今。 今天的Wireshark教程回顾了Dridex的活动，并提供了一些有关基于流量">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wireshark教程：检查Dridex感染流量">
+<meta property="og:url" content="https://ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Dridex%E6%84%9F%E6%9F%93%E6%B5%81%E9%87%8F/index.html">
+<meta property="og:site_name" content="思睿&#39;s Blog">
+<meta property="og:description" content="Wireshark教程：检查Dridex感染流量本教程适用于调查可疑网络活动并查看网络数据包捕获（pcaps）的安全专业人员。必须熟悉Wireshark才能理解本教程，该教程侧重于Wireshark版本3.x。 Dridex是一类信息窃取恶意软件的名称，也被称为银行木马。该恶意软件于2014年首次出现，并一直活跃至今。 今天的Wireshark教程回顾了Dridex的活动，并提供了一些有关基于流量">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-2.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-3.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-4.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-5.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-6.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-7.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-8.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-9.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-10.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-13.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-14.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-15.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-16.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-17.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-18.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-20.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-21.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-22.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-23.jpeg">
+<meta property="og:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-24.jpeg">
+<meta property="article:published_time" content="2021-04-03T11:42:35.713Z">
+<meta property="article:modified_time" content="2021-04-03T12:56:04.106Z">
+<meta property="article:author" content="万俟思睿">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-2.jpeg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/ytytytytyt6.github.io/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ytytytytyt6.github.io/2021/04/03/Wireshark教程：检查Dridex感染流量/"/>
+
+
+
+
+
+  <title>Wireshark教程：检查Dridex感染流量 | 思睿's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/ytytytytyt6.github.io/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">思睿's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/ytytytytyt6.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Dridex%E6%84%9F%E6%9F%93%E6%B5%81%E9%87%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Wireshark教程：检查Dridex感染流量</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-03T19:42:35+08:00">
+                2021-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Wireshark教程：检查Dridex感染流量"><a href="#Wireshark教程：检查Dridex感染流量" class="headerlink" title="Wireshark教程：检查Dridex感染流量"></a>Wireshark教程：检查Dridex感染流量</h1><p>本教程适用于调查可疑网络活动并查看网络数据包捕获（pcaps）的安全专业人员。必须熟悉Wireshark才能理解本教程，该教程侧重于Wireshark版本3.x。</p>
+<p>Dridex是一类信息窃取恶意软件的名称，也被称为银行木马。该恶意软件于2014年首次出现，并一直活跃至今。</p>
+<p>今天的Wireshark教程回顾了Dridex的活动，并提供了一些有关基于流量分析来识别此家庭的有用提示。</p>
+<h2 id="Dridex分布"><a href="#Dridex分布" class="headerlink" title="Dridex分布"></a>Dridex分布</h2><p>要了解Dridex网络流量，您应该了解导致感染的事件链。 Dridex通常是通过恶意垃圾邮件（malspam）分发的。这种垃圾邮件的浪潮通常每周至少发生两次或三次。一些发送Dridex的电子邮件包含附加的Microsoft Office文档，而另一些电子邮件则包含下载恶意文件的链接。图1至图4显示了一些最近的示例。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-2.jpeg" alt="An email carrying a malicious Excel file, pushing Dridex, with the subject line &quot;DHL Invoices for Aug 2020&quot;"></p>
+<p>一封带有恶意Excel文件的电子邮件，推送了Dridex，主题行为“ 2020年8月DHL发票”<br>图1.从2020年9月开始，以DHL为主题的垃圾邮件使用附件推动Dridex。<br>一封使用附加的恶意Excel文件推送Dridex的电子邮件。主题行是“ UPS发票通知”。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-3.jpeg" alt="An email pushing Dridex using an attached malicious Excel file. The subject line is &quot;UPS Invoice Notification.&quot; "></p>
+<p>图2.从2020年10月开始，以UPS为主题的垃圾邮件使用附件推动Dridex。<br>一封使用恶意链接推送Dridex的电子邮件。主题行是“联邦快递发货747958837531已交付”。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-4.jpeg" alt="An email pushing Dridex using a malicious link. The subject line is &quot;FedEx Shipment 747958837531 Delivered.&quot; "></p>
+<p>图3.从2020年9月开始，以联邦快递为主题的垃圾邮件使用链接推动Dridex。<br>一封使用恶意链接推送Dridex的电子邮件。主题行是“通知：发票796636”。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-5.jpeg" alt="An email pushing Dridex using a malicious link. The subject line is &quot;Notification : invoice 796636.&quot; "></p>
+<p>图4.从2020年10月开始，以QuickBooks为主题的垃圾邮件使用链接推送Dridex。<br>初始恶意文件可以是带有恶意宏的Microsoft Office文档，也可以是伪装为某种文档的Windows可执行文件（EXE）。无论哪种方式，潜在的受害者都需要点击此初始文件中的感染路径。初始文件将检索Dridex安装程序，尽管有时初始文件本身就是Dridex安装程序。 Dridex安装程序通过加密的命令和控制（C2）网络流量检索64位Dridex DLL文件。图5和图6显示了我们对最近Dridex活动的感染链的普遍看法。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-6.jpeg" alt="Malspam with attached spreadsheets pushing Dridex. The chain of events is as follows: malspam with attachment, attached Excel spreadsheet, enable macros, HTTPS traffic for installer DLL, installer DLL for Dridex, HTTPS C2 traffic, 64-bit Dridex DLL files, HTTPS C2 traffic, updated 64-bit Dridex DLL files"></p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-7.jpeg" alt="Malspam with links pushing Dridex. Chain of events is commonly as follows: malspam with HTTPS link, HTTPS traffic for Word doc, downloaded Word doc, enable macros, HTTPS traffic for installer DLL, installer DLL for Dridex, HTTPS C2 traffic, 64-bit Dridex DLL files, HTTPS C2 traffic, updated 64-bit Dridex DLL files"></p>
+<p>带有附加电子表格的垃圾邮件推送Dridex。事件链如下：带附件的垃圾邮件，附加的Excel电子表格，启用宏，安装程序DLL的HTTPS流量，Dridex的安装程序DLL，HTTPS C2流量，64位Dridex DLL文件，HTTPS C2流量，更新的64位Dridex DLL文件<br>图5.当Dridex作为垃圾邮件附件分发时，通常可以看到的事件链。<br>带有推动Dridex的链接的垃圾邮件。事件链通常如下：带HTTPS链接的垃圾邮件，Word文档的HTTPS通信，下载的Word文档，启用宏，安装程序DLL的HTTPS通信，Dridex的安装程序DLL，HTTPS C2通信，64位Dridex DLL文件，HTTPS C2流量，更新的64位Dridex DLL文件<br>图6.使用垃圾邮件中的链接分发Dridex时通常看到的事件链。<br>图7显示了来自垃圾邮件的另一种Dridex感染链，与图5和6中使用的Office文档并不相同。到2020年9月24日，来自垃圾邮件的链接推动Dridex并未返回Office文档。相反，他们返回了Windows可执行文件。有关详细信息，请参见图7。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-8.jpeg" alt="Malspam pushing Dridex on Thursday 2020-09-24, Note: Occasionally, the same HTTPS link returned an EXE with an .scr file extension instead of a ZIP archive. The chain of events seen was as follows: malspam with HTTPS link, HTTPS traffic for ZIP archive, downloaded ZIP archive, Dridex installer EXE (.scr file extension), HTTPS C2 traffic, 64-bit Dridex DLL files, HTTPS C2 traffic, updated 64-bit Dridex DLL files"></p>
+<p>malspam在2020-09-24星期四推送Dridex，注意：有时，同一HTTPS链接返回的文件扩展名为.scr而不是ZIP存档的EXE。看到的事件链如下：带有HTTPS链接的垃圾邮件，ZIP存档的HTTPS流量，已下载的ZIP存档，Dridex安装程序EXE（.scr文件扩展名），HTTPS C2流量，64位Dridex DLL文件，HTTPS C2流量，已更新64位Dridex DLL文件<br>图7：在2020年9月看到的事件链，其中的链接导致了Dridex安装程序EXE。<br>如图5到7所示，分发流量通常是HTTPS，它使初始文件或由于Dridex安装程序是加密的，因此很难检测到。幸运的是，由Dridex C2活动引起的感染后流量足以识别。</p>
+<h2 id="证书和HTTPS流量"><a href="#证书和HTTPS流量" class="headerlink" title="证书和HTTPS流量"></a>证书和HTTPS流量</h2><p>要了解Dridex感染活动，我们还应该了解用于HTTPS流量的数字证书。</p>
+<p>数字证书用于HTTPS流量的SSL / TLS加密。使用HTTPS查看网站时，Web服务器会将证书发送到客户端的Web浏览器。来自此数字证书的数据用于建立HTTPS连接。证书包含网站的公共密钥，并确认网站的身份。</p>
+<p>不同的证书颁发机构（CA）可以为各种网站颁发数字证书。证书被出售给商业网站的企业，而一些证书颁发机构（如Let’s Encrypt）则免费提供证书。</p>
+<p>可以从Wireshark中的HTTPS通信中查看证书信息。我们将重点关注以下两个部分：</p>
+<p>有关CA的颁发者数据。<br>有关网站的主题数据。<br>颁发者数据显示颁发了数字证书的CA。主题数据验证网站的身份。图8显示了如何从<a href="http://www.paloaltonetworks.com查找HTTPS流量的证书颁发者和主题数据。" target="_blank" rel="noopener">www.paloaltonetworks.com查找HTTPS流量的证书颁发者和主题数据。</a></p>
+<p>屏幕截图显示了如何使用<a href="http://www.paloaltonetworks.com作为示例来查找HTTPS流量的证书颁发者和主题日期。红色框突出显示主题数据以标识网站。" target="_blank" rel="noopener">www.paloaltonetworks.com作为示例来查找HTTPS流量的证书颁发者和主题日期。红色框突出显示主题数据以标识网站。</a></p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-9.jpeg" alt="The screenshot shows how to find certificate issuer and subject date for HTTPS traffic, using www.paloaltonetworks.com as an example. A red box highlights the subject data to identify the website. "></p>
+<p>图8.从HTTPS流量到<a href="http://www.paloaltonetworks.com的证书数据。" target="_blank" rel="noopener">www.paloaltonetworks.com的证书数据。</a><br>但是，在设置Web服务器时，管理员可以生成自签名证书。自签名证书是本地生成的，不由任何证书颁发机构颁发。在现代浏览器（例如Firefox）中查看时，来自此类服务器的HTTPS流量通常会生成错误消息，如图9所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-10.jpeg" alt="HTTPS traffic from self-signed certificates often generates error messages when viewed in modern browsers, such as this warning from Firefox, which states, &quot;Warning: Potential Security Risk Ahead.&quot; "></p>
+<p>当在现代浏览器中查看时，来自自签名证书的HTTPS通信通常会生成错误消息，例如来自Firefox的警告，该警告指出“警告：潜在的安全隐患”。<br>图9.尝试从使用自签名证书的网站查看页面时，Firefox出现错误。<br>恶意软件开发人员通常将自签名证书用于其C2服务器。为什么？因为自签名证书是快速，容易和免费创建的。此外，恶意软件的HTTPS C2流量不涉及Web浏览器，因此加密的流量可以正常工作而不会出现任何错误或警告。</p>
+<p>生成自签名证书涉及为以下字段输入值（其中一些通常留为空白）：</p>
+<p>国家名称（2个字母代码）。<br>州或省名称。<br>地区名称（通常是城市名称）。<br>机构名称。<br>组织单位名称。<br>通用名称（例如，标准主机名）。<br>电子邮件地址。<br>这些字段用于标识网站的主题数据，但是相同的字段和值也用于颁发者，因为证书是在Web服务器本身上本地生成的。</p>
+<p>恶意软件作者经常在这些字段中使用随机，默认或伪造的值作为自签名证书。例如，Trickbot的HTTPS C2流量通常将example.com用于“通用名称”字段。来自最近的IcedID恶意软件感染的HTTPS C2流量在其证书颁发者字段中使用了以下值：</p>
+<p>国家/地区名称：AU<br>州或省名称：Some-State<br>组织名称：Internet Widgits Pty Ltd<br>通用名称：localhost<br>与其他恶意软件家族相比，<strong>Dridex HTTPS C2流量的证书颁发者数据中的模式有些独特。它们可能是识别Dridex感染的关键。</strong></p>
+<h2 id="Pcaps-of-Dridex感染活性"><a href="#Pcaps-of-Dridex感染活性" class="headerlink" title="Pcaps of Dridex感染活性"></a>Pcaps of Dridex感染活性</h2><p>该GitHub存储库中提供了五个密码保护的ZIP存档，其中包含近期Dridex网络流量的pcaps。进入GitHub页面后，单击每个ZIP归档条目，然后下载它们，如图10和11所示。</p>
+<p>这显示了如何从GitHub存储库中下载本教程使用的ZIP存档pan-unit42 / wireshark-tutorial-Dridex-traffic<br>图10. GitHub存储库，其中包含指向本教程的ZIP存档的链接。<br>屏幕截图显示了从GitHub存储库下载存储此Wireshark教程文件的zip存档2020-06-03-Dridex-infection-traffic-pcap.zip的示例<br>图11.下载本教程的ZIP归档文件之一。<br>使用感染的作为密码从这些ZIP存档中提取pcap。这将产生五个pcap文件：</p>
+<p>2020-06-03-Dridex-infection-traffic.pcap<br>2020-09-24-Dridex-infection-traffic.pcap<br>2020-09-29-Dridex-infection-traffic.pcap<br>2020-10-05-Dridex-infection-traffic.pcap<br>2020-10-07-Dridex-infection-traffic.pcap</p>
+<h2 id="范例一：2020-06-03-Dridex-infection-traffic-pcap"><a href="#范例一：2020-06-03-Dridex-infection-traffic-pcap" class="headerlink" title="范例一：2020-06-03-Dridex-infection-traffic.pcap"></a>范例一：2020-06-03-Dridex-infection-traffic.pcap</h2><p>在Wireshark中打开2020-06-03-Dridex-infection-traffic.pcap，并使用一个基本的Web过滤器，如上一本有关Wireshark过滤器的教程所述。我们针对Wireshark 3.x的基本过滤器是：</p>
+<p>（http.request或tls.handshake.type eq 1）和！（ssdp）</p>
+<p>Dridex感染流量包括两个部分ts：</p>
+<p>初始感染活动。<br>感染后C2流量。<br>当受害者从电子邮件链接下载恶意文件时，就会发生初始感染活动。初始感染活动还包括恶意文件加载Dridex的安装程序。在某些情况下，您可能没有初始下载，因为恶意文件是电子邮件的附件。在其他情况下，您可能看不到Dridex安装程序已加载，因为初始文件本身就是安装程序。在许多情况下，此活动是通过HTTPS进行的，因此我们看不到任何URL，而只是域名。</p>
+<p>感染后活动是在受害者被感染后发生的HTTPS C2通信。成功感染Dridex期间，总是会发生这种情况。此C2通信直接与IP地址进行通信，因此没有与之关联的域名。它还具有异常的证书颁发者数据，如下所述。</p>
+<p>图12显示了使用我们的基本Web过滤器在Wireshark中打开的第一个示例。没有域名的行是Dridex HTTPS C2通信。</p>
+<p>此屏幕快照显示了在Wireshark中过滤的Dridex感染流量。该屏幕标记为2020-06-03-Dridex-infection-traffic.pcap</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-13.jpeg" alt="This screenshot shows Dridex infection traffic, filtered in Wireshark. The screen is labeled 2020-06-03-Dridex-infection-traffic.pcap">图12.使用我们的基本Web过滤器在Wireshark中过滤的第一个pcap的流量。</p>
+<p>图12中显示的第一个pcap显示了直接到IP地址而不是域名的以下流量。这很可能是Dridex HTTPS C2流量：</p>
+<ul>
+<li>185.86.148[.]68 over TCP port 443</li>
+<li>212.95.153[.]36 over TCP port 453</li>
+</ul>
+<p>使用我们的基本Web过滤器看到的其他域是使用以microsoft.com，office.net或windows.com等著名名称结尾的域的系统流量。唯一的例外是到达truepenesonga[.]com的HTTPS流量，该流量接近pcap在世界标准时间19:38:18的开始。这可能是Dridex安装程序。快速的Google搜索表明truepenesonga[.]com与恶意软件相关联。</p>
+<p>关注感染后Dridex C2流量。在Wireshark中使用以下过滤器来查看证书颁发者数据，以了解这两个IP地址上的HTTPS流量：</p>
+<p>tls.handshake.type eq 11 and (ip.addr eq 185.86.148.68 or ip.addr eq 212.95.153.36)</p>
+<p>应用过滤器后，在Wireshark列显示中选择第一帧，然后转到帧详细信息面板并展开值，如图13所示，直到找到以术语RDNSequence项目开头的行的列表为止。 。</p>
+<p>屏幕快照突出显示了可用于查找Dridex HTTPS C2通信的证书颁发者数据的关键点。红色箭头特别指出传输层安全性，证书，握手协议，签名证书，颁发者和rdnSequence。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-14.jpeg" alt="The screenshot highlights key spots that can be used for finding certificate issuer data for Dridex HTTPS C2 traffic. Red arrows particularly point out Transport layer security, certificate, handshake protocol, signed certfiicate, issuer and rdnSequence. "></p>
+<p>图13.查找Dridex HTTPS C2流量的证书颁发者数据。<br>请注意用于185.86.148[.]68的HTTPS流量的RDNSequence项目及其值：</p>
+<ul>
+<li>id-at-countryName=Vu</li>
+<li>id-at-stateOrProvinceName=Uererarnk4</li>
+<li>id-at-localityName=Port Vila</li>
+<li>id-at-organizationName=Whensean Imegdtc SICAV</li>
+<li>id-at-organizationUnitName=6Tbuthinalq</li>
+<li>id-at-commonName=1andfhtittbly.fan</li>
+</ul>
+<p>Dridex证书颁发者字段通常包含随机字符串，有时会插入一两个数字。但是，国家/地区名称和城市或地区的值通常会匹配。在上面的示例中，Vu是瓦努阿图的2个字母的国家代码，而Vila端口是瓦努阿图的首都。</p>
+<p>对到212.95.153[.]36的HTTPS通信执行相同的操作，您应该找到：</p>
+<ul>
+<li>id-at-countryName=AO</li>
+<li>id-at-localityName=Luanda</li>
+<li>id-at-organizationName=Msorest KGaA</li>
+<li>id-at-organizationUnitName=aghat@yongd</li>
+<li>id-at-commonName=arashrinwearc.Ourontizes.ly</li>
+</ul>
+<p>我们发现当地的罗安达是安哥拉的首都，其国家代码为AO。但是其他字段似乎具有随机值。这种类型的证书颁发者数据是Dridex C2流量的有力指标。</p>
+<h2 id="示例二：2020-09-24-Dridex-infection-traffic-pcap"><a href="#示例二：2020-09-24-Dridex-infection-traffic-pcap" class="headerlink" title="示例二：2020-09-24-Dridex-infection-traffic.pcap"></a>示例二：2020-09-24-Dridex-infection-traffic.pcap</h2><p>在Wireshark中打开2020-09-24-Dridex-infection-traffic.pcap并使用基本的Web过滤器，如图14所示。</p>
+<p>此屏幕快照显示了在Wireshark中过滤的Dridex感染流量。该屏幕标记为2020-09-24-Dridex-infection-traffic.pcap</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-15.jpeg" alt="This screenshot shows Dridex infection traffic, filtered in Wireshark. The screen is labeled 2020-09-24-Dridex-infection-traffic.pcap"></p>
+<p>图14.使用基本的Web过滤器，在Wireshark中过滤的第二个pcap的流量。<br>请注意，前三行是未加密的HTTP GET请求。这是来自图3前面所示电子邮件的链接，它为感染链返回了一个ZIP存档，如图7所示。</p>
+<p>可以遵循HTTP流（而非TCP流）。向下滚动以查看返回了一些脚本，如图15和16所示。<img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-16.jpeg" alt="The HTTP stream (not the TCP stream) can be followed. The screenshot indicates how to find that option in Wireshark. "></p>
+<p>图15.在第一个HTTP GET请求的HTTP流之后。<br>当遵循HTTP流进行Dridex感染流量时，向下滚动以查看从第一个HTTP GET请求返回的脚本。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-17.jpeg" alt="When following the HTTP Stream for the Dridex infection traffic, scroll down to view the script returned from the first HTTP GET request. "></p>
+<p>图16.向下滚动以查看从该HTTP GET请求返回的脚本。<br>对adv.epostoday[.]uk的所有三个HTTP GET请求都在同一TCP流中。在最后一个HTTP GET请求f之前向下滚动到末尾或favicon.ico。您会发现一个长长的ASCII字符字符串的结尾，该字符串转换为blob并作为Ref_Sep24-2020.zip发送给受害者，如图17所示。</p>
+<p>红色箭头指示Ref_Sept24-2020.zip，这是鼓励受害者从浏览器保存的ZIP存档。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-18.jpeg" alt="A red arrow indicates Ref_Sept24-2020.zip, the ZIP archive that the victim will be encouraged to save from the browser. "></p>
+<p>图17.脚本旨在将ZIP存档呈现给受害者，以从浏览器保存。<br>可以使用“导出HTTP对象”功能来导出这些脚本，如图18所示。</p>
+<p>使用“导出HTTP对象”功能，可以保存从以app.php结尾的URL返回的脚本。红色箭头指示要选择的选项。<br>图18.保存从以app.php结尾的URL返回的脚本。<br>再次关注感染后Dridex C2流量。在Wireshark中使用以下过滤器来查看两个IP地址上的HTTPS通信的证书颁发者数据，而HTTPS通信中没有域名：</p>
+<p>tls.handshake.type eq 11 and (ip.addr eq 151.236.219.181 or ip.addr eq 62.98.109.30)</p>
+<p>应用过滤器后，选择第一个框架并转到框架详细信息部分。查找第一个pcap中以RDNSequence项开头的行的列表。图19显示了如何在我们的第二个pcap中到达151.236.219[.]181。</p>
+<p>屏幕快照突出显示了可用于查找Dridex HTTPS C2通信的证书颁发者数据的关键点。红色箭头特别指出传输层安全性，证书，握手协议，签名证书，颁发者和rdnSequence。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-20.jpeg" alt="The screenshot highlights key spots that can be used for finding certificate issuer data for Dridex HTTPS C2 traffic. Red arrows particularly point out Transport layer security, certificate, handshake protocol, signed certfiicate, issuer and rdnSequence. "></p>
+<p>图19.在第二个pcap中查找Dridex HTTPS C2流量的证书颁发者数据。<br>证书发行者数据与第一个示例的数据相似。检查两个IP地址的证书颁发者数据，然后找到下面列出的数据。</p>
+<p>151.236.219[.]181上Dridex HTTPS C2通信的证书颁发者数据：</p>
+<ul>
+<li>id-at-countryName=IL</li>
+<li>id-at-stateOrProvinceName=Anourd Thiolaved Thersile5 Fteda8</li>
+<li>id-at-LocalityName=Tel Aviv</li>
+<li>id-at-organizationName=Wemadd Hixchac GmBH</li>
+<li>id-at-organizationUnitName=moasn@emanc</li>
+<li>id-at-commonName=heardbellith.Icanwepeh.nagoya</li>
+</ul>
+<ul>
+<li>id-at-countryName=SS</li>
+<li>id-at-LocalityName=Khartoum</li>
+<li>id-at-organizationName=Hedanpr S.p.a.</li>
+<li>id-at-commonName=psprponounst.aquarelle</li>
+</ul>
+<p>在这两种情况下，位置均与国家/地区名称匹配，但是其他字段似乎是随机字符串。这与我们第一个pcap中的Dridex HTTPS C2流量相同。</p>
+<h2 id="示例三：2020-09-29-Dridex-infection-traffic-pcap"><a href="#示例三：2020-09-29-Dridex-infection-traffic-pcap" class="headerlink" title="示例三：2020-09-29-Dridex-infection-traffic.pcap"></a>示例三：2020-09-29-Dridex-infection-traffic.pcap</h2><p>在Wireshark中打开2020-09-29-Dridex-infection-traffic.pcap并使用基本的Web过滤器，如图20所示。</p>
+<p>此屏幕快照显示了在Wireshark中过滤的Dridex感染流量。该屏幕标记为2020-09-29-Dridex-infection-traffic.pcap</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-21.jpeg" alt="This screenshot shows Dridex infection traffic, filtered in Wireshark. The screen is labeled 2020-09-29-Dridex-infection-traffic.pcap"></p>
+<p>图20.使用我们的基本Web过滤器在Wireshark中过滤的第三个pcap的流量。<br>检查这些域，发现有三个使用HTTPS流量的非Microsoft域可能与初始感染活动有关：</p>
+<p>dsimportaciones[.]com<br>murfreesboro.fairwayconcierge[.]com<br>ryner.net[.]au<br>由于这些是特定于URL的，并且未显示其内容，因此请专注于感染后Dridex C2流量。在Wireshark中使用以下过滤器来查看两个IP地址上的HTTPS通信的证书颁发者数据，而HTTPS通信中没有域名：</p>
+<p>tls.handshake.type eq 11 and (ip.addr eq 67.79.105.174 or ip.addr eq 144.202.31.138)</p>
+<p>应用过滤器后，选择第一个框架，转到“框架详细信息”部分，并查找以术语RDNSequence项开头的行的列表，如在前两个示例中所做的那样。图21显示了如何在67.79.105[.]174的第三个pcap中到达那里。</p>
+<p>屏幕快照突出显示了可用于查找Dridex HTTPS C2通信的证书颁发者数据的关键点。红色箭头特别指出传输层安全性，证书，握手协议，签名证书，颁发者和rdnSequence。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-22.jpeg" alt="The screenshot highlights key spots that can be used for finding certificate issuer data for Dridex HTTPS C2 traffic. Red arrows particularly point out Transport layer security, certificate, handshake protocol, signed certfiicate, issuer and rdnSequence. "></p>
+<p>图21.在第三个pcap中查找Dridex HTTPS C2流量的证书颁发者数据。<br>证书颁发者数据遵循与前两个示例相同的模式。检查两个IP地址的发行方数据，以查找下面列出的数据。</p>
+<p>Dridex HTTPS C2通信在67.79.105[.]174上的证书颁发者数据：</p>
+<ul>
+<li>id-at-countryName=MN</li>
+<li>id-at-stateOrProvinceName=Listth Thearere8 berponedt tithsalet</li>
+<li>id-at-LocalityName=Ulaanbaatar</li>
+<li>id-at-organizationName=Massol SE</li>
+<li>id-at-commonName=Atid7brere.Speso_misetr.stada</li>
+</ul>
+<p>144.202.31[.]138上Dridex HTTPS C2通信的证书颁发者数据：</p>
+<ul>
+<li>id-at-countryName=SS</li>
+<li>id-at-LocalityName=Khartoum</li>
+<li>id-at-organizationName=Hedanpr S.p.a.</li>
+<li>id-at-commonName=psprponounst.aquarelle</li>
+</ul>
+<p>值得注意的是，从2020-09-29开始的第三个示例中的144.202.31[.]138的证书颁发者数据与从2020-09-24开始的第二个示例中的62.98.109[.]30的证书颁发者数据相同。</p>
+<h2 id="示例四：2020-10-05-Dridex-infection-traffic-pcap"><a href="#示例四：2020-10-05-Dridex-infection-traffic-pcap" class="headerlink" title="示例四：2020-10-05-Dridex-infection-traffic.pcap"></a>示例四：2020-10-05-Dridex-infection-traffic.pcap</h2><p>在Wireshark中打开2020-10-05-Dridex-infection-traffic.pcap并使用基本的Web过滤器，如图Fi中所示固尔22。</p>
+<p>此屏幕快照显示了在Wireshark中过滤的Dridex感染流量。屏幕标记为2020-10-05-Dridex-infection-traffic.pcap</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-23.jpeg" alt="This screenshot shows Dridex infection traffic, filtered in Wireshark. The screen is labeled 2020-10-05-Dridex-infection-traffic.pcap"></p>
+<p>图22.使用基本的Web过滤器在Wireshark中过滤的第四个pcap的流量。<br>检查这些域，有一个使用HTTPS流量的非Microsoft域可能与初始感染活动有关：</p>
+<p>vardhmanproducts[.]com<br>再次，重点将放在感染后的Dridex C2流量上。在Wireshark中使用以下过滤器来查看两个IP地址上的HTTPS通信的证书颁发者数据，而HTTPS通信中没有域名：</p>
+<p>tls.handshake.type eq 11 and (ip.addr eq 85.114.134.25 or ip.addr eq 85.211.162.44)</p>
+<p>应用过滤器后，选择第一个框架，转到“框架详细信息”部分，然后按照前三个示例中的方法处理以术语RDNSequence项目开头的行的列表。</p>
+<p>证书颁发者数据遵循与前三个示例相同的模式。检查两个IP地址的颁发者数据，您应该找到下面列出的数据。</p>
+<p>85.114.134[.]25上Dridex HTTPS C2流量的证书颁发者数据：</p>
+<ul>
+<li>id-at-countryName=NZ</li>
+<li>id-at-stateOrProvinceName=Cepli thade0 ithentha temsorer</li>
+<li>id-at-LocalityName=Wellington</li>
+<li>id-at-organizationName=Lling Lovisq NL</li>
+<li>id-at-organizationalUnitName=Punddtln</li>
+<li>id-at-commonName=Onshthonese.vyrda-npeces.post</li>
+</ul>
+<p>85.211.162[.]44上Dridex HTTPS C2流量的证书颁发者数据：</p>
+<ul>
+<li>id-at-countryName=MY</li>
+<li>id-at-LocalityName=Kuala Lumpur</li>
+<li>id-at-organizationName=Ointavi Tagate Unltd.</li>
+<li>id-at-commonName=Ateei7thapom.statonrc.loan</li>
+</ul>
+<h2 id="示例五：2020-10-07-Dridex-infection-traffic-pcap"><a href="#示例五：2020-10-07-Dridex-infection-traffic-pcap" class="headerlink" title="示例五：2020-10-07-Dridex-infection-traffic.pcap"></a>示例五：2020-10-07-Dridex-infection-traffic.pcap</h2><p>在Wireshark中打开2020-10-07-Dridex-infection-traffic.pcap并使用基本的Web过滤器，如图23所示。</p>
+<p>此屏幕快照显示了在Wireshark中过滤的Dridex感染流量。该屏幕标记为2020-10-07-Dridex-infection-traffic.pcap</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-24.jpeg" alt="This screenshot shows Dridex infection traffic, filtered in Wireshark. The screen is labeled 2020-10-07-Dridex-infection-traffic.pcap"></p>
+<p>图23.使用基本的Web过滤器在Wireshark中过滤的第五个pcap的流量。</p>
+<p>检查这些域，有一个使用HTTPS流量的非Microsoft域可能与初始感染活动有关：</p>
+<p>newmg532.wordswideweb[.]com<br>检查感染后的Dridex C2流量。在Wireshark中使用以下过滤器来查看两个IP地址上的HTTPS通信的证书颁发者数据，而HTTPS通信中没有域名：</p>
+<p>tls.handshake.type eq 11 and (ip.addr eq 177.87.70.3 or ip.addr eq 188.250.8.142)</p>
+<p>应用过滤器后，选择第一个框架，转到“框架详细信息”部分，然后按照我们的前四个示例中的方法处理以术语RDNSequence项目开头的行的列表。</p>
+<p>证书颁发者数据遵循与我们前四个示例相同的模式。检查两个IP地址的颁发者数据，并找到下面列出的数据。</p>
+<p>在177.87.70[.]3上Dridex HTTPS C2流量的证书颁发者数据：</p>
+<ul>
+<li>id-at-countryName=BS</li>
+<li>id-at-stateOrProvinceName=Sshopedts Inccofrew</li>
+<li>id-at-LocalityName=Nassau</li>
+<li>id-at-organizationName=Mesureder S.p.a.</li>
+<li>id-at-commonName=avothelyop.thedai9neasysb.author</li>
+</ul>
+<p>188.250.8[.]142上Dridex HTTPS C2通信的证书颁发者数据：</p>
+<ul>
+<li>id-at-countryName=UA</li>
+<li>id-at-stateOrProvinceName=avandi0</li>
+<li>id-at-LocalityName=Kiev</li>
+<li>id-at-organizationName=Icccodiso Icloneedb Oyj</li>
+<li>id-at-organizationalUnitName=4Zenyfea</li>
+<li>id-at-commonName=rebydustat.tci</li>
+</ul>
+<p>这五个示例应该很好地说明Dridex HTTPS C2通信的证书颁发者数据是什么样的。这些模式不同于许多其他恶意软件家族，但它们与HTTPS C2 Qakbot网络流量中的证书颁发者数据有些相似。</p>
+<p>但是，对于Qakbot，stateOrProvinceName始终是两个字母的值，而LocalityName由随机字符组成。</p>
+<p>使用Dridex，stateOrProvinceName由随机字符组成，而LocalityName是用于countryName的任何国家的首都。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>本教程回顾了如何从具有Dridex网络流量的pcap中识别Dridex活动。我们回顾了最近发现的五个Dridex感染事件，并从感染后C2流量中发现了证书颁发者数据的相似性。证书颁发者数据是识别Dridex感染的关键，因为这些模式对于Dridex而言似乎是唯一的。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Emotet%E6%84%9F%E6%9F%93/" rel="next" title="Wireshark教程：检查Emotet感染">
+                <i class="fa fa-chevron-left"></i> Wireshark教程：检查Emotet感染
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Qakbot%E6%84%9F%E6%9F%93/" rel="prev" title="Wireshark教程：检查Qakbot感染">
+                Wireshark教程：检查Qakbot感染 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">万俟思睿</p>
+              <p class="site-description motion-element" itemprop="description">进一寸有一寸的欢喜</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/ytytytytyt6.github.io/archives">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Wireshark教程：检查Dridex感染流量"><span class="nav-number">1.</span> <span class="nav-text">Wireshark教程：检查Dridex感染流量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dridex分布"><span class="nav-number">1.1.</span> <span class="nav-text">Dridex分布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#证书和HTTPS流量"><span class="nav-number">1.2.</span> <span class="nav-text">证书和HTTPS流量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pcaps-of-Dridex感染活性"><span class="nav-number">1.3.</span> <span class="nav-text">Pcaps of Dridex感染活性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#范例一：2020-06-03-Dridex-infection-traffic-pcap"><span class="nav-number">1.4.</span> <span class="nav-text">范例一：2020-06-03-Dridex-infection-traffic.pcap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例二：2020-09-24-Dridex-infection-traffic-pcap"><span class="nav-number">1.5.</span> <span class="nav-text">示例二：2020-09-24-Dridex-infection-traffic.pcap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例三：2020-09-29-Dridex-infection-traffic-pcap"><span class="nav-number">1.6.</span> <span class="nav-text">示例三：2020-09-29-Dridex-infection-traffic.pcap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例四：2020-10-05-Dridex-infection-traffic-pcap"><span class="nav-number">1.7.</span> <span class="nav-text">示例四：2020-10-05-Dridex-infection-traffic.pcap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例五：2020-10-07-Dridex-infection-traffic-pcap"><span class="nav-number">1.8.</span> <span class="nav-text">示例五：2020-10-07-Dridex-infection-traffic.pcap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">1.9.</span> <span class="nav-text">结论</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">万俟思睿</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/ytytytytyt6.github.io/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
