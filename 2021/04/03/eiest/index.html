@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/ytytytytyt6.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/ytytytytyt6.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/ytytytytyt6.github.io/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/ytytytytyt6.github.io/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/ytytytytyt6.github.io/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/ytytytytyt6.github.io/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/ytytytytyt6.github.io/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="EITest概述“ EITest”是一个有据可查的感染链，通常依赖于受到感染的网站来指导用户利用工具包（EK）登陆页面。 EITest参与了各种勒索软件，信息窃取程序和其他恶意软件的交付，其使用可以追溯到2014年，有明确的证据。不过，EITest的元素可能要更老了，暗示EITest是Etest的演进。 2011年以来的“ Glazunov”感染链[1]。有关这种演变的第一份服务器端文档来自Suc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eiest">
+<meta property="og:url" content="https://ytytytytyt6.github.io/2021/04/03/eiest/index.html">
+<meta property="og:site_name" content="思睿&#39;s Blog">
+<meta property="og:description" content="EITest概述“ EITest”是一个有据可查的感染链，通常依赖于受到感染的网站来指导用户利用工具包（EK）登陆页面。 EITest参与了各种勒索软件，信息窃取程序和其他恶意软件的交付，其使用可以追溯到2014年，有明确的证据。不过，EITest的元素可能要更老了，暗示EITest是Etest的演进。 2011年以来的“ Glazunov”感染链[1]。有关这种演变的第一份服务器端文档来自Suc">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://www.proofpoint.com/sites/default/files/chrome-1.png">
+<meta property="og:image" content="https://www.proofpoint.com/sites/default/files/chrome-2.png">
+<meta property="og:image" content="https://www.proofpoint.com/sites/default/files/chrome-3.png">
+<meta property="og:image" content="https://www.proofpoint.com/sites/default/files/chrome-5.png">
+<meta property="og:image" content="https://www.proofpoint.com/sites/default/files/chrome-6.png">
+<meta property="og:image" content="https://www.proofpoint.com/sites/default/files/chrome-7.png">
+<meta property="og:image" content="https://www.proofpoint.com/sites/default/files/chrome-8.png">
+<meta property="og:image" content="https://www.proofpoint.com/sites/default/files/chrome-9.png">
+<meta property="og:image" content="https://www.proofpoint.com/sites/default/files/chrome-10.png">
+<meta property="og:image" content="https://www.proofpoint.com/sites/default/files/chrome-11.png">
+<meta property="og:image" content="https://www.proofpoint.com/sites/default/files/chrome-12.png">
+<meta property="og:image" content="https://www.proofpoint.com/sites/default/files/chrome-13.png">
+<meta property="article:published_time" content="2021-04-03T15:33:16.114Z">
+<meta property="article:modified_time" content="2021-04-03T15:33:33.031Z">
+<meta property="article:author" content="万俟思睿">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.proofpoint.com/sites/default/files/chrome-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/ytytytytyt6.github.io/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ytytytytyt6.github.io/2021/04/03/eiest/"/>
+
+
+
+
+
+  <title>eiest | 思睿's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/ytytytytyt6.github.io/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">思睿's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/ytytytytyt6.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/03/eiest/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">eiest</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-03T23:33:16+08:00">
+                2021-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="EITest"><a href="#EITest" class="headerlink" title="EITest"></a>EITest</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>“ EITest”是一个有据可查的感染链，通常依赖于受到感染的网站来指导用户利用工具包（EK）登陆页面。 EITest参与了各种勒索软件，信息窃取程序和其他恶意软件的交付，其使用可以追溯到2014年，有明确的证据。不过，EITest的元素可能要更老了，暗示EITest是Etest的演进。 2011年以来的“ Glazunov”感染链[1]。有关这种演变的第一份服务器端文档来自Sucuri，2014年7月[2]与通过MailPoet插件漏洞利用Wordpress的浪潮有关。 KahuSecurity最近在2016年10月分析了服务器端脚本[3]。</p>
+<p>2014年7月，研究人员观察到与EITest相关的流量导致了Angler漏洞利用工具包的实例（图1）：</p>
+<p><img src="https://www.proofpoint.com/sites/default/files/chrome-1.png" alt="img"></p>
+<p>图1：2014年7月14日-EITest链接到Angler</p>
+<p>首次公开共享的流量来自2014年9月22日的[Malware-Traffic-Analysis] [4]，一个月后（2014年10月29日），Malwarebytes撰写了博客[5]，描述了Flash重定向，并使用了EITest这个名称。到那个链条。</p>
+<p>EITest感染链发展的一个重要步骤是于2016年10月3日删除了面向受害人的重定向器，这首先由BroadAnalysis记录[6]。这可能是对安全社区针对其面向受害节点的几项行动的反应，需要更改策略。</p>
+<p>我们的研究使我们得出结论，“ EITest”参与者正在向其他群体出售流量，尽管这并不排除他们可能会使用一部分流量进行自身剥削的可能性。结果，我们根据事件的时间和地理位置观察到EITest链导致多个EK。</p>
+<p>尽管他们目前正在休假，但EITest流量的主要买家之一似乎是经营Empire Exploit Kit的组织。该小组从多个参与者购买流量，并将负载（即恶意软件安装）出售给其他多个参与者。重播此感染链会发现各种各样的有效负载（图2）：</p>
+<p><img src="https://www.proofpoint.com/sites/default/files/chrome-2.png" alt="img"></p>
+<p>图2：2016年9月在EITest重定向后可以看到的有效载荷多样性的图示；大部分多样性来自Empire EK及其内部的TDS。</p>
+<p>发现：</p>
+<p>在12月，我们获悉一个受感染的网站删除了“ Chrome_Font.exe” [7]。重播后，我们发现该网站已遭到EITest破坏，但即使使用上述浏览器也无法触发二进制删除。最近的一份报告使我们更加仔细地研究了EITest过滤机制，以了解攻击是如何触发的。</p>
+<p><img src="https://www.proofpoint.com/sites/default/files/chrome-3.png" alt="img"></p>
+<p>图3：图示EITest和连接的生态系统的图。实际上，现实更加复杂且不断发展，针对性更强的国家/地区以及RIG，Empire和Sundown EK的客户更多。为了提高可读性，此处未显示感染后的命令和控制（C＆C）和信誉服务调用。</p>
+<p>攻击链与分析：</p>
+<p>攻击链的用户视图出现在图4的动画中。该链的详细信息在下图中显示。</p>
+<p>图4：2017年1月14日“ Chrome字体”社会工程计划的插图。</p>
+<p>感染很简单：如果受害者符合条件-目标国家/地区，正确的User-Agent（在Windows上为Chrome）和适当的引荐来源-脚本将插入页面中，并在潜在的受害者的浏览器中重写受感染的网站，从而使页面不可读，为用户创建了一个伪造的问题来解决。请注意，满足其他条件的IE用户将遭受更为经典的EK攻击（有关替代感染路径，请参见图3）。</p>
+<p>通过将HTML标记之间的所有数据存储在数组中并对其进行迭代以将其替换为“＆＃0”（这不是适当的ISO字符），这些页面将变得不可读。结果，将显示替换字符�[9]。</p>
+<p><img src="https://www.proofpoint.com/sites/default/files/chrome-5.png" alt="img"></p>
+<p>图5：在受感染网站上的有条件注入-此处显示了替换例程和嵌入式base64编码的图像。</p>
+<p><img src="https://www.proofpoint.com/sites/default/files/chrome-6.png" alt="img"></p>
+<p>图6：第一个诱饵示例-找不到“ HoeflerText”字体。这展示了一个被入侵的网站，其内容被访问的浏览器替代</p>
+<p><img src="https://www.proofpoint.com/sites/default/files/chrome-7.png" alt="img"></p>
+<p>图7：第二个诱饵示例-找不到“ HoeflerText”字体。这几乎与第一个示例相同，但是使用了不同的格式。</p>
+<p><img src="https://www.proofpoint.com/sites/default/files/chrome-8.png" alt="img"></p>
+<p>图8：在用户单击“更新”按钮后，图7中第二个诱饵示例的感染步骤2（单击X关闭对话框不起作用）</p>
+<p>如图6和7所示，向用户显示一个模式窗口[10]，说明“问题”并提供“解决方案”：在这种情况下，安装的是假冒的更新字体包，实际上是恶意软件的有效载荷。 。</p>
+<p><img src="https://www.proofpoint.com/sites/default/files/chrome-9.png" alt="img"></p>
+<p>图9：在受感染网站上的有条件注入；这是模态窗口（诱饵）的代码</p>
+<p>用户单击“更新”按钮后，如图6/7和图8所示，Chrome通过POST发送似乎是一次性密钥的POST下载恶意软件。</p>
+<p><img src="https://www.proofpoint.com/sites/default/files/chrome-10.png" alt="img"></p>
+<p>图10：2017年1月15日-发送POST呼叫以检索恶意软件</p>
+<p>我们认为该活动于2016年12月10日开始；从那时起，下载的可执行文件“ Chrome_Font.exe”实际上是一种称为Fleercivet的广告欺诈恶意软件。</p>
+<p>在此阶段，如果用户不执行下载的文件，则将保持未感染状态。</p>
+<p>感染后：</p>
+<p>Fleercivet是Microsoft授予的以会员模式传播的广告欺诈恶意软件的名称。关联的联属公司在地下市场上以“ Simby”做广告，直到2015年初，并在同年晚些时候以现名“ Clicool”重新出现。</p>
+<p>Clicool地下广告显示在附录A中，并带有英文翻译。</p>
+<p><img src="https://www.proofpoint.com/sites/default/files/chrome-11.png" alt="img"></p>
+<p>图11：由会员“促销”宣传的Clicool会员面板</p>
+<p>感染后，计算机将自行在后台开始浏览。</p>
+<p><img src="https://www.proofpoint.com/sites/default/files/chrome-12.png" alt="img"></p>
+<p>图12：2017年1月15日-FleerCivet产生的感染后流量示例</p>
+<h2 id="结论："><a href="#结论：" class="headerlink" title="结论："></a>结论：</h2><p>这不是第一次将新路径添加到EITest危害链。例如，在2014年12月，ElTest重定向到了一个Android“警察”浏览器储物柜（图13）：</p>
+<p><img src="https://www.proofpoint.com/sites/default/files/chrome-13.png" alt="img"></p>
+<p>图13：2014年12月21日-EITest Android链分发了一个法国警察Browlocker</p>
+<p>但是，此更改对于社交工程和Chrome用户定位的结合是值得注意的。由于行动者发现通过漏洞利用工具包实现转化（即安装恶意软件）更加困难（因此利润减少），因此他们转向了新的策略。与其他威胁一样，行动者正在利用人为因素并诱骗用户自己加载恶意软件，这一次是通过向网站中进行选择性注入来创建问题的外观以及提供伪造的解决方案。</p>
+<p><strong>References:</strong></p>
+<p>[1] <a href="https://blog.sucuri.net/2011/10/evil-backdoors-part-ii.html" target="_blank" rel="noopener">https://blog.sucuri.net/2011/10/evil-backdoors-part-ii.html</a><br>[2] <a href="https://blog.sucuri.net/2014/07/mailpoet-vulnerability-exploited-in-the-wild-breaking-thousands-of-wordpress-sites.html" target="_blank" rel="noopener">https://blog.sucuri.net/2014/07/mailpoet-vulnerability-exploited-in-the-wild-breaking-thousands-of-wordpress-sites.html</a><br>[3] <a href="http://www.kahusecurity.com/2016/deobfuscating-a-malicious-php-downloader/" target="_blank" rel="noopener">http://www.kahusecurity.com/2016/deobfuscating-a-malicious-php-downloader/</a> 2016-10-15<br>[4] <a href="http://malware-traffic-analysis.net/2014/09/22/index.html" target="_blank" rel="noopener">http://malware-traffic-analysis.net/2014/09/22/index.html</a> 2014-09-22<br>[5] <a href="https://blog.malwarebytes.org/exploits-2/2014/10/exposing-the-flash-eitest-malware-campaign/" target="_blank" rel="noopener">https://blog.malwarebytes.org/exploits-2/2014/10/exposing-the-flash-eitest-malware-campaign/</a> 2014-10-29<br>[6] <a href="http://www.broadanalysis.com/2016/10/03/eitest-campaign-drops-flash-gate-for-obfuscated-script-sending-gootkit-banking-malware/" target="_blank" rel="noopener">http://www.broadanalysis.com/2016/10/03/eitest-campaign-drops-flash-gate-for-obfuscated-script-sending-gootkit-banking-malware/</a><br>[7] <a href="https://twitter.com/LowsonWebmin/status/809417116776534017" target="_blank" rel="noopener">https://twitter.com/LowsonWebmin/status/809417116776534017</a> 2016-12-15<br>[8] <a href="http://malware.dontneedcoffee.com/2013/09/cookie-bomb-iframer-way.html" target="_blank" rel="noopener">http://malware.dontneedcoffee.com/2013/09/cookie-bomb-iframer-way.html</a><br>[9] <a href="https://en.wikipedia.org/wiki/Modal_window" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Modal_window</a><br>[10] <a href="https://en.wikipedia.org/wiki/Specials_(Unicode_block)" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Specials_(Unicode_block)</a></p>
+<p><strong>Appendix A - Clicool Fleervicet Advertisement</strong></p>
+<p>Clicool Партнерская программа по кликботу:</p>
+<p>Доброго времени суток, уважаемые читатели форума!</p>
+<p>Разрешите представить вам партнерскую программу по кликботу - Clicool</p>
+<p>Наш софт стабилен и не мешает работать системе, не мешает вашему софту и может длительное время приносить доход с каждой машины.</p>
+<p>Файлы регулярно перекриптовываются и чекаются на АВ.</p>
+<p>Наши рекламодатели дают отличные условия и мы с удовольствием вас обрадуем достойным профитом.</p>
+<p>Мы принимаем us, ca, gb, au, остальные страны обговариваются.</p>
+<p>На выплаты минимальный холд 2 недели, также для проверенных партнеров выплаты по запросу.</p>
+<p>Регистрация через службу поддержки</p>
+<p>jabber: clicool@[REDACTED]</p>
+<p>support_clicool@[REDACTED]</p>
+<p><strong><em>English Translation\</em></strong></p>
+<p>Clicool Affiliate program for clickbot:</p>
+<p>Good day, dear readers of the forum!</p>
+<p>Allow me to introduce to you an affiliate clickbot program - Clicool</p>
+<p>Our software is stable and does not interfere with the work of your system. It does not interfere with system software and you can generate income for a long time on each machine.</p>
+<p>Files are regularly crypted and checked on AV.</p>
+<p>Our advertisers provide excellent conditions and we will please you with a decent profit.</p>
+<p>We accept us, ca, gb, au, other countries can be discussed.</p>
+<p>There is a minimum of a 2 week hold on payments, and by request payment for proven partners.</p>
+<p>Register with Support</p>
+<p>jabber: clicool @ [REDACTED]</p>
+<p>support_clicool @ [REDACTED]</p>
+<p><strong>Appendix B - Other posts providing additional content and resources about EITest</strong></p>
+<p>● <a href="https://blog.sucuri.net/2014/10/wordpress-websites-continue-to-get-hacked-via-mailpoet-plugin-vulnerability.html" target="_blank" rel="noopener">https://blog.sucuri.net/2014/10/wordpress-websites-continue-to-get-hacked-via-mailpoet-plugin-vulnerability.html</a></p>
+<p>● <a href="http://artefact.io/massive-wordpress-hack-seems-underway/" target="_blank" rel="noopener">http://artefact.io/massive-wordpress-hack-seems-underway/</a></p>
+<p>● <a href="https://labsblog.f-secure.com/2015/11/25/the-case-of-a-flash-redirector-from-a-brute-force-password-attack/" target="_blank" rel="noopener">https://labsblog.f-secure.com/2015/11/25/the-case-of-a-flash-redirector-from-a-brute-force-password-attack/</a></p>
+<p>● <a href="http://blog.trendmicro.com/trendlabs-security-intelligence/blog-of-news-site-the-independent-hacked-leads-to-teslacrypto-ransomware/" target="_blank" rel="noopener">http://blog.trendmicro.com/trendlabs-security-intelligence/blog-of-news-site-the-independent-hacked-leads-to-teslacrypto-ransomware/</a></p>
+<p>● <a href="http://blog.fox-it.com/2016/03/24/website-of-security-certification-provider-spreading-ransomware/" target="_blank" rel="noopener">http://blog.fox-it.com/2016/03/24/website-of-security-certification-provider-spreading-ransomware/</a></p>
+<p>● <a href="http://www.cyphort.com/radamant-ransomware-distributed-via-rig-ek/" target="_blank" rel="noopener">http://www.cyphort.com/radamant-ransomware-distributed-via-rig-ek/</a></p>
+<p><strong>Indicators of Compromise:</strong></p>
+<p>The number of EITest-compromised websites is quite large, ranging into the thousands; providing a list is outside the scope of this post.</p>
+<p>As in most affiliate cases, samples are being regenerated every few minutes and are also repacked multiple times per day/week. Researchers may find thousand of iterations and hundreds of imphashes for Fleercivet. The hashes provided are only for the purpose of associating specific samples with this scheme.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Domain | IP</strong></th>
+<th><strong>Comment</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>7a444891c642ec17459471be40bcc1ea9eef6aeb478318a679908f94bf1e7e74</td>
+<td>Fiddler capture (index and post)</td>
+</tr>
+<tr>
+<td>198.37.112.248</td>
+<td>Fleercivet C&amp;C</td>
+</tr>
+<tr>
+<td>searchtopresults[.]com|209.126.122.139</td>
+<td>Server initiating Fleercivet Fraud Scheme (potentially legitimate)</td>
+</tr>
+<tr>
+<td>searchtopresults[.]com/search.php?aff=8320</td>
+<td>Initial Call before Fleercivet clickfraud</td>
+</tr>
+<tr>
+<td>searchtopresults[.]com/search.php?aff=8170&amp;saff=1203</td>
+<td>Later Call tied to Fleercivet activity</td>
+</tr>
+<tr>
+<td>vidvi[.]cf|148.251.102.176</td>
+<td>2014-07-14 - Early “flash redirecting” EITest Domain</td>
+</tr>
+<tr>
+<td>54dfa1cb[.]com|31.184.192.163</td>
+<td>EITest node replying to Compromised Server</td>
+</tr>
+<tr>
+<td>e5b57288[.]com|31.184.192.163</td>
+<td>EITest node replying to Compromised Server</td>
+</tr>
+<tr>
+<td>33db9538[.]com|31.184.192.163</td>
+<td>EITest node replying to Compromised Server</td>
+</tr>
+<tr>
+<td>9507c4e8[.]com|31.184.192.163</td>
+<td>EITest node replying to Compromised Server</td>
+</tr>
+<tr>
+<td>7fc9721cc648de138a61ec3452d63a83fc76ef527d41f4a7aba78f52df13338a</td>
+<td>FleerCivet 2017-01-15</td>
+</tr>
+<tr>
+<td>7bb7848270e76aa1fcb9d11acb46c8421b86c7d528c108d8f179ec829ff977fc</td>
+<td>FleerCivet 2017-01-15</td>
+</tr>
+<tr>
+<td>9190c865c214cf2b1c602edcfe4ab8858806298ca4b6de16bfbd0377385ffe63</td>
+<td>FleerCivet 2017-01-16</td>
+</tr>
+<tr>
+<td>ebeaaef3323331e7ea0e47eac6437dcf5548d9fd759943d2e5c1f3d1fb786167</td>
+<td>FleerCivet 2017-01-17</td>
+</tr>
+<tr>
+<td>starrer[.]com|209.126.118.146 askcom[.]me|209.126.123.39twittertravels[.]com|173.224.124.110shareyourfashion[.]net|209.126.103.104techgnews[.]com|209.239.115.50</td>
+<td>Some servers (potentially legitimate) receiving Fleercivet generated traffic.</td>
+</tr>
+<tr>
+<td>kyle.dark7[.]org/download.phpoblubienica.odnowa[.]org/download.phpsriswamidikshananda[.]org/download.phpdemo.signgo[.]com/help.phpretail.uvapoint[.]com/help.phpchovek5.lozenetz[.]org/download.php</td>
+<td>Exemple of EITest compromised Website acting as download server (POST request with MZ as reply)</td>
+</tr>
+</tbody></table>
+<p><strong>Select ET signatures</strong></p>
+<p>2023742 || EITest SocEng Inject Jan 15 2017 M2</p>
+<p>2023743 || EITest SocEng Inject Jan 15 2017 M1</p>
+<p>2023744 || EITest SocEng Inject Jan 15 2017 M2</p>
+<p>2023745 || EITest SocEng Inject Jan 15 2017 EXE Download</p>
+<p>2023188 || ET CURRENT_EVENTS EITest Inject (compromised site) Sep 12 2016</p>
+<p>2023189 || ET CURRENT_EVENTS EITest Inject (compromised site) M2 Sep 12 2016</p>
+<p>2023249 || ET CURRENT_EVENTS Possible EITest Flash Redirect Sep 19 2016</p>
+<p>2023307 || ET CURRENT_EVENTS EITest Inject (compromised site) Sep 12 2016</p>
+<p>2023312 || ET CURRENT_EVENTS Evil Redirector Leading to EK (EITest Inject) Oct 03 2016</p>
+<p>2023343 || ET CURRENT_EVENTS Evil Redirector Leading to EK EITest Inject Oct 17 2016</p>
+<p>2023482 || ET CURRENT_EVENTS Evil Redirector Leading to EK EITest Inject Oct 17 2016 M2</p>
+<p>2023547 || ET CURRENT_EVENTS Evil Redirector Leading to EK EITest Inject Oct 17 2016 M3</p>
+<p>2810636 || ETPRO TROJAN Fleercivet CnC Beacon 1</p>
+<p>2810637 || ETPRO TROJAN Fleercivet CnC Beacon 2</p>
+<p>2014703 || ET DNS Non-DNS or Non-Compliant DNS traffic on DNS port Reserved Bit Set</p>
+<p>2014702 || ET DNS Non-DNS or Non-Compliant DNS traffic on DNS port Opcode 8 through 15 set</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ytytytytyt6.github.io/2021/04/03/jaff%E5%8B%92%E7%B4%A2%E7%97%85%E6%AF%92%E5%AE%B6%E6%97%8F/" rel="next" title="jaff勒索病毒家族">
+                <i class="fa fa-chevron-left"></i> jaff勒索病毒家族
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ytytytytyt6.github.io/2021/04/04/2019-01-28%20-%20TRAFFIC%20ANALYSIS%20EXERCISE%20-%20TIMBERSHADE/" rel="prev" title="2019-01-28 - TRAFFIC ANALYSIS EXERCISE - TIMBERSHADE">
+                2019-01-28 - TRAFFIC ANALYSIS EXERCISE - TIMBERSHADE <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">万俟思睿</p>
+              <p class="site-description motion-element" itemprop="description">进一寸有一寸的欢喜</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/ytytytytyt6.github.io/archives">
+              
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#EITest"><span class="nav-number">1.</span> <span class="nav-text">EITest</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论："><span class="nav-number">1.2.</span> <span class="nav-text">结论：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">万俟思睿</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/ytytytytyt6.github.io/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

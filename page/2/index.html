@@ -221,6 +221,1608 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Qakbot%E6%84%9F%E6%9F%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Qakbot%E6%84%9F%E6%9F%93/" itemprop="url">Wireshark教程：检查Qakbot感染</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-03T19:43:38+08:00">
+                2021-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Wireshark教程：检查Qakbot感染"><a href="#Wireshark教程：检查Qakbot感染" class="headerlink" title="Wireshark教程：检查Qakbot感染"></a>Wireshark教程：检查Qakbot感染</h1><p>概述<br>Qakbot是一个信息窃取者，也称为Qbot。该恶意软件家族已经活跃了很多年，并且Qakbot产生了独特的流量模式。这份Wireshark教程回顾了最近从Qakbot感染中捕获的数据包（pcap）。在检测和调查Qakbot感染时，了解这些流量模式对于安全专业人员至关重要。</p>
+<p>Qakbot感染流量</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/PB-210-image-01-1024x641.jpg" alt="Qakbot Infection Traffic"></p>
+<p>图1.本教程的pcap。</p>
+<h2 id="Qakbot分配方法"><a href="#Qakbot分配方法" class="headerlink" title="Qakbot分配方法"></a>Qakbot分配方法</h2><p>Qakbot最常通过恶意垃圾邮件（malspam）进行分发，但直到2019年11月，它也已通过漏洞利用工具包进行分发。在某些情况下，Qakbot是由不同的恶意软件（例如Emotet）引起的后续感染，如本示例中所述2019年3月。</p>
+<p>最近针对Qakbot的基于垃圾邮件的分发活动遵循一系列事件，如图2所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-29-1024x618.jpeg" alt="img"></p>
+<p>图2.最近Qakbot分发活动的流程图。<br>来自Malspam中Link的初始Zip存档<br>最近分发Qakbot的恶意垃圾邮件使用伪造的电子邮件链来欺骗合法电子邮件地址。图3显示了一个这样的示例。</p>
+<p>Qakbot感染</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-30-1024x821.jpeg" alt="Qakbot Infections">图3.最近的垃圾邮件示例推动了Qakbot。<br>这些电子邮件的URL以一小段数字结尾，后跟.zip。有关最近在URLhaus和Twitter上报告的来自Qakbot malspam的URL的一些示例，请参见表1。</p>
+<p>最初的zip存档的第一个报告URL<br>![image-20210403203244456](/Users/yueting/Library/Application Support/typora-user-images/image-20210403203244456.png)<br>表1.用于启动Qakbot感染链的初始zip存档的URL。</p>
+<p>在我们的pcap中，您可以使用Wireshark过滤器中的http.request.uri包含.zip的zip存档找到HTTP请求，如图4所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-31-1024x263.jpeg" alt="Qakbot Infections"><br>图4.查找初始zip存档的URL。<br>按照TCP流确认这是一个zip存档，如图5和图6所示，然后尝试从pcap导出zip存档，如图7所示。<br>在大多数情况下，“文件”→“导出对象”→“ HTTP”菜单应导出通过HTTP发送的zip存档。不幸的是，如图8所示，我们无法导出名为9312.zip的文件，因为它在导出HTTP对象列表中被分成数百个较小的部分。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-33-1024x750.jpeg" alt="img"></p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-35-1024x757.jpeg" alt="img"></p>
+<p>图8. 9312.zip在列表中被分解为数百个对象，因此我们无法以这种方式导出它。<br>幸运的是，我们可以从TCP流窗口中导出数据，并在十六进制编辑器中编辑二进制文件以删除任何hxxP响应标头。使用以下步骤从该pcap中提取zip存档：</p>
+<p>跟随TCP流以获取对9312.zip的HTTP请求。<br>仅显示TCP中的响应流量流窗口。<br>将“显示和保存数据为”从ASCII更改为Raw。<br>将数据另存为二进制文件（我选择将其另存为：9312.zip.bin）<br><strong>在十六进制编辑器中打开二进制文件，并删除zip归档文件的前两个字节（以ASCII形式显示为PK）之前的HTTP请求标头。</strong><br><strong>将文件另存为zip存档（我选择将其另存为9312.zip）</strong><br>检查文件以确保它是zip存档。<br>有关此过程的直观指南，请参见图9至14。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-36-1024x675.jpeg" alt="Qakbot Infections"></p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-39-1024x609.jpeg" alt="Qakbot Infections">图14.步骤7-确认编辑的文件是zip存档，然后解压缩VBS文件并检查文件哈希。<br>图14显示了如何使用基于Debian的Linux发行版中的终端窗口来检查文件。从我们的pcap中，zip存档应与提交给VirusTotal的该文件相同。我们提取的VBS文件应与还提交给VirusTotal的该文件相同。</p>
+<p>对提取的VBS文件进行的公共沙盒分析表明，它会在感染链中生成与Qakbot相关的下一个URL：该URL返回Qakbot的Windows可执行文件。</p>
+<h2 id="适用于Qakbot的Windows可执行文件"><a href="#适用于Qakbot的Windows可执行文件" class="headerlink" title="适用于Qakbot的Windows可执行文件"></a>适用于Qakbot的Windows可执行文件</h2><p>这些提取的VBS文件生成URL，这些URL返回Qakbot的Windows可执行文件。自2019年12月以来，用于Qakbot可执行文件的URL以44444.png或444444.png结尾。有关我们使用AutoFocus威胁情报服务发现的这些Qakbot URL的最新示例，请参见表2。</p>
+<p>Qakbot可执行文件的首次看到的URL<br>![image-20210403203603337](/Users/yueting/Library/Application Support/typora-user-images/image-20210403203603337.png)<br>表2. Qakbot可执行文件的URL。</p>
+<p>在我们的pcap中，使用Wireshark过滤器中的hxxp.request.uri包含.png的Qakbot可执行文件找到HTTP GET请求，如图15所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-42-1024x258.jpeg" alt="Qakbot Infections"><br>图15.查找我们的Qakbot可执行文件的URL。<br>使用File→Export Objects→HTTP菜单路径从pcap导出该对象，如图16所示，并检查结果，如图17所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-43-1024x506.jpeg" alt="Qakbot Infections"><br>图17.在基于Debian的Linux终端窗口中检查导出的文件。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-44-1024x276.jpeg" alt="Qakbot Infections">从我们的pcap中，Qakbot可执行文件应该是将此文件提交给VirusTotal。对该文件的公共沙箱分析生成了多个Qakbot指标（标识为Qbot）。</p>
+<h2 id="感染后HTTPS活动"><a href="#感染后HTTPS活动" class="headerlink" title="感染后HTTPS活动"></a>感染后HTTPS活动</h2><p>使用您的基本过滤器（在上一本Wireshark教程中可以找到）来快速查看pcap中的网络流量。向alphaenergyeng . com发送HTTP GET请求后，向下滚动到活动，该活动返回了我们的Qakbot可执行文件。您应该看到一些指向68.1.115 . 106的HTTPS或SSL / TLS流量的指示器，没有相关的域，如图18所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-45-1024x608.jpeg" alt="Qakbot Infections"><br>图18. Qakbot引起的HTTPS或SSL / TLS流量。<br>此流量具有在Qakbot感染期间通常注意到的异常证书颁发者数据。我们在以前的有关Ursnif的WIreshark教程中回顾了异常的证书颁发者数据，因此应该很容易找到。</p>
+<p>让我们使用以下Wireshark过滤器查看我们的Qakbot证书颁发者数据：</p>
+<p>ip.addr eq 68.1.115.186 and ssl.handshake.type eq 11</p>
+<p>对于Wireshark 3.0或更高版本，请使用tls.handshake.type而不是ssl.handshake.type。选择结果中的第一帧，然后展开帧详细信息窗口，直到找到证书颁发者数据为止，如图19所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-46-1024x723.jpeg" alt="Qakbot Infections"><br>图19.从Qakbot流量查看证书颁发者数据。<br>区域名称，组织名称和通用名称的模式非常不常见，通常不会在来自合法HTTPS，SSL或TLS流量的证书中找到。我们的前下面列出了很多此发行者数据：</p>
+<ul>
+<li>id-at-countryName=<strong>ES</strong></li>
+<li>id-at-stateOrProvinceName=<strong>IA</strong></li>
+<li>id-at-localityName=<strong>Uorh Ofwa</strong></li>
+<li>id-at-organizationName=<strong>Coejdut Mavmtko Qxyemk Dxsjie LLC.</strong></li>
+<li>id-at-commonName=<strong>gaevietovp.mobi</strong></li>
+</ul>
+<h2 id="其他感染后流量"><a href="#其他感染后流量" class="headerlink" title="其他感染后流量"></a>其他感染后流量</h2><p>我们的pcap包含与Qakbot感染相关的其他活动。每种活动本身都不具有固有的恶意性，但结合我们先前的发现，我们可以假定完全受到Qakbot感染。</p>
+<p>Qakbot感染的另一个指标是到cdn.speedof . me的HTTPS流量。合法的Internet速度测试服务使用domain speedof . me。尽管这不是恶意流量，但在Qakbot感染期间，我们经常看到到cdn.speedof . me的流量。图20从我们的pcap中显示了此活动。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-47-1024x622.jpeg" alt="img"></p>
+<p>图20. Qakbot通信中的域cdn.speedof . me。<br>Qakbot还会从受感染的Windows主机上的所有浏览器中打开窗口。在进行此沙箱分析的大约13分5秒时，视频播放显示Qakbot在Windows 7主机上打开Chrome，然后是Firefox，然后是Internet Explorer。该分析显示了Qakbot生成的访问以下URL的流量：<br>hxxp：//store.nvprivateoffice . com / redir_chrome.html<br>hxxp：//store.nvprivateoffice . com / redir_ff.html<br>hxxp：//store.nvprivateoffice . com / redir_ie.html</p>
+<p>自2012年以来，域nvprivateoffice . com已通过GoDaddy注册，并且store.nvprivateoffice . com在Fedora服务器上显示nginx的默认网页。</p>
+<p>本教程的pcap来自未安装Chrome或Firefox的Windows 10主机上的Qakbot感染。我们的pcap仅显示Internet Explorer和新的基于Chromium的Microsoft Edge的网络流量。两次，Qakbot生成的URL为hxxp：//store.nvprivateoffice . com / redir_ie.html。</p>
+<p>要查找此流量，请使用以下Wireshark过滤器，如图21所示：</p>
+<p>http.request.full_uri contains store.nvprivateoffice</p>
+<p><strong><em>http.request.full_uri contains store.nvprivateoffice</em></strong></p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-48-1024x315.jpeg" alt="img"></p>
+<p>图21.查找在受感染的Windows主机上打开Web浏览器的Qakbot通信。<br>按照两个以redir_ie.html结尾的HTTP GET请求中的每一个的TCP流。第一个请求在Internet Explorer的HTTP标头中具有一个User-Agent，如图22所示。对于同一URL的第二个请求在新的基于Chromium的Microsoft Edge的HTTP标头中具有一个User-Agent，如图23所示。 </p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-49-1024x757.jpeg" alt="img"></p>
+<p>图22.使用Internet Explorer 11到Qakbot到store.nvprivateoffice . com的流量。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-50-1024x758.jpeg" alt="img"></p>
+<p>图23.使用新的基于Chromium的Microsoft Edge到Qakbot到store.nvprivateoffice . com的流量。<br>最后，来自受Qakbot感染的主机的pcap还具有与电子邮件相关的TCP流量，该TCP流量到各种端口的各种端口，例如SMTP，IMAP和POP3。要了解与网络无关的流量，请使用以下Wireshark过滤器，如图25所示：<br>tcp.flags eq 0x0002 and !(tcp.port eq 80) and !(tcp.port eq 443)</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-51-1024x864.jpeg" alt="img"></p>
+<p>图25.了解来自此Qakbot感染的非Web流量。<br>图25显示了到不同电子邮件协议通常使用的各种端口（如25、110、143、465、587、993和995）的TCP连接和尝试的TCP连接。结果的前两行显示了到TCP端口65400的流量，但是查看关联的TCP流则表明这也是与电子邮件相关的流量。</p>
+<p>使用以下Wireshark筛选器可以更好地了解受感染主机的电子邮件相关流量，如图26所示：</p>
+<p>smtp or imap or pop</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/02/word-image-52-1024x628.jpeg" alt="img"></p>
+<p>图26.在此pcap中查找由Qakbot引起的与电子邮件相关的流量。<br>遵循一些TCP流，以更好地了解此类电子邮件流量。通常，我们不会看到从Windows客户端到公用IP地址的这种未加密电子邮件流量。连同其他指示器一起，此smtp或imap或pop过滤器可能会揭示Qakbot的活动。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>本教程提供了有关使用Qakbot恶意软件检查Windows感染的提示。可以在malware-traffic-analysis.net上找到更多带有Qakbot活动示例的pcap。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Dridex%E6%84%9F%E6%9F%93%E6%B5%81%E9%87%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Dridex%E6%84%9F%E6%9F%93%E6%B5%81%E9%87%8F/" itemprop="url">Wireshark教程：检查Dridex感染流量</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-03T19:42:35+08:00">
+                2021-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Wireshark教程：检查Dridex感染流量"><a href="#Wireshark教程：检查Dridex感染流量" class="headerlink" title="Wireshark教程：检查Dridex感染流量"></a>Wireshark教程：检查Dridex感染流量</h1><p>本教程适用于调查可疑网络活动并查看网络数据包捕获（pcaps）的安全专业人员。必须熟悉Wireshark才能理解本教程，该教程侧重于Wireshark版本3.x。</p>
+<p>Dridex是一类信息窃取恶意软件的名称，也被称为银行木马。该恶意软件于2014年首次出现，并一直活跃至今。</p>
+<p>今天的Wireshark教程回顾了Dridex的活动，并提供了一些有关基于流量分析来识别此家庭的有用提示。</p>
+<h2 id="Dridex分布"><a href="#Dridex分布" class="headerlink" title="Dridex分布"></a>Dridex分布</h2><p>要了解Dridex网络流量，您应该了解导致感染的事件链。 Dridex通常是通过恶意垃圾邮件（malspam）分发的。这种垃圾邮件的浪潮通常每周至少发生两次或三次。一些发送Dridex的电子邮件包含附加的Microsoft Office文档，而另一些电子邮件则包含下载恶意文件的链接。图1至图4显示了一些最近的示例。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-2.jpeg" alt="An email carrying a malicious Excel file, pushing Dridex, with the subject line &quot;DHL Invoices for Aug 2020&quot;"></p>
+<p>一封带有恶意Excel文件的电子邮件，推送了Dridex，主题行为“ 2020年8月DHL发票”<br>图1.从2020年9月开始，以DHL为主题的垃圾邮件使用附件推动Dridex。<br>一封使用附加的恶意Excel文件推送Dridex的电子邮件。主题行是“ UPS发票通知”。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-3.jpeg" alt="An email pushing Dridex using an attached malicious Excel file. The subject line is &quot;UPS Invoice Notification.&quot; "></p>
+<p>图2.从2020年10月开始，以UPS为主题的垃圾邮件使用附件推动Dridex。<br>一封使用恶意链接推送Dridex的电子邮件。主题行是“联邦快递发货747958837531已交付”。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-4.jpeg" alt="An email pushing Dridex using a malicious link. The subject line is &quot;FedEx Shipment 747958837531 Delivered.&quot; "></p>
+<p>图3.从2020年9月开始，以联邦快递为主题的垃圾邮件使用链接推动Dridex。<br>一封使用恶意链接推送Dridex的电子邮件。主题行是“通知：发票796636”。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-5.jpeg" alt="An email pushing Dridex using a malicious link. The subject line is &quot;Notification : invoice 796636.&quot; "></p>
+<p>图4.从2020年10月开始，以QuickBooks为主题的垃圾邮件使用链接推送Dridex。<br>初始恶意文件可以是带有恶意宏的Microsoft Office文档，也可以是伪装为某种文档的Windows可执行文件（EXE）。无论哪种方式，潜在的受害者都需要点击此初始文件中的感染路径。初始文件将检索Dridex安装程序，尽管有时初始文件本身就是Dridex安装程序。 Dridex安装程序通过加密的命令和控制（C2）网络流量检索64位Dridex DLL文件。图5和图6显示了我们对最近Dridex活动的感染链的普遍看法。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-6.jpeg" alt="Malspam with attached spreadsheets pushing Dridex. The chain of events is as follows: malspam with attachment, attached Excel spreadsheet, enable macros, HTTPS traffic for installer DLL, installer DLL for Dridex, HTTPS C2 traffic, 64-bit Dridex DLL files, HTTPS C2 traffic, updated 64-bit Dridex DLL files"></p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-7.jpeg" alt="Malspam with links pushing Dridex. Chain of events is commonly as follows: malspam with HTTPS link, HTTPS traffic for Word doc, downloaded Word doc, enable macros, HTTPS traffic for installer DLL, installer DLL for Dridex, HTTPS C2 traffic, 64-bit Dridex DLL files, HTTPS C2 traffic, updated 64-bit Dridex DLL files"></p>
+<p>带有附加电子表格的垃圾邮件推送Dridex。事件链如下：带附件的垃圾邮件，附加的Excel电子表格，启用宏，安装程序DLL的HTTPS流量，Dridex的安装程序DLL，HTTPS C2流量，64位Dridex DLL文件，HTTPS C2流量，更新的64位Dridex DLL文件<br>图5.当Dridex作为垃圾邮件附件分发时，通常可以看到的事件链。<br>带有推动Dridex的链接的垃圾邮件。事件链通常如下：带HTTPS链接的垃圾邮件，Word文档的HTTPS通信，下载的Word文档，启用宏，安装程序DLL的HTTPS通信，Dridex的安装程序DLL，HTTPS C2通信，64位Dridex DLL文件，HTTPS C2流量，更新的64位Dridex DLL文件<br>图6.使用垃圾邮件中的链接分发Dridex时通常看到的事件链。<br>图7显示了来自垃圾邮件的另一种Dridex感染链，与图5和6中使用的Office文档并不相同。到2020年9月24日，来自垃圾邮件的链接推动Dridex并未返回Office文档。相反，他们返回了Windows可执行文件。有关详细信息，请参见图7。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-8.jpeg" alt="Malspam pushing Dridex on Thursday 2020-09-24, Note: Occasionally, the same HTTPS link returned an EXE with an .scr file extension instead of a ZIP archive. The chain of events seen was as follows: malspam with HTTPS link, HTTPS traffic for ZIP archive, downloaded ZIP archive, Dridex installer EXE (.scr file extension), HTTPS C2 traffic, 64-bit Dridex DLL files, HTTPS C2 traffic, updated 64-bit Dridex DLL files"></p>
+<p>malspam在2020-09-24星期四推送Dridex，注意：有时，同一HTTPS链接返回的文件扩展名为.scr而不是ZIP存档的EXE。看到的事件链如下：带有HTTPS链接的垃圾邮件，ZIP存档的HTTPS流量，已下载的ZIP存档，Dridex安装程序EXE（.scr文件扩展名），HTTPS C2流量，64位Dridex DLL文件，HTTPS C2流量，已更新64位Dridex DLL文件<br>图7：在2020年9月看到的事件链，其中的链接导致了Dridex安装程序EXE。<br>如图5到7所示，分发流量通常是HTTPS，它使初始文件或由于Dridex安装程序是加密的，因此很难检测到。幸运的是，由Dridex C2活动引起的感染后流量足以识别。</p>
+<h2 id="证书和HTTPS流量"><a href="#证书和HTTPS流量" class="headerlink" title="证书和HTTPS流量"></a>证书和HTTPS流量</h2><p>要了解Dridex感染活动，我们还应该了解用于HTTPS流量的数字证书。</p>
+<p>数字证书用于HTTPS流量的SSL / TLS加密。使用HTTPS查看网站时，Web服务器会将证书发送到客户端的Web浏览器。来自此数字证书的数据用于建立HTTPS连接。证书包含网站的公共密钥，并确认网站的身份。</p>
+<p>不同的证书颁发机构（CA）可以为各种网站颁发数字证书。证书被出售给商业网站的企业，而一些证书颁发机构（如Let’s Encrypt）则免费提供证书。</p>
+<p>可以从Wireshark中的HTTPS通信中查看证书信息。我们将重点关注以下两个部分：</p>
+<p>有关CA的颁发者数据。<br>有关网站的主题数据。<br>颁发者数据显示颁发了数字证书的CA。主题数据验证网站的身份。图8显示了如何从<a href="http://www.paloaltonetworks.com查找HTTPS流量的证书颁发者和主题数据。" target="_blank" rel="noopener">www.paloaltonetworks.com查找HTTPS流量的证书颁发者和主题数据。</a></p>
+<p>屏幕截图显示了如何使用<a href="http://www.paloaltonetworks.com作为示例来查找HTTPS流量的证书颁发者和主题日期。红色框突出显示主题数据以标识网站。" target="_blank" rel="noopener">www.paloaltonetworks.com作为示例来查找HTTPS流量的证书颁发者和主题日期。红色框突出显示主题数据以标识网站。</a></p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-9.jpeg" alt="The screenshot shows how to find certificate issuer and subject date for HTTPS traffic, using www.paloaltonetworks.com as an example. A red box highlights the subject data to identify the website. "></p>
+<p>图8.从HTTPS流量到<a href="http://www.paloaltonetworks.com的证书数据。" target="_blank" rel="noopener">www.paloaltonetworks.com的证书数据。</a><br>但是，在设置Web服务器时，管理员可以生成自签名证书。自签名证书是本地生成的，不由任何证书颁发机构颁发。在现代浏览器（例如Firefox）中查看时，来自此类服务器的HTTPS流量通常会生成错误消息，如图9所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-10.jpeg" alt="HTTPS traffic from self-signed certificates often generates error messages when viewed in modern browsers, such as this warning from Firefox, which states, &quot;Warning: Potential Security Risk Ahead.&quot; "></p>
+<p>当在现代浏览器中查看时，来自自签名证书的HTTPS通信通常会生成错误消息，例如来自Firefox的警告，该警告指出“警告：潜在的安全隐患”。<br>图9.尝试从使用自签名证书的网站查看页面时，Firefox出现错误。<br>恶意软件开发人员通常将自签名证书用于其C2服务器。为什么？因为自签名证书是快速，容易和免费创建的。此外，恶意软件的HTTPS C2流量不涉及Web浏览器，因此加密的流量可以正常工作而不会出现任何错误或警告。</p>
+<p>生成自签名证书涉及为以下字段输入值（其中一些通常留为空白）：</p>
+<p>国家名称（2个字母代码）。<br>州或省名称。<br>地区名称（通常是城市名称）。<br>机构名称。<br>组织单位名称。<br>通用名称（例如，标准主机名）。<br>电子邮件地址。<br>这些字段用于标识网站的主题数据，但是相同的字段和值也用于颁发者，因为证书是在Web服务器本身上本地生成的。</p>
+<p>恶意软件作者经常在这些字段中使用随机，默认或伪造的值作为自签名证书。例如，Trickbot的HTTPS C2流量通常将example.com用于“通用名称”字段。来自最近的IcedID恶意软件感染的HTTPS C2流量在其证书颁发者字段中使用了以下值：</p>
+<p>国家/地区名称：AU<br>州或省名称：Some-State<br>组织名称：Internet Widgits Pty Ltd<br>通用名称：localhost<br>与其他恶意软件家族相比，<strong>Dridex HTTPS C2流量的证书颁发者数据中的模式有些独特。它们可能是识别Dridex感染的关键。</strong></p>
+<h2 id="Pcaps-of-Dridex感染活性"><a href="#Pcaps-of-Dridex感染活性" class="headerlink" title="Pcaps of Dridex感染活性"></a>Pcaps of Dridex感染活性</h2><p>该GitHub存储库中提供了五个密码保护的ZIP存档，其中包含近期Dridex网络流量的pcaps。进入GitHub页面后，单击每个ZIP归档条目，然后下载它们，如图10和11所示。</p>
+<p>这显示了如何从GitHub存储库中下载本教程使用的ZIP存档pan-unit42 / wireshark-tutorial-Dridex-traffic<br>图10. GitHub存储库，其中包含指向本教程的ZIP存档的链接。<br>屏幕截图显示了从GitHub存储库下载存储此Wireshark教程文件的zip存档2020-06-03-Dridex-infection-traffic-pcap.zip的示例<br>图11.下载本教程的ZIP归档文件之一。<br>使用感染的作为密码从这些ZIP存档中提取pcap。这将产生五个pcap文件：</p>
+<p>2020-06-03-Dridex-infection-traffic.pcap<br>2020-09-24-Dridex-infection-traffic.pcap<br>2020-09-29-Dridex-infection-traffic.pcap<br>2020-10-05-Dridex-infection-traffic.pcap<br>2020-10-07-Dridex-infection-traffic.pcap</p>
+<h2 id="范例一：2020-06-03-Dridex-infection-traffic-pcap"><a href="#范例一：2020-06-03-Dridex-infection-traffic-pcap" class="headerlink" title="范例一：2020-06-03-Dridex-infection-traffic.pcap"></a>范例一：2020-06-03-Dridex-infection-traffic.pcap</h2><p>在Wireshark中打开2020-06-03-Dridex-infection-traffic.pcap，并使用一个基本的Web过滤器，如上一本有关Wireshark过滤器的教程所述。我们针对Wireshark 3.x的基本过滤器是：</p>
+<p>（http.request或tls.handshake.type eq 1）和！（ssdp）</p>
+<p>Dridex感染流量包括两个部分ts：</p>
+<p>初始感染活动。<br>感染后C2流量。<br>当受害者从电子邮件链接下载恶意文件时，就会发生初始感染活动。初始感染活动还包括恶意文件加载Dridex的安装程序。在某些情况下，您可能没有初始下载，因为恶意文件是电子邮件的附件。在其他情况下，您可能看不到Dridex安装程序已加载，因为初始文件本身就是安装程序。在许多情况下，此活动是通过HTTPS进行的，因此我们看不到任何URL，而只是域名。</p>
+<p>感染后活动是在受害者被感染后发生的HTTPS C2通信。成功感染Dridex期间，总是会发生这种情况。此C2通信直接与IP地址进行通信，因此没有与之关联的域名。它还具有异常的证书颁发者数据，如下所述。</p>
+<p>图12显示了使用我们的基本Web过滤器在Wireshark中打开的第一个示例。没有域名的行是Dridex HTTPS C2通信。</p>
+<p>此屏幕快照显示了在Wireshark中过滤的Dridex感染流量。该屏幕标记为2020-06-03-Dridex-infection-traffic.pcap</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-13.jpeg" alt="This screenshot shows Dridex infection traffic, filtered in Wireshark. The screen is labeled 2020-06-03-Dridex-infection-traffic.pcap">图12.使用我们的基本Web过滤器在Wireshark中过滤的第一个pcap的流量。</p>
+<p>图12中显示的第一个pcap显示了直接到IP地址而不是域名的以下流量。这很可能是Dridex HTTPS C2流量：</p>
+<ul>
+<li>185.86.148[.]68 over TCP port 443</li>
+<li>212.95.153[.]36 over TCP port 453</li>
+</ul>
+<p>使用我们的基本Web过滤器看到的其他域是使用以microsoft.com，office.net或windows.com等著名名称结尾的域的系统流量。唯一的例外是到达truepenesonga[.]com的HTTPS流量，该流量接近pcap在世界标准时间19:38:18的开始。这可能是Dridex安装程序。快速的Google搜索表明truepenesonga[.]com与恶意软件相关联。</p>
+<p>关注感染后Dridex C2流量。在Wireshark中使用以下过滤器来查看证书颁发者数据，以了解这两个IP地址上的HTTPS流量：</p>
+<p>tls.handshake.type eq 11 and (ip.addr eq 185.86.148.68 or ip.addr eq 212.95.153.36)</p>
+<p>应用过滤器后，在Wireshark列显示中选择第一帧，然后转到帧详细信息面板并展开值，如图13所示，直到找到以术语RDNSequence项目开头的行的列表为止。 。</p>
+<p>屏幕快照突出显示了可用于查找Dridex HTTPS C2通信的证书颁发者数据的关键点。红色箭头特别指出传输层安全性，证书，握手协议，签名证书，颁发者和rdnSequence。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-14.jpeg" alt="The screenshot highlights key spots that can be used for finding certificate issuer data for Dridex HTTPS C2 traffic. Red arrows particularly point out Transport layer security, certificate, handshake protocol, signed certfiicate, issuer and rdnSequence. "></p>
+<p>图13.查找Dridex HTTPS C2流量的证书颁发者数据。<br>请注意用于185.86.148[.]68的HTTPS流量的RDNSequence项目及其值：</p>
+<ul>
+<li>id-at-countryName=Vu</li>
+<li>id-at-stateOrProvinceName=Uererarnk4</li>
+<li>id-at-localityName=Port Vila</li>
+<li>id-at-organizationName=Whensean Imegdtc SICAV</li>
+<li>id-at-organizationUnitName=6Tbuthinalq</li>
+<li>id-at-commonName=1andfhtittbly.fan</li>
+</ul>
+<p>Dridex证书颁发者字段通常包含随机字符串，有时会插入一两个数字。但是，国家/地区名称和城市或地区的值通常会匹配。在上面的示例中，Vu是瓦努阿图的2个字母的国家代码，而Vila端口是瓦努阿图的首都。</p>
+<p>对到212.95.153[.]36的HTTPS通信执行相同的操作，您应该找到：</p>
+<ul>
+<li>id-at-countryName=AO</li>
+<li>id-at-localityName=Luanda</li>
+<li>id-at-organizationName=Msorest KGaA</li>
+<li>id-at-organizationUnitName=aghat@yongd</li>
+<li>id-at-commonName=arashrinwearc.Ourontizes.ly</li>
+</ul>
+<p>我们发现当地的罗安达是安哥拉的首都，其国家代码为AO。但是其他字段似乎具有随机值。这种类型的证书颁发者数据是Dridex C2流量的有力指标。</p>
+<h2 id="示例二：2020-09-24-Dridex-infection-traffic-pcap"><a href="#示例二：2020-09-24-Dridex-infection-traffic-pcap" class="headerlink" title="示例二：2020-09-24-Dridex-infection-traffic.pcap"></a>示例二：2020-09-24-Dridex-infection-traffic.pcap</h2><p>在Wireshark中打开2020-09-24-Dridex-infection-traffic.pcap并使用基本的Web过滤器，如图14所示。</p>
+<p>此屏幕快照显示了在Wireshark中过滤的Dridex感染流量。该屏幕标记为2020-09-24-Dridex-infection-traffic.pcap</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-15.jpeg" alt="This screenshot shows Dridex infection traffic, filtered in Wireshark. The screen is labeled 2020-09-24-Dridex-infection-traffic.pcap"></p>
+<p>图14.使用基本的Web过滤器，在Wireshark中过滤的第二个pcap的流量。<br>请注意，前三行是未加密的HTTP GET请求。这是来自图3前面所示电子邮件的链接，它为感染链返回了一个ZIP存档，如图7所示。</p>
+<p>可以遵循HTTP流（而非TCP流）。向下滚动以查看返回了一些脚本，如图15和16所示。<img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-16.jpeg" alt="The HTTP stream (not the TCP stream) can be followed. The screenshot indicates how to find that option in Wireshark. "></p>
+<p>图15.在第一个HTTP GET请求的HTTP流之后。<br>当遵循HTTP流进行Dridex感染流量时，向下滚动以查看从第一个HTTP GET请求返回的脚本。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-17.jpeg" alt="When following the HTTP Stream for the Dridex infection traffic, scroll down to view the script returned from the first HTTP GET request. "></p>
+<p>图16.向下滚动以查看从该HTTP GET请求返回的脚本。<br>对adv.epostoday[.]uk的所有三个HTTP GET请求都在同一TCP流中。在最后一个HTTP GET请求f之前向下滚动到末尾或favicon.ico。您会发现一个长长的ASCII字符字符串的结尾，该字符串转换为blob并作为Ref_Sep24-2020.zip发送给受害者，如图17所示。</p>
+<p>红色箭头指示Ref_Sept24-2020.zip，这是鼓励受害者从浏览器保存的ZIP存档。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-18.jpeg" alt="A red arrow indicates Ref_Sept24-2020.zip, the ZIP archive that the victim will be encouraged to save from the browser. "></p>
+<p>图17.脚本旨在将ZIP存档呈现给受害者，以从浏览器保存。<br>可以使用“导出HTTP对象”功能来导出这些脚本，如图18所示。</p>
+<p>使用“导出HTTP对象”功能，可以保存从以app.php结尾的URL返回的脚本。红色箭头指示要选择的选项。<br>图18.保存从以app.php结尾的URL返回的脚本。<br>再次关注感染后Dridex C2流量。在Wireshark中使用以下过滤器来查看两个IP地址上的HTTPS通信的证书颁发者数据，而HTTPS通信中没有域名：</p>
+<p>tls.handshake.type eq 11 and (ip.addr eq 151.236.219.181 or ip.addr eq 62.98.109.30)</p>
+<p>应用过滤器后，选择第一个框架并转到框架详细信息部分。查找第一个pcap中以RDNSequence项开头的行的列表。图19显示了如何在我们的第二个pcap中到达151.236.219[.]181。</p>
+<p>屏幕快照突出显示了可用于查找Dridex HTTPS C2通信的证书颁发者数据的关键点。红色箭头特别指出传输层安全性，证书，握手协议，签名证书，颁发者和rdnSequence。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-20.jpeg" alt="The screenshot highlights key spots that can be used for finding certificate issuer data for Dridex HTTPS C2 traffic. Red arrows particularly point out Transport layer security, certificate, handshake protocol, signed certfiicate, issuer and rdnSequence. "></p>
+<p>图19.在第二个pcap中查找Dridex HTTPS C2流量的证书颁发者数据。<br>证书发行者数据与第一个示例的数据相似。检查两个IP地址的证书颁发者数据，然后找到下面列出的数据。</p>
+<p>151.236.219[.]181上Dridex HTTPS C2通信的证书颁发者数据：</p>
+<ul>
+<li>id-at-countryName=IL</li>
+<li>id-at-stateOrProvinceName=Anourd Thiolaved Thersile5 Fteda8</li>
+<li>id-at-LocalityName=Tel Aviv</li>
+<li>id-at-organizationName=Wemadd Hixchac GmBH</li>
+<li>id-at-organizationUnitName=moasn@emanc</li>
+<li>id-at-commonName=heardbellith.Icanwepeh.nagoya</li>
+</ul>
+<ul>
+<li>id-at-countryName=SS</li>
+<li>id-at-LocalityName=Khartoum</li>
+<li>id-at-organizationName=Hedanpr S.p.a.</li>
+<li>id-at-commonName=psprponounst.aquarelle</li>
+</ul>
+<p>在这两种情况下，位置均与国家/地区名称匹配，但是其他字段似乎是随机字符串。这与我们第一个pcap中的Dridex HTTPS C2流量相同。</p>
+<h2 id="示例三：2020-09-29-Dridex-infection-traffic-pcap"><a href="#示例三：2020-09-29-Dridex-infection-traffic-pcap" class="headerlink" title="示例三：2020-09-29-Dridex-infection-traffic.pcap"></a>示例三：2020-09-29-Dridex-infection-traffic.pcap</h2><p>在Wireshark中打开2020-09-29-Dridex-infection-traffic.pcap并使用基本的Web过滤器，如图20所示。</p>
+<p>此屏幕快照显示了在Wireshark中过滤的Dridex感染流量。该屏幕标记为2020-09-29-Dridex-infection-traffic.pcap</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-21.jpeg" alt="This screenshot shows Dridex infection traffic, filtered in Wireshark. The screen is labeled 2020-09-29-Dridex-infection-traffic.pcap"></p>
+<p>图20.使用我们的基本Web过滤器在Wireshark中过滤的第三个pcap的流量。<br>检查这些域，发现有三个使用HTTPS流量的非Microsoft域可能与初始感染活动有关：</p>
+<p>dsimportaciones[.]com<br>murfreesboro.fairwayconcierge[.]com<br>ryner.net[.]au<br>由于这些是特定于URL的，并且未显示其内容，因此请专注于感染后Dridex C2流量。在Wireshark中使用以下过滤器来查看两个IP地址上的HTTPS通信的证书颁发者数据，而HTTPS通信中没有域名：</p>
+<p>tls.handshake.type eq 11 and (ip.addr eq 67.79.105.174 or ip.addr eq 144.202.31.138)</p>
+<p>应用过滤器后，选择第一个框架，转到“框架详细信息”部分，并查找以术语RDNSequence项开头的行的列表，如在前两个示例中所做的那样。图21显示了如何在67.79.105[.]174的第三个pcap中到达那里。</p>
+<p>屏幕快照突出显示了可用于查找Dridex HTTPS C2通信的证书颁发者数据的关键点。红色箭头特别指出传输层安全性，证书，握手协议，签名证书，颁发者和rdnSequence。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-22.jpeg" alt="The screenshot highlights key spots that can be used for finding certificate issuer data for Dridex HTTPS C2 traffic. Red arrows particularly point out Transport layer security, certificate, handshake protocol, signed certfiicate, issuer and rdnSequence. "></p>
+<p>图21.在第三个pcap中查找Dridex HTTPS C2流量的证书颁发者数据。<br>证书颁发者数据遵循与前两个示例相同的模式。检查两个IP地址的发行方数据，以查找下面列出的数据。</p>
+<p>Dridex HTTPS C2通信在67.79.105[.]174上的证书颁发者数据：</p>
+<ul>
+<li>id-at-countryName=MN</li>
+<li>id-at-stateOrProvinceName=Listth Thearere8 berponedt tithsalet</li>
+<li>id-at-LocalityName=Ulaanbaatar</li>
+<li>id-at-organizationName=Massol SE</li>
+<li>id-at-commonName=Atid7brere.Speso_misetr.stada</li>
+</ul>
+<p>144.202.31[.]138上Dridex HTTPS C2通信的证书颁发者数据：</p>
+<ul>
+<li>id-at-countryName=SS</li>
+<li>id-at-LocalityName=Khartoum</li>
+<li>id-at-organizationName=Hedanpr S.p.a.</li>
+<li>id-at-commonName=psprponounst.aquarelle</li>
+</ul>
+<p>值得注意的是，从2020-09-29开始的第三个示例中的144.202.31[.]138的证书颁发者数据与从2020-09-24开始的第二个示例中的62.98.109[.]30的证书颁发者数据相同。</p>
+<h2 id="示例四：2020-10-05-Dridex-infection-traffic-pcap"><a href="#示例四：2020-10-05-Dridex-infection-traffic-pcap" class="headerlink" title="示例四：2020-10-05-Dridex-infection-traffic.pcap"></a>示例四：2020-10-05-Dridex-infection-traffic.pcap</h2><p>在Wireshark中打开2020-10-05-Dridex-infection-traffic.pcap并使用基本的Web过滤器，如图Fi中所示固尔22。</p>
+<p>此屏幕快照显示了在Wireshark中过滤的Dridex感染流量。屏幕标记为2020-10-05-Dridex-infection-traffic.pcap</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-23.jpeg" alt="This screenshot shows Dridex infection traffic, filtered in Wireshark. The screen is labeled 2020-10-05-Dridex-infection-traffic.pcap"></p>
+<p>图22.使用基本的Web过滤器在Wireshark中过滤的第四个pcap的流量。<br>检查这些域，有一个使用HTTPS流量的非Microsoft域可能与初始感染活动有关：</p>
+<p>vardhmanproducts[.]com<br>再次，重点将放在感染后的Dridex C2流量上。在Wireshark中使用以下过滤器来查看两个IP地址上的HTTPS通信的证书颁发者数据，而HTTPS通信中没有域名：</p>
+<p>tls.handshake.type eq 11 and (ip.addr eq 85.114.134.25 or ip.addr eq 85.211.162.44)</p>
+<p>应用过滤器后，选择第一个框架，转到“框架详细信息”部分，然后按照前三个示例中的方法处理以术语RDNSequence项目开头的行的列表。</p>
+<p>证书颁发者数据遵循与前三个示例相同的模式。检查两个IP地址的颁发者数据，您应该找到下面列出的数据。</p>
+<p>85.114.134[.]25上Dridex HTTPS C2流量的证书颁发者数据：</p>
+<ul>
+<li>id-at-countryName=NZ</li>
+<li>id-at-stateOrProvinceName=Cepli thade0 ithentha temsorer</li>
+<li>id-at-LocalityName=Wellington</li>
+<li>id-at-organizationName=Lling Lovisq NL</li>
+<li>id-at-organizationalUnitName=Punddtln</li>
+<li>id-at-commonName=Onshthonese.vyrda-npeces.post</li>
+</ul>
+<p>85.211.162[.]44上Dridex HTTPS C2流量的证书颁发者数据：</p>
+<ul>
+<li>id-at-countryName=MY</li>
+<li>id-at-LocalityName=Kuala Lumpur</li>
+<li>id-at-organizationName=Ointavi Tagate Unltd.</li>
+<li>id-at-commonName=Ateei7thapom.statonrc.loan</li>
+</ul>
+<h2 id="示例五：2020-10-07-Dridex-infection-traffic-pcap"><a href="#示例五：2020-10-07-Dridex-infection-traffic-pcap" class="headerlink" title="示例五：2020-10-07-Dridex-infection-traffic.pcap"></a>示例五：2020-10-07-Dridex-infection-traffic.pcap</h2><p>在Wireshark中打开2020-10-07-Dridex-infection-traffic.pcap并使用基本的Web过滤器，如图23所示。</p>
+<p>此屏幕快照显示了在Wireshark中过滤的Dridex感染流量。该屏幕标记为2020-10-07-Dridex-infection-traffic.pcap</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/10/word-image-24.jpeg" alt="This screenshot shows Dridex infection traffic, filtered in Wireshark. The screen is labeled 2020-10-07-Dridex-infection-traffic.pcap"></p>
+<p>图23.使用基本的Web过滤器在Wireshark中过滤的第五个pcap的流量。</p>
+<p>检查这些域，有一个使用HTTPS流量的非Microsoft域可能与初始感染活动有关：</p>
+<p>newmg532.wordswideweb[.]com<br>检查感染后的Dridex C2流量。在Wireshark中使用以下过滤器来查看两个IP地址上的HTTPS通信的证书颁发者数据，而HTTPS通信中没有域名：</p>
+<p>tls.handshake.type eq 11 and (ip.addr eq 177.87.70.3 or ip.addr eq 188.250.8.142)</p>
+<p>应用过滤器后，选择第一个框架，转到“框架详细信息”部分，然后按照我们的前四个示例中的方法处理以术语RDNSequence项目开头的行的列表。</p>
+<p>证书颁发者数据遵循与我们前四个示例相同的模式。检查两个IP地址的颁发者数据，并找到下面列出的数据。</p>
+<p>在177.87.70[.]3上Dridex HTTPS C2流量的证书颁发者数据：</p>
+<ul>
+<li>id-at-countryName=BS</li>
+<li>id-at-stateOrProvinceName=Sshopedts Inccofrew</li>
+<li>id-at-LocalityName=Nassau</li>
+<li>id-at-organizationName=Mesureder S.p.a.</li>
+<li>id-at-commonName=avothelyop.thedai9neasysb.author</li>
+</ul>
+<p>188.250.8[.]142上Dridex HTTPS C2通信的证书颁发者数据：</p>
+<ul>
+<li>id-at-countryName=UA</li>
+<li>id-at-stateOrProvinceName=avandi0</li>
+<li>id-at-LocalityName=Kiev</li>
+<li>id-at-organizationName=Icccodiso Icloneedb Oyj</li>
+<li>id-at-organizationalUnitName=4Zenyfea</li>
+<li>id-at-commonName=rebydustat.tci</li>
+</ul>
+<p>这五个示例应该很好地说明Dridex HTTPS C2通信的证书颁发者数据是什么样的。这些模式不同于许多其他恶意软件家族，但它们与HTTPS C2 Qakbot网络流量中的证书颁发者数据有些相似。</p>
+<p>但是，对于Qakbot，stateOrProvinceName始终是两个字母的值，而LocalityName由随机字符组成。</p>
+<p>使用Dridex，stateOrProvinceName由随机字符组成，而LocalityName是用于countryName的任何国家的首都。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>本教程回顾了如何从具有Dridex网络流量的pcap中识别Dridex活动。我们回顾了最近发现的五个Dridex感染事件，并从感染后C2流量中发现了证书颁发者数据的相似性。证书颁发者数据是识别Dridex感染的关键，因为这些模式对于Dridex而言似乎是唯一的。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Emotet%E6%84%9F%E6%9F%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E6%A3%80%E6%9F%A5Emotet%E6%84%9F%E6%9F%93/" itemprop="url">Wireshark教程：检查Emotet感染</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-03T19:41:30+08:00">
+                2021-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="检查Emotet感染"><a href="#检查Emotet感染" class="headerlink" title="检查Emotet感染"></a>检查Emotet感染</h1><p>本教程适用于调查可疑网络活动并查看数据包捕获（pcaps）的安全专业人员。必须熟悉Wireshark才能理解本教程，该教程侧重于Wireshark版本3.x。</p>
+<p>Emotet是一名信息窃取者，于2014年首次被报告为银行恶意软件。从那以后，它就不断发展，并具有其他功能，例如：dropper，可以分发其他恶意软件家族，如Gootkit，IcedID，Qakbot和Trickbot。</p>
+<p>今天的Wireshark教程回顾了最近的Emotet活动，并提供了一些有关基于流量分析来识别此恶意软件的有用提示。</p>
+<p>您将需要使用包含本教程使用的pcap的ZIP存档访问GitHub存储库。</p>
+<p>警告：本教程使用的某些pcap中包含基于Windows的恶意软件。如果使用Windows计算机，则存在感染的风险。如果可能，我们建议您在非Windows环境（例如BSD，Linux或macOS）中查看这些pcap。</p>
+<h2 id="Emotet感染的事件链"><a href="#Emotet感染的事件链" class="headerlink" title="Emotet感染的事件链"></a>Emotet感染的事件链</h2><p>要了解由Emotet引起的网络流量，您必须首先了解导致感染的事件链。 Emotet通常通过恶意垃圾邮件（malspam）电子邮件进行分发。 Emotet感染链中的关键步骤是一个Microsoft Word文档，其中包含旨在感染易受攻击的Windows主机的宏。</p>
+<p>所示的Word文档被用于在2021年1月引起Emotet感染。请注意屏幕快照中的消息：该文档受保护。预览不适用于受保护的文档。您必须按下“启用编辑”和“启用内容”按钮才能预览此文档。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-30.jpeg" alt="This Word document shown was used to cause an Emotet infection in January 2021. Note the message in the screenshot: This document is protected. Previewing is not available for protected documents. You have to press &quot;ENABLE EDITING&quot; and &quot;ENABLE CONTENT&quot; buttons to preview this document. "></p>
+<p>图1. 2021年1月用于引起Emotet感染的Word文档的屏幕截图。<br>传播垃圾邮件Emotet使用不同的技术来分发这些Word文档。</p>
+<p>垃圾邮件可能包含附加的Microsoft Word文档，或者具有包含Word文档的附加ZIP存档。在最近几个月中，我们看到了几个示例，其中这些ZIP存档受密码保护。某些分发Emotet的电子邮件没有任何附件。而是，它们包含下载Word文档的链接。</p>
+<p>在过去的几年中，垃圾邮件推动Emotet还使用带有嵌入式链接的PDF附件来提供这些Emotet Word文档。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-31.jpeg" alt="Distribution paths for Emotet Word document: 1) malspam with attachment to Word doc; 2) malspam with attachment to ZIP archive to Word doc; 3) malspam with link to web traffic to download Word doc to Word doc; 4) malspam with attachment to PDF file to web traffic to download Word doc to Word doc"></p>
+<p>图2说明了这四种分配技术。</p>
+<blockquote>
+<p>Emotet Word文档的分发路径：</p>
+<p>1）带有Word doc附件的垃圾邮件；</p>
+<p> 2）垃圾邮件，并将ZIP存档附加到Word doc； </p>
+<p>3）带有网络流量链接的垃圾邮件，可下载Word doc；</p>
+<p> 4）带有PDF文件附件的垃圾邮件到网络访问量中，以下载Word doc</p>
+</blockquote>
+<p>图2. Emotet Word文档的各种分发路径。<br>交付Word文档后，如果受害者打开文档并在易受攻击的Windows主机上启用了宏，则该主机感染了Emotet。</p>
+<p>从流量的角度来看，我们看到从Emotet Word文档到Emotet感染的以下步骤：</p>
+<p>Web流量检索初始二进制文件。<br>通过HTTP的编码/加密命令和控制（C2）通信。<br>如果Emotet丢弃了后续恶意软件，则额外的感染流量。<br>如果Emotet使用受感染的主机作为垃圾邮件程序，则SMTP流量。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-32.jpeg" alt="Flowchart for an Emotet infection: Word doc to enable macros to web traffic for initial binary to initial binary. From there, encoded C2 traffic over HTTP, which is a hub in the flowchart that can lead to follow-up malware, spambot activity, data exfiltration and updating the binary. ">图3显示了我们在Emotet感染期间可能发现的网络活动的流程图。</p>
+<p>Emotet感染的流程图：Word doc使宏能够将网络流量从初始二进制文件转换为初始二进制文件。从那里开始，通过HTTP进行编码的C2流量，这是流程图中的中心，可导致后续恶意软件，垃圾邮件活动，数据泄露和更新二进制文件。</p>
+<p>自2020年12月21日以来，Emotet的初始二进制文件一直是Windows DLL文件。以前，此二进制文件是Windows EXE文件。</p>
+<p>Emotet C2通信量包含通过HTTP发送的编码或其他加密数据。此C2活动可以使用与HTTP流量关联的标准或非标准TCP端口。此C2活动还包括数据泄漏和更新初始Emotet二进制文件的流量。</p>
+<p>由于Emotet还是一个恶意软件删除程序，因此受害者可能会感染其他恶意软件。分析来自受Emotet感染的主机的流量时，分析师应搜索其他恶意软件的流量。</p>
+<p>最终，受Emotet感染的主机也可能成为垃圾邮件程序，它通过与SMTP相关的TCP端口（如TCP端口25、465和587）生成大量流量。</p>
+<h2 id="Pcaps的Emotet变化感染活动"><a href="#Pcaps的Emotet变化感染活动" class="headerlink" title="Pcaps的Emotet变化感染活动"></a>Pcaps的Emotet变化感染活动</h2><p>五个包含pca的受密码保护的ZIP归档文件在此GitHub存储库<a href="https://github.com/pan-unit42/wireshark-tutorial-Emotet-traffic中提供了有关最近Emotet感染流量的一些信息。进入GitHub页面后，单击每个ZIP归档条目并下载它们。" target="_blank" rel="noopener">https://github.com/pan-unit42/wireshark-tutorial-Emotet-traffic中提供了有关最近Emotet感染流量的一些信息。进入GitHub页面后，单击每个ZIP归档条目并下载它们。</a></p>
+<ul>
+<li>Example-1-2021-01-06-Emotet-infection.pcap</li>
+<li>Example-2-2021-01-05-Emotet-with-spambot-traffic-part-1.pcap</li>
+<li>Example-3-2021-01-05-Emotet-with-spambot-traffic-part-2.pcap</li>
+<li>Example-4-2021-01-05-Emotet-infection-with-Trickbot.pcap</li>
+<li>Example-5-2020-08-18-Emotet-infection-with-Qakbot.pcap</li>
+</ul>
+<p>在Wireshark中打开Example-1-2021-01-06-Emotet-infection.pcap，并使用基本的Web过滤器，如我们先前有关Wireshark过滤器的教程中所述。 Wireshark 3.x的basic</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-35.jpeg" alt="Figure 6. Our first pcap in this tutorial filtered in Wireshark."></p>
+<p>图6.本教程中的第一个pcap在Wireshark中进行了过滤。<br>如图6所示，前五个HTTP GET请求代表用于检索初始Emotet DLL的四个URL。流量为：</p>
+<ul>
+<li>hangarlastik[.]com GET /cgi-bin/Ui4n/</li>
+<li>hangarlastik[.]com GET /cgi-sys/suspendedpage.cgi</li>
+<li>padreescapes[.]com GET /blog/0I/</li>
+<li>sarture[.]com GET /wp-includes/JD8/</li>
+<li>seo.udaipurkart[.]com GET /rx-5700-6hnr7/Sgms/</li>
+</ul>
+<p>前两个URL指示hangarlastik[.]com不再具有它所托管的Emotet DLL文件。跟踪每个请求的TCP流，以查看对每个HTTP GET请求的答复。</p>
+<p>查看HTTP响应的一种更简单的方法是更新Wireshark基本Web过滤器以包含HTTP响应：</p>
+<p>(http.request <strong>or http.response</strong> or tls.handshake.type eq 1) and !(ssdp)</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-36.jpeg" alt="Figure 7. Adding HTTP responses to the Wireshark display filter."></p>
+<p>这将在Info列中显示HTTP响应。</p>
+<p>图7.将HTTP响应添加到Wireshark显示过滤器。</p>
+<p>现在，我们对Word宏尝试检索Emotet DLL时发生的情况有了更清晰的了解：</p>
+<ul>
+<li>hangarlastik[.]com GET /cgi-bin/Ui4n/</li>
+<li>HTTP/1.1 302 Found</li>
+<li>hangarlastik[.]com GET /cgi-sys/suspendedpage.cgi</li>
+<li>HTTP/1.1 200 OK</li>
+<li>padreescapes[.]com GET /blog/0I/</li>
+<li>HTTP/1.1 401 Unauthorized</li>
+<li>sarture[.]com GET /wp-includes/JD8/</li>
+<li>HTTP/1.1 403 Forbidden</li>
+<li>seo.udaipurkart[.]com GET /rx-5700-6hnr7/Sgms/</li>
+</ul>
+<p>唯一可以接受的200回复是来自hangarlastik[.]com的suspendedpage.cgi。</p>
+<p>到seo.udaipurkart[.]com的HTTP GET请求未显示响应，因此请遵循此请求的TCP流。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-37.jpeg" alt="Figure 8. Following TCP stream for the HTTP request to seo.udaipurkart[.]com."></p>
+<p>图8.针对seo.udaipurkart[.]com的HTTP请求的以下TCP流。<br>TCP流显示指示符，指示seo.udaipurkart[.]com返回了Windows DLL文件，如图9所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-38.jpeg" alt="Figure 9. Indicators of a DLL file returned from seo.udaipurkart[.]com.">图9.从seo.udaipurkart[.]com返回的DLL文件的指示器。</p>
+<p>通过使用菜单路径从pcap导出此DLL：File-&gt; Export Objects-&gt; HTTP，如图10所示。与往常一样，我们建议您不要在Windows环境中导出此文件，因为DLL是Windows恶意软件。</p>
+<p>Emotet C2流量是使用HTTP POST请求发送的编码数据。您可以使用以下过滤器在Wireshark中轻松找到这些请求：</p>
+<p>http.request.method eq POST</p>
+<p>结果如图11所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-40.jpeg" alt="Figure 11. Filtering for HTTP POST requests in our first pcap."></p>
+<p>图11.在我们的第一个pcap中过滤HTTP POST请求。</p>
+<p>在我们的第一个pcap中，Emotet C2流量由HTTP POST请求组成，这些请求包括：</p>
+<ul>
+<li>5.2.136[.]90 over TCP port 80</li>
+<li>167.71.4[.]0 over TCP port 8080</li>
+</ul>
+<p>Emotet为其C2流量生成两种类型的HTTP POST请求。第一种POST请求以HTTP / 1.1结尾。第二种POST请求以HTTP/1.1 (application/x-www-form-urlencoded)结尾。</p>
+<p>按照针对初始HTTP请求的TCP流到达UTC 5.2.136 [.] 90（UTC时间16:42:34），以查看第一种C2 POST请求的示例，如图12所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-41.jpeg" alt="Figure 12. The first type of HTTP POST request for Emotet C2 traffic."></p>
+<p>图12.针对Emotet C2流量的第一种HTTP POST请求。<br>图12显示了此POST请求发送了大约6 K数据，似乎是已编码或已加密的二进制文件。向下滚动到HTTP响应以查看从服务器返回的编码数据。图13显示了此编码数据的开始。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-42.jpeg" alt="Figure 13. Encoded data returned from the server in response to the HTTP POST request."><br>图13.从服务器返回的响应HTTP POST请求的编码数据。<br>这种类型的编码或加密数据是Emotet僵尸网络服务器如何与受感染的Windows主机交换数据的方式。这也是Emotet用于更新Emotet DLL并删除后续恶意软件的渠道。</p>
+<p>针对Emotet C2流量的第二种HTTP POST请求看起来与第一种明显不同。在Wireshark中使用以下过滤器可以轻松找到第二种HTTP POST请求：</p>
+<p>编码形式</p>
+<p>这应该通过TCP端口8080将两个HTTP POST请求返回到167.71.4 [.] 0，如图14所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-43.jpeg" alt="Figure 14. Filtering for the second type of HTTP POST request in Emotet C2 traffic."></p>
+<p>图14.过滤Emotet C2通信中的第二种HTTP POST请求。<br>按照这两个HTTP POST请求中第一个的UTC的TCP流进行操作：16：58：43 UTC。查看流量。结果如图15所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-44.jpeg" alt="Figure 15. TCP stream for the second type of HTTP POST request in Emotet C2 traffic."></p>
+<p>图15. Emotet C2通信中第二种HTTP POST请求的TCP流。<br>如图15所示，POST请求中发送的某些数据被编码为具有某些URL编码的base64字符串。例如，％2B表示+，％2F表示/，％3D表示=。</p>
+<p>来自服务器的响应所发送的数据已被编码或以其他方式加密。</p>
+<p>我们的第一个pcap没有后续的恶意软件或其他重要活动。</p>
+<p>唯一的其他活动是通过TCP端口443重复尝试连接到46.101.230 [.] 194。您可以通过过滤作为重传的TCP SYN段来轻松地发现此活动。使用以下Wireshark过滤器：</p>
+<p>tcp.analysis.retransmission and tcp.flags eq 0x0002</p>
+<p>结果如图16所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-45.jpeg" alt="Figure 16. Filtering on retransmissions of TCP SYN segments in Wireshark."></p>
+<p>图16.在Wireshark中对TCP SYN段的重传进行过滤。</p>
+<p>在46.101.230 [.] 194上进行的Internet搜索应该显示此IP地址已用于Emotet C2活动。</p>
+<p>pcap中的剩余流量是由Microsoft Windows 10主机生成的系统流量。</p>
+<p>在下一个pcap中，我们将检查带有垃圾邮件机器人活动的Emotet感染。</p>
+<h2 id="示例2：带有垃圾邮件流量的Emotet，第1部分"><a href="#示例2：带有垃圾邮件流量的Emotet，第1部分" class="headerlink" title="示例2：带有垃圾邮件流量的Emotet，第1部分"></a>示例2：带有垃圾邮件流量的Emotet，第1部分</h2><p>在Wireshark中打开Example-2-2021-01-05-Emotet-with-spambot-traffic-part-1.pcap，并使用基本的Web过滤器，如图17所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-46.jpeg" alt="Figure 17. Traffic from the second pcap filtered in Wireshark using our basic web filter."></p>
+<p>图17.使用我们的基本Web过滤器在Wireshark中过滤的第二个pcap的流量。</p>
+<p>与第一个示例类似，我们在Emotet C2流量之前收到了一些HTTP GET请求。这些GET请求是尝试通过网络流量下载初始Emotet DLL的尝试。列显示的第一帧显示到obob [.] tv的HTTPS流量，这可能是对原始Emotet DLL的Web请求，因为据报此域在2021年1月5日（与该日期相同）托管Emotet二进制文件 pcap中的流量。</p>
+<p>按照TCP流对miprimercamino [.] com的HTTP GET请求进行确认，以确认它返回了Emotet DLL。您应该从我们的第一个pcap中看到类似于图9的指示器。我们可以导出从miprimercamino [.] com返回的Emotet DLL，如图18所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-47.jpeg" alt="Figure 18. Exporting the Emotet DLL from the pcap."></p>
+<p>图18.从pcap导出Emotet DLL。<br>从第二个pcap中提取的DLL的SHA256哈希为：</p>
+<p>963b00584d8d63ea84585f7457e6ddcac9eda54428a432f388a1ffee21137316</p>
+<p>同样，我们发现针对Emotet C2流量的两种HTTP POST请求。要针对每种Emotet C2 HTTP POST请求进行过滤，请使用以下Wireshark过滤器：</p>
+<p>第一种类型：http.request method eq POST and !(urlencoded-form)<br>第二种：urlencoded-form<br>跟踪这些过滤器返回的HTTP POST请求的TCP流，并确认它们遵循在我们的第一个pcap中看到的相同模式。</p>
+<p>在查看了来自此pcap的一些Emotet C2流量示例之后，我们继续进行垃圾邮件机器人活动。</p>
+<p>在此示例中，我们被感染的主机变成了垃圾邮件机器人，因此我们也有SMTP通信。 spambot SMTP流量已加密，但是我们可以使用基本的Web过滤器并向下滚动列显示轻松找到它。</p>
+<p>在20:06:20 UTC，pcap开始显示到与SMTP电子邮件协议相关的TCP端口的SSL / TLS通信，例如TCP端口25、465和587，如图19所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-48.jpeg" alt="Figure 19. Using the basic web filter and scrolling through the column display to find spambot traffic."></p>
+<p>图19.使用基本的Web过滤器并在列显示中滚动来查找spambot流量。<br>在建立加密的SMTP隧道之前，我们可以对smtp进行过滤以查找一些SMTP命令。图20显示了结果。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-49.jpeg" alt="Figure 20. Filtering for SMTP traffic in our second pcap."></p>
+<p>图20.过滤<br>图20.在第二个pcap中过滤SMTP流量。<br>有时，我们可以从受Emotet感染的Windows主机生成的spambot流量中找到未加密的SMTP。未加密的SMTP将显示其邮件内容，但是来自spambot主机的加密SMTP的数量远远大于未加密的SMTP的数量。因此，来自受Emotet感染的主机的大多数spambot邮件都隐藏在加密流量中。</p>
+<p>在此示例中，您应该只看到加密的SMTP通信。</p>
+<p>但是，我们的下一个示例是后来由于相同的感染而来的，当时我们终于看到了一些未加密的SMTP。</p>
+<h2 id="示例3：Emotet和Spambot流量，第2部分"><a href="#示例3：Emotet和Spambot流量，第2部分" class="headerlink" title="示例3：Emotet和Spambot流量，第2部分"></a>示例3：Emotet和Spambot流量，第2部分</h2><p>在Wireshark中打开Example-3-2021-01-05-Emotet-with-spambot-traffic-part-2.pcap，并使用基本的Web过滤器，如图21所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-50.jpeg" alt="Figure 21. Traffic from the third pcap filtered in Wireshark using our basic web filter."></p>
+<p>图21.使用基本的Web过滤器在Wireshark中过滤的第三个pcap的流量。<br>在此pcap中，我们仍然看到对Emotet C2流量的HTTP POST请求，每分钟至少两次。我们还可以找到类似于之前的pcap的加密spambot活动。</p>
+<p>Spambot活动经常产生大量流量。这个pcap包含来自受感染的Windows主机的4分42秒的spambot活动，并且流量超过21 MB。</p>
+<p>通过使用以下Wireshark过滤器，我们可以快速识别任何未加密的SMTP通信：</p>
+<p>smtp.data.fragment</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-51.jpeg" alt="Figure 22. Filtering for indicators of unencrypted SMTP from spambot traffic."></p>
+<p>图22显示了针对第三个pcap的此过滤器的结果。该筛选器揭示了由受感染的Windows主机生成的五个Emotet垃圾邮件示例。图22.从spambot流量过滤未加密SMTP的指示符。<br>遵循TCP流中来自以下位置的最后一封电子邮件：“ Gladisbel Miranda，UTC时间20:19:54。检查这些消息的外观，如图23所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-52.jpeg" alt="Figure 23. TCP stream for an example of Emotet malspam from our third pcap."></p>
+<p>图23. TCP流，这是来自第三个pcap的Emotet恶意垃圾邮件的示例。<br>我们可以使用菜单路径File-&gt; Export Objects-&gt; IMF导出这五个Emotet垃圾邮件，如图24所示。</p>
+<p> Thunderbird是一个免费的电子邮件客户端，您可以使用它查看潜在的受害者如何查看这些电子邮件。</p>
+<p>如前所述，Emotet还是恶意软件下载器。通过Emotet分发的最常见的恶意软件可能是Trickbot。</p>
+<h2 id="实施例4：用Trickbot感染Emotet"><a href="#实施例4：用Trickbot感染Emotet" class="headerlink" title="实施例4：用Trickbot感染Emotet"></a>实施例4：用Trickbot感染Emotet</h2><p>在Wireshark中打开Example-4-2021-01-05-Emotet-infection-with-Trickbot.pcap，并使用基本的Web过滤器，如图25所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-54.jpeg" alt="Figure 25. Traffic from the fourth pcap filtered in Wireshark using our basic web filter."></p>
+<p>图25.使用我们的基本Web过滤器在Wireshark中过滤出的第四个pcap的流量。</p>
+<p>此pcap没有针对初始Emotet DLL的HTTP GET请求。但是，我们列显示的第一帧显示到fathekarim [.] com的HTTPS流量。这可能是对Emotet DLL的Web请求，因为据报道该域在2021年1月5日（与我们pcap中的流量相同）托管Emotet二进制文件。</p>
+<p>您应该找到与Emotet C2关联的两种相同类型的HTTP POST请求，如前两个pcap中所述。</p>
+<p>该pcap还包含Trickbot感染的迹象。使用基本的Web过滤器并向下滚动以查找Trickbot流量，如图26所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-55.jpeg" alt="Figure 26. Scrolling down the column display to find Trickbot indicators in our fourth pcap using a basic web filter."></p>
+<p>图26.向下滚动列显示，使用基本的Web过滤器在第四个pcap中找到Trickbot指示器。<br>我们在之前的Wireshark教程中检查了Trickbot的感染，其中对Trickbot进行了回顾，但是这里有个快速介绍。以下是Trickbot的常见指标：</p>
+<p>在没有关联域或主机名的情况下，通过TCP端口447或449进行的HTTPS通信。<br>通过标准或非标准TCP端口的HTTP POST请求，以/ 81 /，/ 83 /或/ 90结尾的HTTP流量与数据渗透相关联。<br>对于受Emotet感染的Trickbot，上述HTTP POST请求以/ mor开头，后跟一个数字（到目前为止只能看到一个或两个数字）。<br>对以.png结尾的URL的HTTP GET请求，返回其他Trickbot二进制文件。<br>我们可以使用以下Wireshark过滤器轻松找到这些指标：</p>
+<ul>
+<li>tls.handshake.type eq 1 and (tcp.port eq 447 or tcp.port eq 449)</li>
+<li>(http.request.uri contains /81 or http.request.uri contains /83 or http.request.uri contains /90) and http.request.uri contains mor</li>
+<li>http.request.uri contains .png</li>
+</ul>
+<p>图27-29显示了上述每个过滤器的结果。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-56.jpeg" alt="Figure 27.: Filtering for Trickbot HTTPS traffic over TCP port 447 or TCP port 449."></p>
+<p>图27 .:通过TCP端口447或TCP端口449过滤Trickbot HTTPS流量。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-57.jpeg" alt="Figure 28. Filtering for HTTP POST requests associated with Trickbot data exfiltration."><br>图28.筛选与Trickbot数据渗透相关的HTTP POST请求。<br>遵循图28所示的每个HTTP POST请求的TCP流，以查看是否泄露了任何密码数据。最后一个以/ 90结尾的HTTP POST请求包含有关受感染Windows主机及其环境的数据。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-58.jpeg" alt="Figure 29. Filtering for HTTP GET requests ending in .png associated with additional Trickbot binaries."></p>
+<p>图29.筛选以.png结尾的HTTP GET请求，该请求与其他Trickbot二进制文件关联。</p>
+<p>遵循TCP流以处理图29中所示的每个HTTP POST请求，以查看是否返回了Windows二进制文件。这样做应该显示两个Windows可执行文件。然后，您可以使用文件-&gt;导出对象-&gt; HTTP从pcap导出这些二进制文件，如前面的示例中所述。</p>
+<p>Trickbot是Emotet发行的最常见的恶意软件，但并非唯一。 Qakbot是另一种经常在受Emotet感染的Windows主机上丢弃的恶意软件。</p>
+<h2 id="示例5：用Qakbot感染Emotet"><a href="#示例5：用Qakbot感染Emotet" class="headerlink" title="示例5：用Qakbot感染Emotet"></a>示例5：用Qakbot感染Emotet</h2><p>在Wireshark中打开Example-5-2020-08-18-Emotet-infection-with-Qakbot.pcap，并使用基本的Web过滤器，如图30所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-59.jpeg" alt="Figure 30. Traffic from the fifth pcap filtered in Wireshark using our basic web filter."></p>
+<p>图30.使用我们的基本Web过滤器在Wireshark中过滤了来自第五个pcap的流量。<br>在第五封pcap中，在世界标准时间21:23:50从savetpranamam.mysquare [.] in中检索了一个Emotet Word文档，该文档与报告在同一日期托管Emotet Word文档的URL相匹配。如先前示例中所述，使用文件-&gt;导出对象-&gt; HTTP从pcap导出此Word文档。</p>
+<p>此提取的Word文档的SHA256哈希为：</p>
+<p>c7f429dde8986a1b2fc51a9b3f4a78a92311677a01790682120ab603fd3c2fcb<br>我们还在世界标准时间21:24:40看到到samaritantec [.] com的HTTPS流量。据报道，该域在同一日期托管了Emotet二进制文件。</p>
+<p>与前面的示例一样，您应该找到与Emotet C2流量关联的两种相同类型的HTTP POST请求。</p>
+<p>此外，该pcap包含Qakbot感染的指示。使用基本的Web过滤器并向下滚动以查找Qakbot流量，如图31所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-60.jpeg" alt="Figure 31. Scrolling down the column display to find Qakbot indicators in our fifth pcap using a basic web filter."></p>
+<p>图31.向下滚动列显示，使用基本的Web过滤器在第五个pcap中找到Qakbot指示器。<br>我们在之前的Wireshark教程中检查了Qakbot，该教程介绍了如何检查Qakbot感染，但是这里不容赘述。以下是Qakbot的常见指标：</p>
+<p>通过HTTPS的标准和非标准TCP端口进行的HTTPS流量。<br>Qakbot HTTPS流量的证书数据在颁发者字段中具有异常值，并且证书不是由美国的颁发机构颁发的。<br>通过TCP端口65400的TCP流量。<br>2020年11月下旬之前，Qakbot通常生成到cdn.speedof [.] me的HTTPS流量。<br>2020年11月下旬之前，Qakbot通常会向a.strandsglobal [.] com生成HTTP GET请求。<br>我们可以使用以下Wireshark过滤器轻松找到这些指标：</p>
+<ul>
+<li>tls.handshake.type eq 11 and !(x509sat.CountryName == US)</li>
+<li>tcp.port eq 65400</li>
+<li>tls.handshake.extensions_server_name contains speedof</li>
+<li>http.host contains strandsglobal</li>
+</ul>
+<p>图32-35显示了上述每个过滤器的结果。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-61.jpeg" alt="Figure 32. Filtering and searching for unusual certificate issuer data in HTTPS traffic generated by Qakbot."><br>图32.过滤和搜索Qakbot生成的HTTPS通信中的异常证书颁发者数据。<br>在图32中，第一个过滤器的结果在来自71.80.66 [.] 107的流量的列显示中显示了几帧。搜索框架详细信息，并找到异常的证书颁发者数据，如上所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-62.jpeg" alt="Figure 33. Filtering for Qakbot traffic over TCP port 65400.">图33.过滤TCP端口65400上的Qakbot流量。<br>图33.过滤TCP端口65400上的Qakbot流量。<br>在上图中，我们在TCP端口65400上找到了一个Qakbot通信的TCP流。该流包含受感染Qakbot的Windows主机的公共IP地址和一个僵尸网络标识字符串。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-63.jpeg" alt="Figure 34. Filtering for traffic to cdn.speedof[.]me, which is not inherently malicious, but a connectivity check caused by Qakbot prior to late November 2020."><br>图34.过滤到cdn.speedof.me的流量，这不是天生的恶意，而是Qakbot在2020年11月下旬之前引起的连接检查。<br><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2021/01/word-image-64.jpeg" alt="Figure 35. Filtering for traffic to a.stransglobal[.]com, typically generated by Qakbot prior to late November 2020."><br>图35.过滤到a.stransglobal [.] com的流量，通常由Qakbot在2020年11月下旬之前生成。<br>当Emotet通常会删除Trickbot和Qakbot，请注意，Emotet还删除了其他类型的恶意软件，例如Gootkit和IcedID。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>本教程回顾了如何从感染流量的pcap中识别Emotet活动。我们回顾了五个最近的pcaps，发现由Emotet C2流量引起的HTTP POST请求中的相似之处。这些模式非常独特，可用于识别网络中的Emotet感染。我们还回顾了与Emotet相关的其他感染后活动，例如垃圾邮件程序流量和被感染主机上丢弃的各种恶意软件家族。</p>
+<p>这些知识可以帮助安全专业人员在检查可疑网络活动时更好地检测和捕获Emotet感染。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E8%A7%A3%E5%AF%86https%E6%B5%81%E9%87%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E8%A7%A3%E5%AF%86https%E6%B5%81%E9%87%8F/" itemprop="url">Wireshark教程：解密https流量</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-03T18:38:15+08:00">
+                2021-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="解密https流量"><a href="#解密https流量" class="headerlink" title="解密https流量"></a>解密https流量</h1><p>本教程适用于调查可疑网络活动并查看流量的数据包捕获（pcaps）的安全专业人员。这些说明假定您熟悉Wireshark，并且重点介绍Wireshark版本3.x。</p>
+<p>在审查可疑的网络活动时，我们经常会遇到加密的流量。为什么？因为大多数网站使用安全超文本传输协议（HTTPS）协议。但是像大多数网站一样，各种类型的恶意软件也使用HTTPS。查看恶意软件活动产生的数据后，了解感染后流量中包含的内容非常有帮助。</p>
+<p>该Wireshark教程描述了如何从Wireshark中的pcap解密HTTPS流量。可以使用基于文本的日志进行解密，该日志包含最初记录pcap时捕获的加密密钥数据。使用此密钥日志文件，我们可以在pcap中解密HTTPS活动并查看其内容。</p>
+<p>今天，我们将检查来自Dridex恶意软件感染的HTTPS活动。</p>
+<p>注意：我们的说明假定您已按照“自定义Wireshark –更改列显示”中的说明自定义了Wireshark列显示。</p>
+<p>这是一个Github存储库，其中包含ZIP存档，其中包含本教程使用的pcap和密钥日志文件。</p>
+<p>警告：本教程使用的pcap包含基于Windows的恶意软件。如果使用Windows计算机，则存在感染的风险。我们建议您尽可能在非Windows环境（例如BSD，Linux或macOS）中查看此pcap。</p>
+<h2 id="0x01-加密流量背后的上下文"><a href="#0x01-加密流量背后的上下文" class="headerlink" title="0x01 加密流量背后的上下文"></a>0x01 加密流量背后的上下文</h2><p>在1990年代中期至后期，网站使用的最常见协议是超文本传输协议（HTTP），该协议生成未加密的Web流量。但是，随着安全性日益受到关注，网站开始切换到HTTPS，现在我们很少看到来自Web浏览的HTTP流量。</p>
+<p>HTTPS本质上是一个包含HTTP流量的加密通信隧道。这些隧道首先使用安全套接字层（SSL）作为加密协议。如今，大多数HTTPS流量都使用传输层安全性（TLS）。</p>
+<h2 id="0x02-HTTPS-Web流量"><a href="#0x02-HTTPS-Web流量" class="headerlink" title="0x02 HTTPS Web流量"></a>0x02 HTTPS Web流量</h2><p>HTTPS流量通常会显示一个域名。例如，当在Web浏览器中查看<a href="https://www.wireshark.org时，在自定义的Wireshark列显示中查看时，pcap将显示www.wireshark.org作为此流量的服务器名称。不幸的是，我们不知道其他详细信息，例如实际的URL或从服务器返回的数据。从pcap遵循传输控制协议（TCP）流将不会显示此流量的内容，因为它是经过加密的。" target="_blank" rel="noopener">https://www.wireshark.org时，在自定义的Wireshark列显示中查看时，pcap将显示www.wireshark.org作为此流量的服务器名称。不幸的是，我们不知道其他详细信息，例如实际的URL或从服务器返回的数据。从pcap遵循传输控制协议（TCP）流将不会显示此流量的内容，因为它是经过加密的。</a></p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/08/word-image.jpeg" alt="The screenshots show what is seen when viewing https://www.wireshark.org in a web browser, vs. what a pcap would show when viewed in a customized Wireshark column display. "></p>
+<p>屏幕截图显示了在Web浏览器中查看<a href="https://www.wireshark.org时看到的内容，以及在自定义的Wireshark列显示中查看pcap时显示的内容。" target="_blank" rel="noopener">https://www.wireshark.org时看到的内容，以及在自定义的Wireshark列显示中查看pcap时显示的内容。</a><br>图1.从HTTPS流量到<a href="http://www.wireshark.org的流量。" target="_blank" rel="noopener">www.wireshark.org的流量。</a><br>Wireshark-遵循TCP流（tcp.stream eq0）-以太网0</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/08/word-image-1.jpeg" alt="Wireshark - Follow TCP Stream (tcp.stream eq0) - Ethernet0"></p>
+<p>图2.往返于<a href="http://www.wireshark.org的服务器的HTTPS流量的TCP流。" target="_blank" rel="noopener">www.wireshark.org的服务器的HTTPS流量的TCP流。</a></p>
+<h2 id="0x03-加密密钥日志文件"><a href="#0x03-加密密钥日志文件" class="headerlink" title="0x03 加密密钥日志文件"></a>0x03 加密密钥日志文件</h2><p>加密密钥日志是一个文本文件。一个示例如图3所示。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/08/word-image-2.jpeg" alt="Wireshark-tutorial-KeysLogFile.txt - Mousepad"><br>图3.本教程中使用的关键日志文件。<br>最初记录pcap时，使用中间人（MitM）技术创建这些日志。如果在记录pcap时未创建此类文件，则无法解密该pcap中的HTTPS流量。</p>
+<h2 id="0x04-具有密钥日志文件的Pcap的示例"><a href="#0x04-具有密钥日志文件的Pcap的示例" class="headerlink" title="0x04 具有密钥日志文件的Pcap的示例"></a>0x04 具有密钥日志文件的Pcap的示例</h2><p>这个Github存储库<a href="https://github.com/pan-unit42/wireshark-tutorial-decrypting-HTTPS-traffic中提供了一个受密码保护的ZIP归档文件，其中包含pcap及其密钥日志文件。转到Github页面，单击ZIP存档条目，然后如图4和5所示下载它。值得注意的是，此ZIP存档中包含的pcap通过密钥日志解密后，可以访问基于Windows的恶意软件样本。与往常一样，我们建议您在非Windows环境中谨慎行事并按照本教程中的步骤进行操作。" target="_blank" rel="noopener">https://github.com/pan-unit42/wireshark-tutorial-decrypting-HTTPS-traffic中提供了一个受密码保护的ZIP归档文件，其中包含pcap及其密钥日志文件。转到Github页面，单击ZIP存档条目，然后如图4和5所示下载它。值得注意的是，此ZIP存档中包含的pcap通过密钥日志解密后，可以访问基于Windows的恶意软件样本。与往常一样，我们建议您在非Windows环境中谨慎行事并按照本教程中的步骤进行操作。</a></p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2020/08/word-image-3.jpeg" alt="pan-unit42/wireshark-tutorial-decrypting-HTTPS-traffic - the screenshot shows the Github repository with the link to the ZIP archive used for this tutorial on decrypting HTTPS traffic. "></p>
+<p>pan-unit42 / wireshark-tutorial-decrypting-HTTPS-traffic-屏幕快照显示了Github存储库，其中包含指向本教程有关解密HTTPS流量的ZIP存档的链接。<br>图4. Github存储库，带有指向本教程使用的ZIP存档的链接。<br>pan-unit42 / wireshark-tutorial-decrypting-HTTPS-traffic-屏幕快照显示了如何在Github存储库中下载用于本教程的解密HTTPS流量的ZIP存档。<br>图5.下载本教程的ZIP存档。<br>使用感染的作为密码来提取pcap和密钥日志文件</p>
+<ul>
+<li>Wireshark-tutorial-KeysLogFile.txt</li>
+<li>Wireshark-tutorial-on-decrypting-HTTPS-SSL-TLS-traffic.pcap</li>
+</ul>
+<p>从ZIP存档中。这将提供两个文件。</p>
+<h2 id="0x05-没有密钥日志文件的HTTPS流量"><a href="#0x05-没有密钥日志文件的HTTPS流量" class="headerlink" title="0x05 没有密钥日志文件的HTTPS流量"></a>0x05 没有密钥日志文件的HTTPS流量</h2><p>在Wireshark中打开pcap。使用基本的basic：</p>
+<p>![image-20210403182308872](/Users/yueting/Library/Application Support/typora-user-images/image-20210403182308872.png)</p>
+<p>此pcap来自Windows 10主机上的Dridex恶意软件感染。所有Web流量（包括感染活动）都是HTTPS。没有密钥日志文件，我们将看不到流量的任何详细信息，只有IP地址，TCP端口和域名。</p>
+<h2 id="0x06-加载密钥日志文件"><a href="#0x06-加载密钥日志文件" class="headerlink" title="0x06 加载密钥日志文件"></a>0x06 加载密钥日志文件</h2><p>在Wireshark中打开pcap。然后使用菜单路径Edit-&gt; Preferences来打开Preferences菜单，在Preferences菜单的左侧，单击Protocols。（macos的在wireshark下的perferences）</p>
+<p>![](/Users/yueting/Library/Application Support/typora-user-images/image-20210403182802760.png)</p>
+<p>在Wireshark-“首选项”菜单的左侧，单击“协议”，如此处所示。<br>图9.在“首选项”菜单中选择“协议”。<br>如果您使用的是Wireshark版本2.x，请向下滚动直到找到SSL并选择它。如果使用的是Wireshark 3.x版，请向下滚动到TLS并选择它。</p>
+<p>![image-20210403182843840](/Users/yueting/Library/Application Support/typora-user-images/image-20210403182843840.png)选择SSL或TLS后，应该看到（Pre）-Master-Secret log filename。单击“浏览”按钮，然后选择名为Wireshark-tutorial-KeysLogFile.txt的密钥日志文件。</p>
+<p>![image-20210403182935612](/Users/yueting/Library/Application Support/typora-user-images/image-20210403182935612.png)<br>图11.选择本教程的关键日志文件。<br>图12.将文件选择为（Pre）-Master-Secret日志文件名后，单击“ OK”。</p>
+<h2 id="0x07带有密钥日志文件的HTTPS流量"><a href="#0x07带有密钥日志文件的HTTPS流量" class="headerlink" title="0x07带有密钥日志文件的HTTPS流量"></a>0x07带有密钥日志文件的HTTPS流量</h2><p>一旦单击“ OK”，在使用基本过滤器时，Wireshark列显示将在每条HTTPS行下列出解密的HTTP请求，如图13所示。</p>
+<p>![image-20210403183026598](/Users/yueting/Library/Application Support/typora-user-images/image-20210403183026598.png)<br>图13.使用密钥日志文件后，Wireshark中的HTTPS解密。<br>在此pcap中，我们现在看到以前隐藏在HTTPS通信中的对microsoft.com和skype.com域的HTTP请求。我们还发现由Dridex感染引起的以下流量：</p>
+<ul>
+<li>foodsgoodforliver[.]com - GET /invest_20.dll</li>
+<li>105711[.]com - POST /docs.php</li>
+</ul>
+<p>对foodsgoodforliver [.] com的GET请求返回了Dridex的DLL文件。对105711 [.] com的POST请求是来自受Dridex感染的Windows主机的命令和控制（C2）通信。</p>
+<p>我们可以通过跟踪HTTP流来查看流量。右键单击该行以将其选中，然后单击鼠标左键以弹出一个菜单以遵循HTTP流。图14和15显示了针对foodsgoodforliver [.] com的HTTP GET请求的HTTP流。</p>
+<p>![image-20210403183254419](/Users/yueting/Library/Application Support/typora-user-images/image-20210403183254419.png)</p>
+<p>![image-20210403183404236](/Users/yueting/Library/Application Support/typora-user-images/image-20210403183404236.png)<br>图15. HTTP流指示从服务器返回的EXE或DLL。<br>由于我们具有用于此流量的密钥日志文件，因此我们现在可以从pcap导出此恶意软件。使用菜单路径File-&gt; Export Objects-&gt; HTTP从pcap导出此文件，如图16所示。</p>
+<p>![image-20210403183528123](/Users/yueting/Library/Application Support/typora-user-images/image-20210403183528123.png)<br>可以在公开可用的在线沙箱环境中找到结果。</p>
+<p>最后，我们可以检查来自此Dridex感染的C2流量。使用您的basic过滤，然后遵循从其中一个POST请求到105711 .com的HTTP流。图18显示了来自HTTP流之一的示例。</p>
+<p>![image-20210403183800965](/Users/yueting/Library/Application Support/typora-user-images/image-20210403183800965.png)</p>
+<p>来自Dridex C2 POST请求之一的HTTP流。<br>图18.来自Dridex C2 POST请求之一的HTTP流。<br>结论<br>本教程回顾了如何使用密钥日志文本文件通过Wireshark在pcap中解密HTTPS流量。如果没有在最初记录pcap时创建密钥日志文件，则无法在Wireshark中解密来自该pcap的HTTPS通信。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E8%AE%BE%E7%BD%AE%E8%BF%87%E6%BB%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E8%AE%BE%E7%BD%AE%E8%BF%87%E6%BB%A4/" itemprop="url">Wireshark教程：设置过滤</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-03T18:11:45+08:00">
+                2021-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="wireshark设置过滤"><a href="#wireshark设置过滤" class="headerlink" title="wireshark设置过滤"></a>wireshark设置过滤</h1><h2 id="1-感染流量指标"><a href="#1-感染流量指标" class="headerlink" title="1.感染流量指标"></a>1.感染流量指标</h2><p>本教程使用Windows感染流量示例，这些流量来自通过大规模分发方法（如恶意垃圾邮件（malspam））或Web流量分发的商品恶意软件。 在恶意软件（通常是Windows可执行文件）感染Windows主机之前，这些感染可以遵循许多不同的路径。</p>
+<p>指标包括从网络流量中获取的与感染相关的信息。 这些指标通常称为危害指标（IOC）。 安全专业人员经常记录与Windows感染流量相关的指示器，例如URL，域名，IP地址，协议和端口。 正确使用Wireshark显示过滤器可以帮助人们快速找到这些指标。</p>
+<h2 id="2-Wireshark显示过滤器"><a href="#2-Wireshark显示过滤器" class="headerlink" title="2.Wireshark显示过滤器"></a>2.Wireshark显示过滤器</h2><p>经常使用到的</p>
+<p> Equals: == or eq<br> And: &amp;&amp; or and<br> Or: || (double pipe) or or</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ip.addr eq 192.168.10.195 and ip.addr &#x3D;&#x3D; 192.168.10.1</span><br><span class="line">http.request &amp;&amp; ip.addr &#x3D;&#x3D; 192.168.10.195</span><br><span class="line">http.request || http.response</span><br><span class="line">dns.qry.name contains microsoft or dns.qry.name contains windows</span><br></pre></td></tr></table></figure>
+
+<p>指定排除值时，请勿在过滤器表达式中使用!=。例如，如果要指定不包含IP地址192.168.10.1的所有流量，请使用!(ip.addr eq 192.168.10.1)而不是ip.addr!= 192.168.10.1。</p>
+<h2 id="3-过滤基于Web的感染流量"><a href="#3-过滤基于Web的感染流量" class="headerlink" title="3.过滤基于Web的感染流量"></a>3.过滤基于Web的感染流量</h2><p>快速查看pcap中的网络流量:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http.request <span class="keyword">or</span> ssl.handshake.type == <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>值http.request显示HTTP请求的URL，而ssl.handshake.type == 1显示HTTPS或SSL / TLS通信中使用的域名。</p>
+<p>但是，我也使用Windows 7主机生成pcaps流量，并且该流量包括在正常活动期间通过UDP端口1900发出的HTTP请求。 UDP端口1900上的HTTP通信是简单服务发现协议（SSDP）。 SSDP是用于发现即插即用设备的协议，它与正常的网络流量无关。 因此，我使用以下表达式将其过滤掉：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http.request or ssl.handshake.type &#x3D;&#x3D; 1 and !(udp.port eq 1900)</span><br><span class="line"></span><br><span class="line">http.request or ssl.handshake.type &#x3D;&#x3D; 1 and !(ssdp)</span><br></pre></td></tr></table></figure>
+
+<p>从Windows 7主机上的感染中检查pcap时，过滤出SSDP活动可提供非常清晰的流量视图。 图6显示了从2018年12月3日开始在Windows 7主机上具有IcedID感染流量的Emotet活动。 它针对包含SSDP请求的Web流量进行过滤。 图7显示了对除SSDP请求之外的Web流量进行过滤的相同pcap，它提供了更清晰的活动图。</p>
+<p>![image-20210403161803286](/Users/yueting/Library/Application Support/typora-user-images/image-20210403161803286.png)</p>
+<p>添加!ssdp后更加清晰</p>
+<p>![image-20210403161902711](/Users/yueting/Library/Application Support/typora-user-images/image-20210403161902711.png)</p>
+<p>在图7中，我们看到了一些感染流量的指标，但并非所有感染指标都可以显示出来。 在某些情况下，受感染的主机可能会尝试与已脱机或拒绝TCP连接的服务器连接。 通过添加tcp.flags eq 0x0002在过滤器中包含TCP SYN段，可以揭示这些尝试的连接。 对相同的流量尝试以下过滤器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(http.request or ssl.handshake.type &#x3D;&#x3D; 1 or tcp.flags eq 0x0002) and !(udp.port eq 1900)</span><br></pre></td></tr></table></figure>
+
+<p>![image-20210403162012446](/Users/yueting/Library/Application Support/typora-user-images/image-20210403162012446.png)</p>
+<p>其中黑色部分三次握手没有回应</p>
+<p>在搜索中包括TCP SYN段，这表明受感染的主机还试图通过TCP端口8443与IP地址217.164.2 .133连接。</p>
+<h2 id="4-过滤其他类型的感染流量"><a href="#4-过滤其他类型的感染流量" class="headerlink" title="4.过滤其他类型的感染流量"></a>4.过滤其他类型的感染流量</h2><p>在某些情况下，感染后流量将不是基于Web的，并且被感染的主机将与命令和控制（C2）服务器联系。 这些服务器可以直接托管在IP地址上，也可以托管在使用域名的服务器上。 某些感染后活动（例如，由Nanocore远程访问工具（RAT）引起的C2通信）不是HTTP或HTTPS / SSL / TLS通信。</p>
+<p>因此，在查看pcap来查看流量中是否有任何这些域处于活动状态时，我经常添加DNS活动。 这将导致以下过滤器表达式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(http.request or ssl.handshake.type &#x3D;&#x3D; 1 or tcp.flags eq 0x0002 or dns) and !(udp.port eq 1900)</span><br></pre></td></tr></table></figure>
+
+<p>我使用上面的过滤器表达式查看了pcap，该pcap显示了从<a href="http://www.mercedes-club-bg" target="_blank" rel="noopener">www.mercedes-club-bg</a> [.]com下载的Nanocore RAT可执行文件，以感染易受攻击的Windows主机。 初始下载后，尝试通过TCP连接到185.163.45 [.]48上的franex.sytes [.]net和95.213.251 [.]165上的franexserve.duckdns [.]org。 图10显示了DNS查询和TCP流量之间的相关性。</p>
+<p>![image-20210403162522125](/Users/yueting/Library/Application Support/typora-user-images/image-20210403162522125.png)</p>
+<p>某些感染流量使用的通用协议很容易被Wireshark解码。 图11显示了由该恶意软件可执行文件产生的感染后流量，该可执行文件生成FTP流量。 使用标准的网络流量搜索（该功能还会检查DNS流量和TCP SYN标志），在对ftp.totallyanonymous [.] com进行DNS查询之后，我们可以找到TCP端口21和其他TCP端口上的流量。</p>
+<p>![image-20210403162848799](/Users/yueting/Library/Application Support/typora-user-images/image-20210403162848799.png)</p>
+<p>![image-20210403163114324](/Users/yueting/Library/Application Support/typora-user-images/image-20210403163114324.png)</p>
+<p>检索两个文件</p>
+<p>向下滚动至以后的FTP通信，如图13所示，您将发现大约每分钟发送到FTP服务器的名为6R7MELYD6的文件。 进一步调查将发现6R7MELYD6包含从受感染Windows主机窃取的密码数据。</p>
+<p>![image-20210403163253046](/Users/yueting/Library/Application Support/typora-user-images/image-20210403163253046.png)</p>
+<p>除了FTP，恶意软件还可以使用其他通用协议来处理恶意流量。 Spambot恶意软件可以将受感染的主机转变为旨在每分钟发送数十至数百封电子邮件的spambot。 它的特征是对各种邮件服务器的几个DNS请求，然后是TCP端口25、465、587或与电子邮件流量关联的其他TCP端口上的SMTP流量。</p>
+<p>（http.request或ssl.handshake.type == 1或tcp.flags eq 0x0002或dns）和！（udp.port eq 1900）</p>
+<p>在查看spambot流量时，您会发现对邮件服务器的DNS查询和对与SMTP相关的端口的TCP通信。</p>
+<p>如果将smtp用作过滤器表达式，则会发现几个结果。如果您发现STARTTLS，则可能是经过加密的SMTP通信，并且您将无法看到电子邮件数据。</p>
+<p>smtp contains “From: “<br>smtp contains “Message-ID: “<br>smtp contains “Subject: “</p>
+<p>![image-20210403163816906](/Users/yueting/Library/Application Support/typora-user-images/image-20210403163816906.png)</p>
+<p>![image-20210403163849039](/Users/yueting/Library/Application Support/typora-user-images/image-20210403163849039.png)</p>
+<p>tcp流</p>
+<h2 id="5-保存过滤器"><a href="#5-保存过滤器" class="headerlink" title="5.保存过滤器"></a>5.保存过滤器</h2><p>basic (http.request or ssl.handshake.type == 1) and !(udp.port eq 1900)<br>basic+ (http.request or ssl.handshake.type == 1 or tcp.flags eq 0x0002) and !(udp.port eq 1900)<br>basic+DNS (http.request or ssl.handshake.type == 1 or tcp.flags eq 0x0002 or dns) and !(udp.port eq 1900)</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E4%BD%BF%E7%94%A8Wireshark%E5%AF%BB%E6%89%BE%E4%B8%BB%E6%9C%BA%E4%BF%A1%E6%81%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/ytytytytyt6.github.io/2021/04/03/Wireshark%E6%95%99%E7%A8%8B%EF%BC%9A%E4%BD%BF%E7%94%A8Wireshark%E5%AF%BB%E6%89%BE%E4%B8%BB%E6%9C%BA%E4%BF%A1%E6%81%AF/" itemprop="url">Wireshark教程：使用Wireshark寻找主机信息</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-03T18:00:53+08:00">
+                2021-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="使用Wireshark寻找主机信息"><a href="#使用Wireshark寻找主机信息" class="headerlink" title="使用Wireshark寻找主机信息"></a>使用Wireshark寻找主机信息</h1><p>网络中产生流量的任何主机都应具有三个标识符：MAC地址，IP地址和主机名。</p>
+<p>我们如何使用Wireshark查找此类主机信息？我们对两种活动进行过滤：DHCP或NBNS。 DHCP流量可以帮助识别连接到网络的几乎所有类型的计算机的主机。 NBNS流量主要由运行Microsoft Windows的计算机或运行MacOS的Apple主机生成。</p>
+<h2 id="实验一来自DHCP流量的主机信息"><a href="#实验一来自DHCP流量的主机信息" class="headerlink" title="实验一来自DHCP流量的主机信息"></a>实验一来自DHCP流量的主机信息</h2><p>![image-20210403144915421](/Users/yueting/Library/Application Support/typora-user-images/image-20210403144915421.png)</p>
+<p>DHCP traffic can help identify hosts for almost any type of computer connected to your network.</p>
+<p> DHCP Request &gt;Bootstrap Protocol (Request)&gt; Client Identifier and Host Name</p>
+<p>![image-20210403145148267](/Users/yueting/Library/Application Support/typora-user-images/image-20210403145148267.png)</p>
+<p>通过这里 似乎是一个ipad，但是不能仅凭一个主机名确定</p>
+<p>在这种情况下，172.16.1 [.] 207的主机名是Rogers-iPad，MAC地址是7c：6d：62：d2：e3：4f。此MAC地址已分配给Apple。根据主机名，此设备可能是iPad，但我们无法仅通过主机名进行确认。</p>
+<p>MAC address and IP address（找相关的）</p>
+<p>![image-20210403145658069](/Users/yueting/Library/Application Support/typora-user-images/image-20210403145658069.png)</p>
+<h2 id="实验二-来自NetBIOS名称服务（NBNS）流量的主机信息"><a href="#实验二-来自NetBIOS名称服务（NBNS）流量的主机信息" class="headerlink" title="实验二 来自NetBIOS名称服务（NBNS）流量的主机信息"></a>实验二 来自NetBIOS名称服务（NBNS）流量的主机信息</h2><p> NBNS traffic is generated primarily by computers running Microsoft Windows or Apple hosts running MacOS.</p>
+<p>根据更新DHCP租约的频率，您的pcap中可能没有DHCP流量。幸运的是，我们可以使用NBNS流量来标识运行Microsoft Windows的计算机或运行MacOS的Apple主机的主机名。</p>
+<p>NBNS(NetBIOS Name Server)是动态DNS的一种，Microsoft的NBNS实现称为WINS</p>
+<p>![image-20210403150214758](/Users/yueting/Library/Application Support/typora-user-images/image-20210403150214758.png)</p>
+<p>该主机使用内部IP地址10.2.4.101。在Wireshark中打开pcap，然后在nbns上进行过滤。这应该显示NBNS流量。选择第一帧，您可以快速将IP地址与MAC地址和主机名相关联，如图所示。</p>
+<p>从这里也可以看到一些细节</p>
+<p>![image-20210403150323755](/Users/yueting/Library/Application Support/typora-user-images/image-20210403150323755.png)</p>
+<h2 id="实验三-来自HTTP流量的设备模型和操作系统"><a href="#实验三-来自HTTP流量的设备模型和操作系统" class="headerlink" title="实验三 来自HTTP流量的设备模型和操作系统"></a>实验三 来自HTTP流量的设备模型和操作系统</h2><p>来自HTTP通信头的用户代理字符串可以显示操作系统。如果HTTP流量来自Android设备，那么还可以确定设备的制造商和型号。</p>
+<p>过滤： http.request and !(ssdp)</p>
+<p>此pcap来自Windows主机，使用内部IP地址192.168.1 .97。在Wireshark中打开pcap，然后对http.request and !(ssdp)进行过滤。选择第二个帧，这是对<a href="http://www.ucla" target="_blank" rel="noopener">www.ucla</a> . edu的第一个HTTP请求，并跟踪TCP流，如图所示。</p>
+<p>![image-20210403150601328](/Users/yueting/Library/Application Support/typora-user-images/image-20210403150601328.png)</p>
+<p>![image-20210403150645206](/Users/yueting/Library/Application Support/typora-user-images/image-20210403150645206.png)</p>
+<p>该TCP流具有HTTP请求标头，如图所示。User-Agent行表示在Microsoft Windows 7 x64操作系统上运行的Google Chrome浏览器Web版本72.0.3626. 81。</p>
+<p>Note the following string in the User-Agent line from Figure 8:</p>
+<p>(Windows NT 6.1; Win64; x64)</p>
+<ul>
+<li><pre><code>NT字符串表示以下版本的Microsoft Windows
+- Windows NT 5.1: Windows XP
+- Windows NT 6.0: Windows Vista
+- Windows NT 6.1: Windows 7
+- Windows NT 6.2: Windows 8
+- Windows NT 6.3: Windows 8.1
+- Windows NT 10.0: Windows 10
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 实验四 DHCP流量中的主机信息</span><br><span class="line"></span><br><span class="line">使用来自Windows主机的基于HTTP的web浏览流量，可以确定操作系统和浏览器。来自Android设备的相同类型的流量可以揭示设备的品牌和型号。</span><br><span class="line"></span><br><span class="line">此pcap来自使用内部IP地址172.16.4.119的Android主机。在Wireshark中打开pcap，然后对http.request进行过滤。选择第二个框架，这是对&#x2F;blank.html的www.google.com的HTTP请求。跟踪TCP流。</span><br><span class="line"></span><br><span class="line">![image-20210403151129755](&#x2F;Users&#x2F;yueting&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20210403151129755.png)</span><br><span class="line"></span><br><span class="line">User-Agent行显示了Android 7.1.2，它是2017年4月发布的Android操作系统的较旧版本。LM-X210APM表示此Android设备的型号。 Google进行了快速搜索，发现该型号是LG Phoenix 4 Android智能手机。</span><br><span class="line"></span><br><span class="line">来自iPhone或其他苹果移动设备的HTTP流量的用户代理行将为您提供操作系统，并提供设备类型。我们只能确定苹果的设备是iPhone、iPad还是iPod</span><br><span class="line"></span><br><span class="line">## 实验五 </span><br><span class="line"></span><br><span class="line">此pcap来自使用内部IP地址为10.0.0.114的iPhone主机。在Wireshark中打开pcap，然后对http.request进行过滤。选择对web.mta.info的第一个HTTP请求的帧，并遵循TCP流</span><br><span class="line"></span><br><span class="line">![image-20210403151440508](&#x2F;Users&#x2F;yueting&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20210403151440508.png)</span><br><span class="line"></span><br><span class="line">(iPhone; CPU iPhone OS 12_1_3 like Mac OS X</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">关于HTTP流量和用户代理字符串的最后一点说明：并非所有HTTP活动都是web浏览流量。某些HTTP请求不会显示浏览器或操作系统。当您在流量中搜索以识别主机时，在查找web浏览器流量之前，可能需要尝试几个不同的HTTP请求。</span><br><span class="line">由于越来越多的网站使用HTTPS，这种主机识别方法可能很困难。HTTP头和内容在HTTPS通信中不可见。然而，对于那些有幸在调查期间发现HTTP web浏览流量的人来说，这种方法可以提供更多关于主机的信息。</span><br><span class="line"></span><br><span class="line">## 实验六Windows用户帐户来自Kerberos流量</span><br><span class="line"></span><br><span class="line">对于Active Directory（AD）环境中的Windows主机，我们可以从Kerberos通信中找到用户帐户名。</span><br></pre></td></tr></table></figure>
+Domain: happycraft[.]org
+Network segment: 172.16.8.0/24 (172.16.8[.]0 - 172.16.8[.]255)
+Domain controller IP: 172.16.8[.]8
+Domain controller hostname: Happycraft-DC
+Segment gateway: 172.16.8[.]1
+Broadcast address: 172.16.8[.]255
+Windows client: 172.16.8[.]201</code></pre><p>kerberos.CNameString</p>
+</li>
+</ul>
+<p>在Wireshark中打开pcap，并在kerberos.CNameString上进行过滤。选择第一帧。转到frame details部分，然后展开行，如图13所示。选择带有CNameString的行：johnson-pc $并将其作为一列应用。</p>
+<p>![image-20210403151646754](/Users/yueting/Library/Application Support/typora-user-images/image-20210403151646754.png)</p>
+<p>这将创建一个名为CNameString的新列。向下滚动到列显示中的最后一帧。您应该在域控制器172.16.8 [。] 8和Windows客户端172.16.8 [。] 201之间的通信中找到Theresa.johnson的用户帐户名，如图14所示。</p>
+<p>![image-20210403151802871](/Users/yueting/Library/Application Support/typora-user-images/image-20210403151802871.png)</p>
+<p>主机名的CNameString值总是以$（美元符号）结尾，而用户帐户名则不是。要根据用户帐户名进行筛选，请使用以下Wireshark表达式消除带有美元符号的CNameString结果：</p>
+<p>kerberos.CNameString and !(kerberos.CNameString contains $)</p>
+<p>![image-20210403151917676](/Users/yueting/Library/Application Support/typora-user-images/image-20210403151917676.png)</p>
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/03/wireshark%E5%88%9D%E6%AD%A5%E5%85%A5%E9%97%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/ytytytytyt6.github.io/2021/04/03/wireshark%E5%88%9D%E6%AD%A5%E5%85%A5%E9%97%A8/" itemprop="url">wireshark初步入门</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-03T14:46:35+08:00">
+                2021-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="wireshark导出文件"><a href="#wireshark导出文件" class="headerlink" title="wireshark导出文件"></a>wireshark导出文件</h1><h2 id="1-从HTTP通信中导出对象"><a href="#1-从HTTP通信中导出对象" class="headerlink" title="1.从HTTP通信中导出对象"></a>1.从HTTP通信中导出对象</h2><p>![image-20210403165009709](/Users/yueting/Library/Application Support/typora-user-images/image-20210403165009709.png)</p>
+<p>第一个请求以.doc结尾，表示第一个请求返回了Microsoft Word文档。第二个请求以.exe结尾，表示第二个请求返回了Windows可执行文件。 HTTP GET请求在下面列出</p>
+<p>smartfax[.]com  GET /Documents/Invoice&amp;MSORequest.doc<br>smartfax[.]com  GET /knr.exe</p>
+<p>我们可以使用菜单路径从HTTP对象列表中导出这些对象：File-&gt; Export Objects-&gt; HTTP …图2在Wireshark中显示了此菜单路径。</p>
+<p>![image-20210403165214017](/Users/yueting/Library/Application Support/typora-user-images/image-20210403165214017.png)</p>
+<p>值得注意的是，HTTP对象列表中的“内容类型”显示了服务器如何在其HTTP响应标头中识别文件。在某些情况下，有意将Windows可执行文件标记为其他类型的文件，以避免被检测到。</p>
+<p>在MacBook或Linux环境中，可以将终端窗口或命令行界面（CLI）用于以下命令：</p>
+<p>file [filename]<br>shasum -a 256 [filename]</p>
+<p>![image-20210403165557862](/Users/yueting/Library/Application Support/typora-user-images/image-20210403165557862.png)</p>
+<p>上面的信息确认我们怀疑的Word文档实际上是Microsoft Word文档。它还确认可疑的Windows可执行文件确实是Windows可执行文件。我们可以针对VirusTotal检查SHA256哈希值，以查看是否将这些文件检测为恶意软件。我们还可以对SHA256哈希进行Google搜索，以查找其他信息。</p>
+<p>![image-20210403165653362](/Users/yueting/Library/Application Support/typora-user-images/image-20210403165653362.png)</p>
+<p>除了Windows可执行文件或其他恶意软件文件外，我们还可以提取网页。本教程的第二个pcap提取对象来自pcap-example-02.pcap（在此处可用）包含有人在伪造的PayPal登录页面上输入登录凭据的流量。</p>
+<p>查看来自网络钓鱼站点的网络流量时，我们可能希望查看网络钓鱼网页的外观。我们可以使用Export HTTP object菜单提取初始HTML页面，如图6所示。然后，我们可以在隔离的环境中通过Web浏览器查看它，如图7所示。</p>
+<p>![image-20210403165943093](/Users/yueting/Library/Application Support/typora-user-images/image-20210403165943093.png)</p>
+<p>图6.从第二个pcap导出伪造的PayPal登录页面。</p>
+<p><img src="https://unit42.paloaltonetworks.com/wp-content/uploads/2019/07/word-image-6.png" alt="img"></p>
+<p>图7.在Web浏览器中查看的导出的伪造PayPal登录页面。</p>
+<h2 id="2-从SMB流量导出对象"><a href="#2-从SMB流量导出对象" class="headerlink" title="2.从SMB流量导出对象"></a>2.从SMB流量导出对象</h2><p>某些恶意软件使用Microsoft的服务器消息块（SMB）协议在基于Active Directory（AD）的网络中传播。早在2017年7月，一个名为Trickbot的银行木马就添加了蠕虫模块，该蠕虫模块使用基于EternalBlue的漏洞在SMB上跨网络传播。今天，我们仍在寻找该Trickbot蠕虫模块的迹象。</p>
+<p>我们的下一个pcap代表Trickbot感染，该感染使用SMB从受感染的客户端10.6.26.110传播到其域控制器10.6.26.6.从pcap-example-03.pcap提取对象，在这里可用。在Wireshark中打开pcap。使用菜单路径File-&gt; Export Objects-&gt; SMB …，如图8所示。</p>
+<p>![image-20210403170114367](/Users/yueting/Library/Application Support/typora-user-images/image-20210403170114367.png)</p>
+<p>图9.进入“导出SMB对象”列表。</p>
+<p>这将弹出一个Export SMB object列表，列出可以从pcap导出的SMB对象，如图9所示。</p>
+<p>请注意列表中间附近的两个条目，其中 10.6.26.6  C $作为主机名。仔细检查它们各自的“文件名”字段，可以发现这是两个Windows可执行文件。有关详细信息，请参见下面的表1。</p>
+<p>![image-20210403170157132](/Users/yueting/Library/Application Support/typora-user-images/image-20210403170157132.png)</p>
+<p>在“内容类型”列中，我们需要[100.00％]导出这些文件的正确副本。小于100％的任何数字表示网络流量中有一些数据丢失，从而导致文件副本损坏或不完整。这些来自pcap的Trickbot相关文件具有SHA256文件哈希，如表2所示。</p>
+<p>SHA256哈希文件大小<br>59896ae5f3edcb999243c7bfdc0b17eb7fe28f3a66259d797386ea470c010040 712 kB<br>cf99990bee6c378cbf56239b3cc88276eec348d82740f84e9d5c343751f82560 115 kB<br>表2. Windows可执行文件的SHA256文件哈希。</p>
+<h2 id="从SMTP流量导出电子邮件"><a href="#从SMTP流量导出电子邮件" class="headerlink" title="从SMTP流量导出电子邮件"></a>从SMTP流量导出电子邮件</h2><p>某些类型的恶意软件旨在将受感染的Windows主机转变为垃圾邮件机器人。这些垃圾邮件发送器每分钟发送数百封垃圾邮件或恶意电子邮件。在某些情况下，邮件是使用未加密的SMTP发送的，我们可以从感染流量的pcap中导出这些邮件。</p>
+<p>一个这样的示例来自我们的下一个pcap，即从pcap-example-04.pcap提取对象（在此处可用）。在此pcap中，受感染的Windows客户端发送垃圾邮件。在Wireshark中打开pcap，在smtp.data.fragment上进行过滤，您应该看到50个主题行示例，如图10所示。这是在来自一台受感染Windows主机的五秒钟的网络流量中发生的。</p>
+<p>![image-20210403170339557](/Users/yueting/Library/Application Support/typora-user-images/image-20210403170339557.png)</p>
+<p>图10.在Wireshark中过滤电子邮件发件人和主题行。</p>
+<p>您可以使用菜单路径文件-&gt;导出对象-&gt; IMF …来导出这些消息，如图11所示。IMF代表Internet消息格式，它被保存为带有.eml文件扩展名的名称。</p>
+<p>![](/Users/yueting/Library/Application Support/typora-user-images/image-20210403170403385.png)</p>
+<p>在IMF对象列表中，所有色情短信垃圾邮件均以.eml文件扩展名列出，如图12所示。</p>
+<p>导出这些.eml文件后，可以使用诸如Thunderbird之类的电子邮件客户端对其进行检查，也可以在文本编辑器中对其进行检查，如图13所示。</p>
+<p>![image-20210403172937119](/Users/yueting/Library/Application Support/typora-user-images/image-20210403172937119.png)</p>
+<p>图13.使用文本编辑器查看从pcap导出的.eml文件。</p>
+<h2 id="4-从FTP流量导出文件"><a href="#4-从FTP流量导出文件" class="headerlink" title="4.从FTP流量导出文件"></a>4.从FTP流量导出文件</h2><p>一些恶意软件家族在恶意软件感染期间使用FTP。我们的下一个pcap具有从FTP服务器检索到的恶意软件可执行文件，然后将来自受感染Windows主机的信息发送回同一FTP服务器。</p>
+<p>下一个pcap是从pcap-example-05.pcap提取对象，可在此处获取。在Wireshark中打开pcap。在ftp.request.command上进行过滤以查看FTP命令，如图14所示。您应该找到一个用户名（USER）和密码（PASS），然后是检索（RETR）五个Windows可执行文件的请求：q.exe, w.exe, e.exe, r.exe, and t.exe。随后是大约每1个将基于HTML日志文件（STOR）的请求存储回同一FTP服务器的请求。</p>
+<p>ftp.request.command</p>
+<p>![image-20210403173053072](/Users/yueting/Library/Application Support/typora-user-images/image-20210403173053072.png)</p>
+<p>![image-20210403173229362](/Users/yueting/Library/Application Support/typora-user-images/image-20210403173229362.png)</p>
+<p>TCP流 保存</p>
+<p>![image-20210403173317980](/Users/yueting/Library/Application Support/typora-user-images/image-20210403173317980.png)</p>
+<p>![image-20210403173430978](/Users/yueting/Library/Application Support/typora-user-images/image-20210403173430978.png)</p>
+<ul>
+<li>Filter on ftp-data</li>
+<li>Follow the TCP stream for a TCP segment with the name of your file in the Info column</li>
+<li>Change “Show and save data as” to “Raw”</li>
+<li>Use the “Save as…” button to save the file</li>
+<li>Check to make sure your saved file is, in fact, a Windows executable file.</li>
+</ul>
+<p>将从受感染的Windows主机发送的HTML文件导出回FTP服务器时，我们必须进行更精确的搜索。为什么？因为每次都使用相同的文件名。过滤ftp.request.command，然后滚动到末尾。我们可以看到与用于将窃取的数据（STOR）存储到FTP服务器（作为HTML文件）的文件名相同的文件名，如图20所示。</p>
+<p>![image-20210403173710267](/Users/yueting/Library/Application Support/typora-user-images/image-20210403173710267.png)</p>
+<p>图20.用于将窃取的信息发送回FTP服务器的相同文件名。</p>
+<p>要查看通过ftp数据通道发送的关联文件，请使用过滤器ftp-data.command contains .html ，如图21所示。</p>
+<p>![image-20210403173857536](/Users/yueting/Library/Application Support/typora-user-images/image-20210403173857536.png)</p>
+<p>图21.通过FTP数据通道过滤文件名中带有.html的文件。</p>
+<p>在图21中，每次将文件存储（STOR）到FTP服务器时，目标端口都会更改。第一次是TCP端口52202。第二次是TCP端口57791。第三次是TCP端口55045。第四次是57203。第五次是61099。</p>
+<p>我们使用与以前相同的过程。与其关注文件名，不如关注TCP端口。使用端口52202跟随任何TCP段的TCP流。在TCP流窗口中，将“显示并将数据另存为”更改为“raw”。然后保存文件。对TCP端口57791上的HTML文件执行相同的操作。</p>
+<p>如果对所有五个HTML文件都执行此操作，则会发现它们是完全相同的文件。这些基于文本的HTML文件包含有关受感染Windows主机的数据，包括由恶意软件找到的所有密码。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/07/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB07-30/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/ytytytytyt6.github.io/2020/07/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB07-30/" itemprop="url">demo.md</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-30T09:34:46+08:00">
+                2020-07-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Automated Ransomware Behavior Analysis: Pattern Extraction and Early Detection Preprint</p>
+<ol>
+<li><h3 id="论文摘要"><a href="#论文摘要" class="headerlink" title="论文摘要"></a><strong>论文摘要</strong></h3><p>使用cuckoo sandbox分析得到的日志，三种机器学习方法（TF-IDF (term frequencyinverse document frequency), Fisher’s LDA (linear discriminant analysis) and ET (extra trees/extremely randomized trees)）实现了恶意代码模式提取和早期检测工具。可以实现三点：1.在沙箱环境中分析新发现的恶意代码样本并生成动态分析报告（主机日志）；2.自动提取与大数量未受攻击的主机日志相比恶意代码导致的事件序列，并且相关的少数日志从受到潜在多态恶意代码产生的；3.排列最具有辨识性的特征（独特模式）4.允许操作者可视化特征以及它们之间的关系用于取证。</p>
+<p>整个实验数据：7个不同家族的勒索病毒WannaCry, DBGer, Cerber, Defray, GandCrab, Locky, and nRansom</p>
+<p>实验结果：tf-idf最优，et时间效率 健壮</p>
+</li>
+<li><h3 id="论文结论"><a href="#论文结论" class="headerlink" title="论文结论"></a><strong>论文结论</strong></h3><p>![image-20200730100608003](/Users/yueting/Library/Application Support/typora-user-images/image-20200730100608003.png)</p>
+</li>
+<li><h3 id="论文贡献"><a href="#论文贡献" class="headerlink" title="论文贡献"></a><strong>论文贡献</strong></h3><p>1.使用cuckoo日志分析勒索病毒并且从主机行为报告中生成特征。</p>
+<p>2.提取勒索病毒日志文件（大部分被感染和潜在来自未被感染的大量的ambient报告）产生的特征（事件序列）</p>
+<p>3.排序最具有辨识性的特征并且去识别恶意代码行为在数据被勒索病毒加密之前。</p>
+<p>4.创建图可视化et模型用于取证，便于操作者可视化独特模式及其关系。</p>
+</li>
+<li><h3 id="achievements"><a href="#achievements" class="headerlink" title="achievements"></a><strong>achievements</strong></h3><p>1。参考文献8 只考虑特征提取 tf-idf 一种勒索病毒</p>
+<p>2.参考文献16 作者应用了序列模式挖掘用于找到最大频率模式msp 对于四种勒索病毒攻击，不同于本文中直接从主机文件中生成特征的方法，他们的方法总结了使用不同类型msp的行为。使用四种学习分类器，发现注册表的msp是最重要的序列在检测时可以达到99%。</p>
+<p>3.27将主机日志文件嵌入到语义上有意义的度量空间，表示用于构建勒索病毒行为签名。用于提前检测。</p>
+<p>4.28 REDFISH——一种勒索病毒检测算法，识别勒索病毒行为 当尝试加密共享文件的时候。基于被监视的smb流量分析，使用3个流量统计参数检测恶意行为。作者使用了19种勒索病毒家族测试该算法，均小于20秒。很高的检测率，但是不能在开始加密之前进行检测。</p>
+<p>5.29全面的分析和调查</p>
+<p>6.augment paths of specific files to emphasize their names only. For example, C:\Windows\system32\ \rsaenh.dll is converted to a string “c:..rsaenh.dll”.</p>
+</li>
+</ol>
+<ol start="5">
+<li><h3 id="启示和思考"><a href="#启示和思考" class="headerlink" title="启示和思考"></a><strong>启示和思考</strong></h3><p>1.主机日志是什么？Cuckoo analysis report (raw behavior log) </p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/07/21/cuckoo2mist/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -473,1510 +2075,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%B8%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="万俟思睿">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="思睿's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%B8%80/" itemprop="url">恶意流量分析训练一</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-20T13:10:56+08:00">
-                2020-07-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h1><p>本次实验所涉及并要求掌握的知识点。</p>
-<hr>
-<p>wireshark起还原现场的作用，帮助审计。</p>
-<p>Wiki上是这样描述的：对于安全人员而言，网络安全工程师可以使用wireshark来检查讯息安全相关的问题。对于网络安全而言，现场很重要，黑客攻击的过程和服务器被攻击的过程都必须使用网络，wireshark完全可以记录下来，这也正是wireshark强大的地方。</p>
-<p>使用wireshark进行恶意流量分析，主要涉及知识点包括<strong>IOC，键盘记录器木马，ftp协议</strong>等。</p>
-<blockquote>
-<p>入侵指标IOC(Indicatorsof Compromised):[URLs, domains, IP addresses, andSHA256 hashes related to the infection should appear in this section]</p>
-</blockquote>
-<hr>
-<h1 id="二、实验环境"><a href="#二、实验环境" class="headerlink" title="二、实验环境"></a>二、实验环境</h1><p>实验所使用的设备名称及规格，网络管理工具简介、版本等。</p>
-<hr>
-<p>服务器：Windows 7 ，IP地址：随机分配</p>
-<p>辅助工具：Wireshark</p>
-<h1 id="三、实验内容与实验要求"><a href="#三、实验内容与实验要求" class="headerlink" title="三、实验内容与实验要求"></a>三、实验内容与实验要求</h1><p>实验内容、原理分析及具体实验要求。</p>
-<hr>
-<blockquote>
-<p><strong>实验步骤一</strong></p>
-<p><strong>场景</strong></p>
-<p>局域网段范围：10.0.0.0/24(10.0.0.0 到 10.0.0.255)</p>
-<p>域： beguilesoft.com</p>
-<p>域控：10.0.0.10 - BeguileSoft-DC</p>
-<p>局域网网关：10.0.0.1</p>
-<p>局域网广播地址：10.0.0.255</p>
-<p><strong>任务</strong></p>
-<p>分析现有的材料，针对受害的windows主机写一份应急报告。建议的模板如下：</p>
-<p><strong>总结:</strong></p>
-<p>​        在xx时间, 一台window主机被xx感染</p>
-<p><strong>细节:</strong></p>
-<p>​        IP address:</p>
-<p>​        MAC address:</p>
-<p>​        Host name:</p>
-<p>​        Windows user account name:</p>
-<p>入侵指标IOC(Indicatorsof Compromised)：[URLs, domains, IP addresses, andSHA256 hashes related to the infection should appear in this section]</p>
-<p>提供了两个压缩文件，分别是告警日志和数据包。</p>
-</blockquote>
-<blockquote>
-<p>实验步骤二</p>
-<p>​      那么攻击者究竟拿到了什么数据呢？我们使用ftp-data看看他通过ftp传送了什么</p>
-</blockquote>
-<blockquote>
-<p>实验步骤三</p>
-<p>应急报告现在还缺少IOC，所以我们需要整理下，需要整理出目标端口，ip等</p>
-<p>在这之前，我们需要先回顾下ftp协议，ftp协议用两个端口实现，分别是数据端口和命令端口。命令端口用于连接，数据端口用于传输数据。</p>
-<p>​      命令端口一般都是21。那么数据端口呢？这里又引入了主动模式（PORT）和被动模式（PASV）的概念。当客户端通知服务器它处于被动模式时才会启用，其标志就是客户端给服务端发送了一个PASV.</p>
-<p>​      主动模式：</p>
-<h1 id=""><a href="#" class="headerlink" title=""></a><img src="http://www.hetianlab.com/headImg.action?guideImg=/3dd647e9-8e45-4905-b820-e99c12a51f36.jpg" alt="img"></h1><p>​      在第1步中，客户端的命令端口与FTP服务器的命令端口建立连接，并发送命令“PORT 1027”。然后在第2步中，FTP服务器给客户端的命令端口返回一个”ACK”。在第3步中，FTP服务器发起一个从它自己的数据端口（20）到客户端先前指定的数据端口（1027）的连接，最后客户端在第4步中给服务器端返回一个”ACK”。</p>
-<p>  被动模式：</p>
-<h1 id="-1"><a href="#-1" class="headerlink" title=""></a><img src="http://www.hetianlab.com/headImg.action?guideImg=/59e76a29-8149-401f-a493-50b0520f2a86.jpg" alt="img"></h1><p>​      在第1步中，客户端的命令端口与服务器的命令端口建立连接，并发送命令“PASV”。然后在第2步中，服务器返回命令”PORT 2024”，告诉客户端（服务器）用哪个端口侦听数据连接。在第3步中，客户端初始化一个从自己的数据端口到服务器端指定的数据端口的数据连接。最后服务器在第4 步中给客户端的数据端口返回一个”ACK”响应。</p>
-<p>​      简单地说，就是，在主动模式下一般默认的数据端口为20，在被动模式下数据端口就不一定了。</p>
-</blockquote>
-<hr>
-<hr>
-<h1 id="四、实验过程与分析"><a href="#四、实验过程与分析" class="headerlink" title="四、实验过程与分析"></a>四、实验过程与分析</h1><p>根据具体实验，记录、整理相应命令、运行结果等，包括截图和文字说明。</p>
-<p>详细记录在实验过程中发生的故障和问题，并进行故障分析，说明故障排除的过程及方法。</p>
-<p><strong>实验步骤一</strong></p>
-<p>使用wireshark打开数据包pcap文件，先看告警日志（alert.jpg）：</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590823528961.png" alt="1590823528961"></p>
-<p>1.接收到whatismyaddress.com的请求，不能判断是否是恶意软件产生的流量；3.使用了FTP STOR用于存储文件到服务器上，连接到external network，可推测恶意软件通过ftp协议将数据传输到外网服务器；4.Hawkeye Keylogger的木马，可以检索到相关的分析文章<a href="https://www.freebuf.com/column/157857.html。涉及到ftp协议，因此使用ftp过滤查看：" target="_blank" rel="noopener">https://www.freebuf.com/column/157857.html。涉及到ftp协议，因此使用ftp过滤查看：</a></p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590825324591.png" alt="1590825324591"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FTP	Response: 220 ProFTPD Server (000webhost.com) [::ffff:145.14.144.10]</span><br></pre></td></tr></table></figure>
-
-<p>显示的是proftpd，一款很常用的ftp服务端软件，后面 (000webhost.com)[::ffff:145.14.144.10]进入查看，一家免费的虚拟主机商。</p>
-<p>使用ftp 关键字过滤</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ftp.request.command eq USER or ftp.request.command eq PASS or ftp.request.command eq STOR</span><br></pre></td></tr></table></figure>
-
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590825362266.png" alt="1590825362266">可以发现目标地址在变化，攻击者用的是免费的虚拟主机，比如000webhost。如果更新页面或者传送数据则有可能会导致自动更换ip。</p>
-<p><strong>实验步骤二</strong></p>
-<p>ftp-data</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590824626760.png" alt="1590824626760"></p>
-<p>追踪流</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590825226631.png" alt="1590825226631"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">可以看到系统信息被获取到了，包括：</span><br><span class="line">​      主机名：BREAUX-WIN7-PC</span><br><span class="line">​      用户名：Adriana.breaux</span><br><span class="line">​      MAC地址：84:8f:69:09:86:c0</span><br><span class="line">​      Ip地址：10.0.0.227</span><br><span class="line">还有谷歌等网站的账号、密码都被攻击者获取到了，我们注意到还有一部分的流量显示的是jpeg，推测可能是主机截屏的图我们注意到还有一部分的流量显示的是jpeg，推测可能是主机截屏的图片</span><br></pre></td></tr></table></figure>
-
-<p>选择jpeg 追踪流 显示 保存 另存为png格式</p>
-<p><strong>实验步骤三</strong></p>
-<p>在wireshark中要想把完整的ftp协议过滤出来需要使用 ftp-data or ftp,只用单个的话只能过滤出ftp命令端口的流量或数据端口的流量，是不完整的</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590825445417.png" alt="1590825445417"></p>
-<p>715——状态码220表示对新用户的服务已经准备好</p>
-<p>716,719可以看到受害者机器通过用户名密码连入ftp服务端</p>
-<p>一直到734条可以看到受害者机器向145.14.145.4发出PASV,前面提到，发出PASV,就说明后面的数据传输过程中服务端使用的端口就不是20了。</p>
-<p> 在715到744之间都是命令端口通信的流量。所以此时的IOC是</p>
-<p>​      </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ip:145.14.145.4  port:21  url:000.webhost.com</span><br></pre></td></tr></table></figure>
-
-<p>745开始是通过被动模式连接后进行数据传输了</p>
-<p>755为例查看：</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590825559834.png" alt="1590825559834"></p>
-<p>目标端口为37280，即此时的145.14.145.4使用的端口</p>
-<p>所以第二条IOC为 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ip:145.14.145.4  port:37280  url:000webhost.com</span><br></pre></td></tr></table></figure>
-
-<p>分析第二个外网地址——145.14.144.10[从839开始]</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590825693354.png" alt="1590825693354"></p>
-<p>858的时候pasv。</p>
-<p>命令端口的通信流量</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ip:145.14.144.10  port:21  000webhost.com</span><br></pre></td></tr></table></figure>
-
-<p> 数据端口的通信流量以867为例</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590825799304.png" alt="1590825799304"></p>
-<p>得到IOC:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ip:145.14.144.10  port:40651  url:000webhost.com</span><br></pre></td></tr></table></figure>
-
-<p>​      从887开始又一次建立数据传输，端口47434</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590825843592.png" alt="1590825843592"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ip:145.14.144.10 port:47434 url:000webhost.com</span><br></pre></td></tr></table></figure>
-
-<p>第三个外网地址分析：从5259开始</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590825977425.png" alt="1590825977425"></p>
-<p>5278出现pasv。 可得两条IOC:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Ip:145.14.145.99  port:21  url:000webhost.com</span><br><span class="line">Ip:145.14.145.99 port:36091 url:000webhost.com</span><br></pre></td></tr></table></figure>
-
-<p> 5309开始又建立了一次数据传输，数据端口为35396，IOC为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ip:145.14.145.99  port:35396  url:000webhost.com</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="五、实验结果总结"><a href="#五、实验结果总结" class="headerlink" title="五、实验结果总结"></a>五、实验结果总结</h1><p>对实验结果进行分析，完成思考题目，总结实验的心得体会，并提出实验的改进意见。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">1）在2019年5月2日21点36分，Adriana.breaux的windows主机被Hawkeye Keylogger恶意软件感染。</span><br><span class="line">2）细节：</span><br><span class="line">​      主机名：BREAUX-WIN7-PC</span><br><span class="line">​      用户名：Adriana.breaux</span><br><span class="line">​      MAC地址：84:8f:69:09:86:c0</span><br><span class="line">​      Ip地址：10.0.0.227</span><br><span class="line">3）IOC:</span><br><span class="line">​      Ip:145.14.145.4   port:21         url:000.webhost.com</span><br><span class="line">​      Ip:145.14.145.4   port:37280   url:000webhost.com</span><br><span class="line">​      Ip:145.14.144.10 port:21         url:000webhost.com</span><br><span class="line">​      Ip:145.14.144.10 port:40651   url:000webhost.com</span><br><span class="line">​      Ip:145.14.144.10 port:47434    url:000webhost.com</span><br><span class="line">​      Ip:145.14.145.99 port:21         url:000webhost.com</span><br><span class="line">​      Ip:145.14.145.99 port:36091   url:000webhost.com</span><br><span class="line">​      Ip:145.14.145.99 port:35396   url:000webhost.com。</span><br></pre></td></tr></table></figure>
-
-
-
-<hr>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%B8%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="万俟思睿">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="思睿's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%B8%89/" itemprop="url">恶意流量分析训练三</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-20T13:10:56+08:00">
-                2020-07-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>一、实验目的</p>
-<p>本次实验所涉及并要求掌握的知识点。</p>
-<hr>
-<p>通过该实验了解使用wireshark进行恶意流量分析，培养流量分析的思维和能力，本次实验涉及知识包括<strong>善用搜索引擎、技术分析文章整合、snort日志分析、以及关于Lockyransomware和Angler EK部分攻击流量特征。</strong></p>
-<hr>
-<h1 id="二、实验环境"><a href="#二、实验环境" class="headerlink" title="二、实验环境"></a>二、实验环境</h1><p>实验所使用的设备名称及规格，网络管理工具简介、版本等。</p>
-<hr>
-<p>服务器：Windows 7 ，IP地址：随机分配</p>
-<p>辅助工具：Wireshark</p>
-<hr>
-<h1 id="三、实验内容与实验要求"><a href="#三、实验内容与实验要求" class="headerlink" title="三、实验内容与实验要求"></a>三、实验内容与实验要求</h1><p>实验内容、原理分析及具体实验要求。</p>
-<hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">试根据给出的数据包等文件，分析解答如下问题</span><br><span class="line"></span><br><span class="line">       Q1；用户的姓名？</span><br><span class="line">       Q2：用户windows机器的主机名？</span><br><span class="line">       Q3；用户windows主机的ip地址？</span><br><span class="line">       Q4；用户电脑的mac地址？</span><br><span class="line">       Q5；用户被感染了哪些恶意文件？</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="四、实验过程与分析"><a href="#四、实验过程与分析" class="headerlink" title="四、实验过程与分析"></a>四、实验过程与分析</h1><p>根据具体实验，记录、整理相应命令、运行结果等，包括截图和文字说明。</p>
-<p>详细记录在实验过程中发生的故障和问题，并进行故障分析，说明故障排除的过程及方法。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Q1；用户的姓名？</span><br><span class="line">Q2：用户windows机器的主机名？</span><br><span class="line">Q3；用户windows主机的ip地址？</span><br><span class="line">Q4；用户电脑的mac地址？</span><br></pre></td></tr></table></figure>
-
-<p>统计找到10.0.21.136</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591014527454.png" alt="1591014527454"></p>
-<p>如何找主机名？——</p>
-<blockquote>
-<p>NetBIOS是Network Basic Input/Output System的简称，一般指用于局域网通信的一套API，它在基于 NetBIOS 名称访问的网络上提供主机名和地址映射方法。所以通过NBNS协议我们可以找到主机名</p>
-</blockquote>
-<p>mac地址及主机名如下</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591014670680.png" alt="1591014670680"></p>
-<p>如何找用户名？</p>
-<blockquote>
-<p>在电脑自带的通信过程中，一般人是不会设置完整的姓名的，题目既然这么问说明要从其他地方入手，比如用户在网站注册，或者他的邮件的名字，都有可能是姓名，所以我们尝试过滤出http请求数据。</p>
-</blockquote>
-<p>出现signup 追踪流 发现</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591014808751.png" alt="1591014808751"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q5；用户被感染了哪些恶意文件？</span><br></pre></td></tr></table></figure>
-
-<p>  可以看到在用户注册之后，紧接着是google analytics,这是Google开发的网站流量跟踪工具。</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591015616412.png" alt="1591015616412"></p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591015895770.png" alt="1591015895770"></p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591015989193.png" alt="1591015989193"></p>
-<p>继续分析，往下</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591016377552.png" alt="1591016377552"></p>
-<p>出现top域名 值得注意 选择一条get 跟踪流</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591016521168.png" alt="1591016521168"></p>
-<p>可以看到referer信息，referer表示是从该页面链接过来的，所以此处的话表明用户访问正常的网页<a href="http://www.emidioleite.com........然后被定向访问到了.top" target="_blank" rel="noopener">http://www.emidioleite.com........然后被定向访问到了.top</a></p>
-<p>​    接下来结合snort日志分析，根据目的ip去日志中检索</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591016656334.png" alt="1591016656334"></p>
-<p>可以看到snort检测到是属于Angler exploit-kit发起的攻击，后面还提示是landing page，那么一定会传递载荷</p>
-<p>​       我们进一步分析其他的tcp流</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591016735113.png" alt="1591016735113"></p>
-<p>继续往下看看剩余有没有可疑的流量</p>
-<p>​       在最后的一系列postuserinfo.php这种用户正常访问的额流量之前我们有看到了奇怪的流量</p>
-<p>同上一步 在snort文件中查找ip 但是攻击手法有变化。实际攻击中IP是动态变化的，但是端口一般不会变化，取消条件后发现主要是80和443.在搜索引擎中搜索</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591017017379.png" alt="1591017017379"></p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591017029696.png" alt="1591017029696"></p>
-<p>  用户受到了三次感染，第一次是来自malware spam的Locky ransomware,第二次是Angler EK的文件（由分析文章推知是伪装的swf文件），第三次是AnglerEK的CryptXXX ransomware。</p>
-<hr>
-<h1 id="五、实验结果总结"><a href="#五、实验结果总结" class="headerlink" title="五、实验结果总结"></a>五、实验结果总结</h1><p>对实验结果进行分析，完成思考题目，总结实验的心得体会，并提出实验的改进意见。</p>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%BA%8C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="万俟思睿">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="思睿's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%BA%8C/" itemprop="url">恶意流量分析训练二</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-20T13:10:56+08:00">
-                2020-07-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h1><p>本次实验所涉及并要求掌握的知识点。</p>
-<hr>
-<p>通过该实验了解使用wireshark进行恶意流量分析，本次实验涉及知识包括<strong>操作系统指纹识别、域环境、Emotet银行木马流量特征等</strong>。</p>
-<hr>
-<h1 id="二、实验环境"><a href="#二、实验环境" class="headerlink" title="二、实验环境"></a>二、实验环境</h1><p>实验所使用的设备名称及规格，网络管理工具简介、版本等。</p>
-<hr>
-<p>服务器：Windows 7 ，IP地址：随机分配</p>
-<p>辅助工具：Wireshark</p>
-<hr>
-<h1 id="三、实验内容与实验要求"><a href="#三、实验内容与实验要求" class="headerlink" title="三、实验内容与实验要求"></a>三、实验内容与实验要求</h1><p>实验内容、原理分析及具体实验要求。</p>
-<hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">环境：</span><br><span class="line">局域网段：172.16.3.0&#x2F;24（172.16.3.0 到 172.16.3.255）</span><br><span class="line">域：eggnogsoup.com</span><br><span class="line">域控：172.16.3.2-EggNogSoup-DC</span><br><span class="line">网关：172.16.3.1</span><br><span class="line">广播地址：172.16.3.255</span><br><span class="line">Q1:域里有多少台存活的主机，分别给出他们的地址</span><br><span class="line">Q2.哪个主机的操作系统是ubuntu？</span><br><span class="line">这个问题考到一个知识点，就是访问网页时，用户的http请求包的头部的user-agent可能会泄露对应的操作系统的部分信息。</span><br><span class="line">Q3：ip地址为172.16.3.188的是什么类型的主机？</span><br><span class="line">Q4:哪个ip地址最有可能是Amazon Fire tablet</span><br><span class="line">Q5:哪些windows主机曾经连接到域控上？</span><br><span class="line">Q6:下面三台主机中哪一台主机有感染Emotet银行木马的迹象？（172.16.3.114,172.16.3.133,172.16.3.189）</span><br><span class="line">Q7:运行着安卓8.0.0的ip地址是多少？是什么牌子和型号？</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="四、实验过程与分析"><a href="#四、实验过程与分析" class="headerlink" title="四、实验过程与分析"></a>四、实验过程与分析</h1><p>根据具体实验，记录、整理相应命令、运行结果等，包括截图和文字说明。</p>
-<p>详细记录在实验过程中发生的故障和问题，并进行故障分析，说明故障排除的过程及方法。</p>
-<p>下载数据流量特征如图：</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590932843485.png" alt="1590932843485"></p>
-<p>pcap包文件：</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590932890626.png" alt="1590932890626"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q1:域里有多少台存活的主机，分别给出他们的地址</span><br></pre></td></tr></table></figure>
-
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590932964175.png" alt="1590932964175"></p>
-<p>菜单。统计。会话。IPv4。</p>
-<p>172.16.3.0/24的各个主机的ip</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590933158128.png" alt="1590933158128"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q2.哪个主机的操作系统是ubuntu？</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">这个问题考到一个知识点，就是访问网页时，用户的http请求包的头部的user-agent可能会泄露对应的操作系统的部分信息。</span><br><span class="line">部分user agent如下所示</span><br><span class="line">​       ·  ·  Firefox</span><br><span class="line">​       ·  ·  Mozilla&#x2F;5.0(Windows NT 6.1; WOW64; rv:34.0) Gecko&#x2F;20100101 Firefox&#x2F;34.0</span><br><span class="line">​       ·  ·  Mozilla&#x2F;5.0(X11; U; Linux x86_64; zh-CN; rv:1.9.2.10) Gecko&#x2F;20100922 Ubuntu&#x2F;10.10(maverick) Firefox&#x2F;3.6.10</span><br><span class="line"></span><br><span class="line">​       ·  ·  Safari</span><br><span class="line">​       ·  ·  Mozilla&#x2F;5.0(Windows NT 6.1; WOW64) AppleWebKit&#x2F;534.57.2 (KHTML, like Gecko) Version&#x2F;5.1.7Safari&#x2F;534.57.2</span><br><span class="line"></span><br><span class="line">​       ·  ·  chrome</span><br><span class="line">​       ·  ·  Mozilla&#x2F;5.0(Windows NT 6.1; WOW64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko)Chrome&#x2F;39.0.2171.71 Safari&#x2F;537.36</span><br><span class="line">​       ·  ·  Mozilla&#x2F;5.0(X11; Linux x86_64) AppleWebKit&#x2F;537.11 (KHTML, like Gecko) Chrome&#x2F;23.0.1271.64Safari&#x2F;537.11</span><br><span class="line">​       ·  ·  Mozilla&#x2F;5.0(Windows; U; Windows NT 6.1; en-US) AppleWebKit&#x2F;534.16 (KHTML, like Gecko)Chrome&#x2F;10.0.648.133 Safari&#x2F;534.16</span><br></pre></td></tr></table></figure>
-
-<p> ip contains Ubuntu and http.request</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590933381111.png" alt="1590933381111"></p>
-<p>可以看出172.16.3.110主机的操作系统是，可以随便打开一条，追踪TCP流，查看User-Agent字段进行验证</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q3：ip地址为172.16.3.188的是什么类型的主机？</span><br></pre></td></tr></table></figure>
-
-<p> ip.addr eq 172.16.3.188</p>
-<p>选择追踪流，可以发现是苹果设备</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590933604056.png" alt="1590933604056"></p>
-<p>也可以通过DNS请求发现查询iCloud</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590933944966.png" alt="1590933944966"></p>
-<p>怎样知道是iPhone ，iPad还是Mac呢？具体还是看User Agent，</p>
-<p>  ip.addr eq 172.16.3.188 and http.request</p>
-<p> 右键跟踪tcp流，可以看出是iPhone 8 </p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934174649.png" alt="1590934174649"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q4:哪个ip地址最有可能是Amazon Fire tablet</span><br></pre></td></tr></table></figure>
-
-<p> 这是亚马逊的一款平板电脑。这时候还是用找ubuntu的方法能行吗？  ip contains Amazon and http.request  失效</p>
-<p>尝试查询Amazon的域名：  dns.qry.name contains amazon</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934296184.png" alt="1590934296184"></p>
-<p>可以看到111,122,109三个主机。我们知道亚马逊的网上采用了https，我们可以尝试过滤出https域名中有amazon的</p>
-<p>​       ssl.handshake.type == 1 and ip contains amazon</p>
-<p>发现122和109主机</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934422638.png" alt="1590934422638"></p>
-<p>查看对应的MAC，发现122为苹果的设备。</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934488802.png" alt="1590934488802"></p>
-<p>对应的看ua的思路也会有浏览器特征，比如firefox,chrome等，那么这个平板上的浏览器是什么呢？</p>
-<p>通过关键字可以看到其特有的浏览器是Silk，那么我们试试使用silk关键字来过滤</p>
-<p>​       ssl.handshake.type == 1 and ip contains silk</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934631806.png" alt="1590934631806"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q5:哪些windows主机曾经连接到域控上？</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>域建立后会有一个管理域成员的目录列表，称之为活动目录ActiveDirectory(AD),而AD默认使用Kerberos处理认证请求。所以我们考虑使用kerberos关键字进行过滤</p>
-</blockquote>
-<p>  kerberos.CNameSrting</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934719712.png" alt="1590934719712"></p>
-<p>展开，cnamestring，右键选中为列查看</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q6:下面三台主机中哪一台主机有感染Emotet银行木马的迹象？（172.16.3.114,172.16.3.133,172.16.3.189）</span><br></pre></td></tr></table></figure>
-
-<p>(http.request or ssl.handshake.type == 1) and  !(udp.port eq 1900) and ip.addr  eq 172.16.3.114</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q7:运行着安卓8.0.0的ip地址是多少？是什么牌子和型号？</span><br></pre></td></tr></table></figure>
-
-
-
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<h1 id="五、实验结果总结"><a href="#五、实验结果总结" class="headerlink" title="五、实验结果总结"></a>五、实验结果总结</h1><p>对实验结果进行分析，完成思考题目，总结实验的心得体会，并提出实验的改进意见。</p>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/07/20/%E6%BC%8F%E6%B4%9E%E7%AC%94%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="万俟思睿">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="思睿's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/ytytytytyt6.github.io/2020/07/20/%E6%BC%8F%E6%B4%9E%E7%AC%94%E8%AE%B0/" itemprop="url">漏洞笔记</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-20T13:10:56+08:00">
-                2020-07-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>有道无术，术尚可求，有术无道，止于术。如果说网络安全是互联网发展的“道”，那么漏洞则是互联网安全的“术”。</p>
-<p>作者认为人与生俱来就有贪婪、自私、猜疑、虚荣、恐惧、固执等弱点，这些缺陷一旦被利用，就是致命的漏洞。作者因此认为漏洞时因人而生，因人心而用，因人性而决定使用之道。</p>
-<p>据深圳市反电信网络诈骗中心介绍，利用第三方支付平台专业赃款和洗钱的手段一般有三种：通过第三方支付平台发型的商户POS机虚构交易套现；将诈骗得手的资金转移到第三方支付平台账户，在线购买游戏点卡、比特币；将赃款在银行账户和第三方支付平台之间多次转账切换。</p>
-<p>网站挂马与篡改——病毒感染、零日漏洞利用、SQL注入漏洞、网络劫持、恶意广告投放等。</p>
-<p>拖库——黑客从有价值的网站中将用户资料数据库拖走。</p>
-<p>撞库——黑客通过手机互联网已泄露的用户和密码信息，生成对应的密码字典表，尝试批量登录其他网站后，碰撞出一系列可以登录的账户。</p>
-<p>私服——未经版权拥有者授权，非法获得服务器安装程序之后设立的网络服务器，本质上属于网络盗版，与在互联网上共享未经授权的版权作品本质差别不大。</p>
-<p>DNS安全是网络安全的第一道大门。</p>
-<p>2017年7月《关键信息基础设施安全保护条例（征求意见稿）》</p>
-<p>狭义上说，网络白产是围绕漏洞评估、发现与响应工作而形成的。其中漏洞挖掘技术是白产的核心技术，漏洞防护是白产快反的高级手段。</p>
-<p>补天漏洞响应平台</p>
-<p>糊掉问题的本源，风险是与威胁相对应的概念，在排优算法中加入威胁相关的数据，可以极大缩减处理漏洞的数量，优化漏洞排优算法。在漏洞排优中使用威胁情报和机器学习算法。</p>
-<p>可利用的威胁情报及上下文数据包括：观测到的语漏洞相关的安全事件数量、公开已获得的漏洞利用代码、已知的恶意代码家族或攻击工具套件使用的漏洞、检测到相关的组织受到类似的攻击等。这些情报和数据在未来将越来越重要。</p>
-<p>2018.05.25欧盟发布GDPR通用数据保护条例正式实施，目的是就规范并约束企业对用户个人数据的收集和使用，加强对欧盟境内居民的个人数据和隐私保护。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/07/20/%E6%BC%8F%E6%B4%9E%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="万俟思睿">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="思睿's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/ytytytytyt6.github.io/2020/07/20/%E6%BC%8F%E6%B4%9E%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/" itemprop="url">漏洞基础概念</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-20T13:10:56+08:00">
-                2020-07-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>漏洞相关概念**</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">熟悉基本概念和原理（二进制漏洞基本原理、漏洞类型、漏洞利用方法、常见漏洞挖掘、shellcode编写）。</span><br><span class="line">通过关键字（栈溢出、堆溢出、整数溢出、UAF、double-free、shellcode）进行Google&#x2F;SecWiki等了解基本概念；</span><br><span class="line">阅读《Q版本缓冲区溢出》《0day漏洞挖掘》等书籍，学习二进制漏洞形成的基本原理和基本的利用方法，并进行实践操作；</span><br><span class="line">学习《加密与解密》中部分章节，熟悉Windows系统的重要数据结构、函数传参方法以及PE文件结构等基础知识。</span><br></pre></td></tr></table></figure>
-
-<h3 id="0x01-熟悉基本概念和原理（二进制漏洞基本原理、漏洞类型、漏洞利用方法、常见漏洞挖掘、shellcode编写）"><a href="#0x01-熟悉基本概念和原理（二进制漏洞基本原理、漏洞类型、漏洞利用方法、常见漏洞挖掘、shellcode编写）" class="headerlink" title="0x01 熟悉基本概念和原理（二进制漏洞基本原理、漏洞类型、漏洞利用方法、常见漏洞挖掘、shellcode编写）"></a>0x01 熟悉基本概念和原理（二进制漏洞基本原理、漏洞类型、漏洞利用方法、常见漏洞挖掘、shellcode编写）</h3><ol>
-<li><p>二进制漏洞基本原理</p>
-<p><a href="https://bbs.pediy.com/thread-252569.htm" target="_blank" rel="noopener">https://bbs.pediy.com/thread-252569.htm</a></p>
-<p>1）栈溢出漏洞原理 属于缓冲区漏洞</p>
-<p>变量中的字符串通过strcpy拷贝到栈空间时，没有对字符串长度做限制，导致栈溢出，最后覆盖到了返回地址，造成程序崩溃。溢出后的栈空间布局如下</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590715345698.png" alt="1590715345698"></p>
-<p>2）堆溢出漏洞原理</p>
-<p>由于调试堆和常态堆结构不同，在演示代码中加入getchar函数，用于暂停进程，方便运行heapoverflowexe后用调试器附加进程。debug版本和release版本实际运行的进程中各个内存结构和分配过程也不同，因此测试的时候应该编译成release版本。</p>
-<p>使用windbg函数附加调试，一定是附加调试</p>
-<p>上面的ecx已经被AAAA字符串覆盖掉了，最后在应用改地址的时候导致崩溃，通过前面的栈回溯定位到了main函数入口，找到复制字符串的函数下断点</p>
-<p>此时堆块已经分配完毕，对应的分配地址位于0x007104a0，0x007104a0是堆块数据的起始地址，并非堆头信息的起始地址，对已经分配的堆块，开头有8字节的HEAP_ENTRY结构，因此heap的该结构位于0x007104a0-8=0x710498。</p>
-<p>在windbg上查看两个堆块的信息，目前处于占用状态，共有0x10大小空间（usersize） 查看命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">！heap -p -a 0x710498</span><br></pre></td></tr></table></figure>
-
-<p>使用！heap查看HeapCreate创建的整个堆块信息，可以发现堆块后面还有一个0x007104c0：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!heap</span><br><span class="line"></span><br><span class="line">!heap -a 710000</span><br></pre></td></tr></table></figure>
-
-<p>在复制字符串时，原本只有0x10大小的堆块，填充过多字符串就会覆盖到下方空闲堆块007104c0，在复制前007104c0空闲堆块的HEAP_FREE_ENTRY结构数据如下：</p>
-<p>dt _HEAP_FREE_ENTRY 0x007104c0</p>
-<p>dt _LIST_ENTRY <code>0x007104c0</code>+8</p>
-<p>覆盖之后的结果中出现？？整个空闲堆头信息都被覆盖了，包括最后的空闲链表中的前后向指针都变成了0x41414141，后面调用HeapFree释放堆块的时候，就会将buf2和后面的空闲堆块0x007104c0合并，修改两个空闲堆块的前后向指针就会引用0x41414141，最后造成崩溃。</p>
-<p>如果把上面释放堆块的操作换成分配堆块HeapAlloc(),也会导致崩溃，因为在分配堆块时会遍历空闲链表指针，会造成地址引用异常，当内存中已经分配多个堆块时，可能覆盖到的就是已经分配的堆块，就可能覆盖HEAP_ENTRY结构，而不是HEAP_FREE_ENTRY结构。</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590716744637.png" alt="1590716744637">3）堆调试技巧</p>
-<p>微软提供，可以通过windbg提供的gflag.exe或者！gflg命令来设置：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">htc：堆尾检查，是否发生溢出</span><br><span class="line">hfc：堆释放检查</span><br><span class="line">hpc：堆参数检查</span><br><span class="line">hpa：启用页堆</span><br><span class="line">htg：堆标志</span><br><span class="line">ust：用户态栈回溯</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<p>对heapoverflow.exe添加堆尾检查和页堆，去掉堆标志：<strong>去掉堆标志为什么还是+htg？</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#96;gflags.exe &#96;&#96;-&#96;&#96;i F:\vulns\Release\heapoverflow &#96;&#96;+&#96;&#96;htc &#96;&#96;+&#96;&#96;hpa &#96;&#96;+&#96;&#96;htg&#96;</span><br></pre></td></tr></table></figure>
-
-<p>堆尾检查主要是在每个堆的尾部，用户数据之后添加8个字节，通常是连续的2个0xabababab，该数据段被破坏就可能发生了溢出。对heapoverflow.exe开启hpc和htc，用windbg加载对heapoverflow程序，附加进程无法在堆尾添加额外标志，使用以下命令开启堆尾检查和堆参数检查：</p>
-<p>!gflag +htc +hpc</p>
-<p>g</p>
-<p>执行命令g后，回车程序会断下来</p>
-<p>HEAP[heapoverflow.exe]: Heap block at 001E0498 modified at 001E04B0 past requested size of 10</p>
-<p>调试输出信息是在大小为0x10的堆块001E0498 的001E04B0 覆盖破坏了，0x10大小的空间加上堆头的8字节一共0x18字节，0x001E04B0 -0x001E0498 =0x18，也即0x001E04B0 是位于堆块数据的最后一个字节上，基于上面信息，可以分析出程序主要是因为向0x10的堆块中复制过多数据导致的堆溢出。</p>
-<p>页堆</p>
-<p>在调试漏洞时，经常需要定位导致漏洞的代码和函数，比如导致堆溢出的字节复制指令rep movsz等，前面的堆尾检查方式主要是堆被破坏的场景，不利于定位导致漏洞的代码。为此引入页堆的概念，开启页堆，会在堆块中增加不可访问的栅栏页，溢出覆盖到栅栏页就会触发异常。</p>
-<p>gflags.exe -i F:\vulns\Release\heapoverflow  +hpa</p>
-<p>用windbg加载heapoverflow，运行上面命令开启页堆，然后g运行后cmd按下回车键断下。可以发现程序在复制A字符串时触发了异常，程序复制到0x11字节时被断下，此时异常还未破坏到堆块，知道定位导致溢出的复制指令rep movs<strong>[不是很能理解]</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0:000&gt; kb</span><br><span class="line">ChildEBP RetAddr  Args to Child             </span><br><span class="line">WARNING: Stack unwind information not available. Following frames may be wrong.</span><br><span class="line">0012ff48 00401327 00000001 01699fb0 0169bf70 image00400000+0x1084</span><br></pre></td></tr></table></figure>
-
-<p>kb 根据栈回溯，调用rep movs的上一层函数位于image00400000+0x1084的上一条指令，也就是00401322，此处调用了00401000函数，很容易发现这是主入口函数：</p>
-<p>uf 00401000</p>
-<p>4）整数溢出漏洞原理</p>
-<p>整数分为有符号和无符号两类，有符号以最高位作为符号位，正整数最高位为1，负整数最高位为0，不同类型的证书在内存中有不同的取值范围，unsigned int为4字节，int为4字节，当存储的数值超高该类型证书的最大值就会发生溢出。</p>
-<p>在一些有符号和无符号转换过程中最有可能发生整数溢出漏洞。</p>
-<table>
-<thead>
-<tr>
-<th>数据类型</th>
-<th>占用字节数</th>
-<th>范围</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>字符类型char</td>
-<td>1</td>
-<td>-128~127[2的8次方]</td>
-</tr>
-<tr>
-<td>无符号字符类型unsigned  char</td>
-<td>1</td>
-<td>0~255</td>
-</tr>
-<tr>
-<td>布尔类型 bool</td>
-<td>1</td>
-<td>0~1</td>
-</tr>
-<tr>
-<td>短整型short</td>
-<td>2</td>
-<td>-32768~32767[2的16次方]</td>
-</tr>
-<tr>
-<td>整型int</td>
-<td>4</td>
-<td>-2147483648~2147483647</td>
-</tr>
-<tr>
-<td>无符号整型unsigned int</td>
-<td>4</td>
-<td>0~4294967295</td>
-</tr>
-<tr>
-<td>长整型long</td>
-<td>4</td>
-<td>-2147483648~2147483647</td>
-</tr>
-<tr>
-<td>无符号长整型unsigned long</td>
-<td>4</td>
-<td>0~4294967295[2的32次方]</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<p>1字节是8位</p>
-<p><strong>基于栈的整数溢出</strong></p>
-<p>代码中size变量是无符号短整型，取值范围为0-65535，输入值大于65535就会发生溢出，最后得到是size为4，这样会通过边界检查，但是使用memcpy复制数据的时候，使用的是int类型的参数i，这个值输入的是65540，就会发生栈溢出。</p>
-<p><strong>基于堆的整数溢出</strong></p>
-<p>代码中size变量是无符号短整型，取值范围为0-65535，当输入小于5时，size减去5会得到负数，但由于无符号短整型的取值范围限制无法识别负数，得到正数65535，最后分配得到过大的堆块，溢出覆盖了后面的堆管理结构。</p>
-<p>5）格式化字符串漏洞原理</p>
-<p>产生主要原因是对用户输入的内容没有做过滤，有些输入数据都是作为参数传递给某些执行格式化操作的函数的，比如printf，fprintf，vprintf，sprintf。</p>
-<p>恶意用户可以使用%s和%x等格式符，从堆栈和其他内存位置输出数据，也可以使用格式符%n想任意地址写入数据，配合printf（）函数就可以向任意地址写入被格式化的字节数，可能导致任意代码执行，或者读取敏感数据。当输入数据包含%s和%x等格式符时，会议外输出其他数据，用ollydbg附加调试程序，执行前需要先设置命令行参数，调试-参数-命令行：test-%x</p>
-<p>在运行程序后，传递给printf的参数只有test-%x，但他把输入参数test-%x之后的另一个栈上数据当做参数传给了printf函数，因为printf基本类型是printf（“格式化控制符”，变量列表）；</p>
-<p>传递给printf参数只有一个，但是程序默认将栈上下一个数据作为参数传递给printf函数，刚好下一个数据是strcpy函数的目标地址，就是buff变量，buff刚好指向test-%x的地址0x0019fec4，所以程序会输出0x0019fec4，如果后面再加上%x就会将src参数值也输出了，这样就可以遍历整个栈上的数据了。</p>
-<p>此外还可以使用%n写入数据修改返回地址来实现漏洞利用。</p>
-<p>6）双重释放漏洞原理</p>
-<p>Double Free漏洞是由于对同一块内存进行二次释放导致的，利用漏洞可以执行任意代码。在第二次释放p2时会发生程序崩溃，但是并不是每次出现Double Free都会发生崩溃，要有<strong>堆块合并动作</strong>发生才会发生崩溃。</p>
-<p><strong><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590719859961.png" alt="1590719859961"></strong></p>
-<p>在释放过程中，邻近的已经释放的堆块存在合并操作，这会改变原有堆头信息，之后再对其地址引用释放就会发生访问异常。</p>
-<p>7）释放后重引用漏洞原理 UAF漏洞原理</p>
-<p>buf2占了buf1的内存位置，经过UAF后，buf2被成功篡改</p>
-<p>程序通过分配和buf1大小相同的堆块buf2实现占坑，buf2分配到已经释放的buf1内存位置，但是由于buf1指针仍然有效，并且指向的内存数据是不可预测的，可能被堆管理器回收，也可能被其他数据占用填充，buf1指针称为悬挂指针，借助悬挂指针buf1将内存赋值为hack，导致buf2也被篡改为hack。</p>
-<p>如果原有漏洞程序引用到悬挂指针指向的数据用于执行指令，就会导致任意代码执行。在通常的浏览器UAF漏洞中，都是某个C++对象释放后重引用，假设程序存在UAF的漏洞，有个悬挂指针指向test对象，要实现漏洞利用，通过占坑的方式覆盖test对象虚表指针，虚表指针指向虚函数存放地址，现在让其指向恶意构造的shellcode，当程序再次引用到test对象就会导致任意代码执行。</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590720390686.png" alt="1590720390686"></p>
-<p>8）数组越界访问漏洞</p>
-<p>数组访问越界漏洞包含读写类型，溢出属于数据写入</p>
-<p>部分溢出漏洞本质是数组越界漏洞</p>
-<p>前者像是倒水的时候倒错了杯子，溢出就像是水从杯子里溢出来</p>
-<p>执行生成的程序，分别输入12345，当输入的数组下标为12的时候会得到正常数值，从索引3开始就超出了原来数组的范围。数组越界访问数组，导致读取不在程序控制范围内的数值。使用ollydbg调试发现array[5]就是从array开始的第六个数据0x4012A9，已经读取到了array之外的数据，如果越界访问距离过大，就会访问到不可访问的内存空间，导致程序崩溃。</p>
-<p>9）类型混淆漏洞原理</p>
-<p>类型混淆漏洞（Type Confusion）一般是将数据类型A当作数据类型B来解析引用，这就可能导致非法访问数据从而执行任意代码，比如将Unit转成了String，将类对象转成数据结构。</p>
-<p>类型混淆型数据是现在浏览器漏洞挖掘的主流漏洞，这类漏洞在java，js等弱类型语言中非常常见。</p>
-<p>以IE/Edge类型混淆漏洞（CVE-2017-0037）为例讲解，漏洞原因是函数处理时，没有对对象类型进行严格检查，导致类型混淆。</p>
-<p>通过跟踪可以发现第一次调用Readable函数时ecx是一个正常的FlowItem对象，而第二次时是一个int Array Object。Layout::Patchable &gt;::Readable函数是处理虚表对象的函数，由于boom()函数中引用th1.align导致Readable函数得到第二次引用，由于没有进行对象属性检查，导致第二次调用时将table对象传入，最终发生类型混淆崩溃。</p>
-<p>10）竞争条件漏洞原理</p>
-<p>竞争条件（Race Condition）是由于多个线程/对象/进程同时操作同一资源，导致系统执行违背原有逻辑设定的行为，这类漏洞在linux，内核层面非常多见，在windows和web层面也存在。互斥锁的出现就是为了解决此类漏洞问题，保证某一对象在特定资源访问时其他对象不能操作此资源。</p>
-<ol>
-<li><p>漏洞类型</p>
-<p>见第一部分</p>
-</li>
-<li><p>漏洞利用方法</p>
-<p>漏洞分析方法<a href="https://www.cnblogs.com/freesec/p/6443870.html" target="_blank" rel="noopener">https://www.cnblogs.com/freesec/p/6443870.html</a></p>
-<p>拿到poc分析漏洞成因关键步骤是定位到漏洞代码。</p>
-<p><strong>栈溢出一般分析方法</strong></p>
-<p>1基于字符串定位——当存在漏洞的代码片段引用了字符串时，IDA直接搜索，交叉引用，多处的话分别下断点看断在何处。</p>
-<p>2基于栈回溯定位分析方法——当对字符串进行复制时溢出并向不可写的地方进行写入而发生异常，栈回溯并对返回地址上方进行反汇编，在这些call上下断点，可以断在漏洞代码附近。</p>
-<p>基于污点追踪的漏洞分析方法——断在异常处代码时查看操作的寄存器值，向上追踪</p>
-<p>针对activeX控件的分析方法——activeX控件注册到系统中后,在html中通过<object>标签的classid来引用, 在ie中对应的模块是oleaut32.dll, 函数是dispcallfunc.</p>
-<p>在dispcallfunc函数中首个call ecx 即为activex中的被html调用的函数.可以直接在od中按 alt+e 找到模块,按ctrl+n找到函数. 然后找到call ecx跟进分析即可</p>
-<p><strong>堆溢出一般分析方法:</strong></p>
-<p>1.堆调试</p>
-<p>!heap   查看程序用heapcreate函数创建的堆信息</p>
-<p>!heap -p -a 地址    用于查看该地址的堆详细信息</p>
-<p>dt _HEAP_FREE_ENTRY 地址      显示空闲堆块详细信息</p>
-<p>dt _LIST_ENTRY　地址　　　　   显示系统链表结构信息</p>
-<p>2.基于heapPage的分析方法</p>
-<p>通过开启hpa后, 附加,加载poc,断下. 然后查看栈回溯,反汇编返回地址上方, 在上面找合适的地方下断点,重新运行调试断下,然后结合实际慢慢分析.</p>
-<p>小技巧:当windows7这种系统有aslr时,直接对地址下断点可能有问题,所以可以直接用符号名代替,如bp mshtml!CTableLayout::CalculateMinMax</p>
-<p>对上层函数下断:bp mshtml!CTableLayout::CalculateMinMax</p>
-<p><strong>格式化字符串漏洞分析</strong></p>
-<p>基于输出消息漏洞定位</p>
-<p>其实就是一种字符串定位的方法</p>
-<p>3.通过栈回溯和堆状态判断漏洞类型</p>
-<p>4.基于ROP指令地址反向追踪</p>
-</li>
-</ol>
-<ol>
-<li><p>常见漏洞挖掘</p>
-<p><a href="https://blog.csdn.net/stonesharp/article/details/50971701" target="_blank" rel="noopener">https://blog.csdn.net/stonesharp/article/details/50971701</a></p>
-<p>二进制漏洞研究可以分为漏洞分析利用和漏洞挖掘两部分。漏洞挖掘方法较少。漏洞挖掘是一种注重结果不追求过程的工程。</p>
-<p>1.手动法——不使用自动挖掘工具，手动进行分析，挖掘点是手动寻找的，畸形数据也是手动构造的。</p>
-<p>优点：测试的主要是堆栈溢出漏洞，速度快，效率高。</p>
-<p>缺点：文件格式漏洞难以挖掘</p>
-<p>具体怎么挖掘：</p>
-<p>1.确定挖掘点——凡是用户可控的数据点可以作为挖掘点。包括程序路径，输入消息，文件内配置消息等。</p>
-<p>2.对挖掘点填充畸形数据——超长字符串，畸形字符，边界值数据等。超长字符串的效果更好，一般为堆栈溢出。</p>
-<p>3.程序是否发生异常</p>
-<p>4.分析——发生异常，用反汇编工具和汇编级调试器深入分析，找到异常原因，判断漏洞类型及危害。</p>
-<h2 id="通用fuzz法进行漏洞挖掘："><a href="#通用fuzz法进行漏洞挖掘：" class="headerlink" title="通用fuzz法进行漏洞挖掘："></a><strong>通用fuzz法进行漏洞挖掘：</strong></h2><p>在不研究文件格式的情况下，用自动化测试工具对目标程序进行fuzz测试。</p>
-<p>1.选取目标文件。<br>2.用我们的工具对目标文件的格式进行变异，生成大量的畸形样本。<br>3.让程序分别载入并解析这些畸形样本，监测程序是否会触发异常。<br>4.通过逆向分析这些异常样本，查看是否是漏洞同时确定危害级别。</p>
-<p>评价一个通用fuzz工具的好坏，一般考虑以下两个方面<br>1.生成的样本是否足够畸形：只有样本足够畸形，才能保证覆盖面足够大，才能挖掘出更多的安全隐患。<br>2.监控功能是否足够的强大准确：通用fuzz的监控模块可以准确的监控到程序运行时所发生的异常。不误报，不漏报。</p>
-</li>
-</ol>
-<h2 id="智能fuzz法进行漏洞挖掘"><a href="#智能fuzz法进行漏洞挖掘" class="headerlink" title="智能fuzz法进行漏洞挖掘"></a><strong>智能fuzz法进行漏洞挖掘</strong></h2><p>智能fuzz是对文件的结构进行分析，编写出表述文件结构的代码。然后fuzzer工具根据该代码的约束生成畸形样本，接下来就和通用fuzz相同了：执行畸形样本，监控异常。<br><strong>智能fuzz**</strong>的优点<strong>：执行效率高，效果好。可以挖掘其他方法挖掘不到的软件漏洞。<br>**智能fuzz缺点</strong>：需要深入研究相应的文件格式，并写出相应的文件格式脚本。该过程需要的时间较长。<br><strong>智能fuzz的步骤：</strong>1.研究要挖掘程序处理的相应文件格式，包括该格式的各种数据结构，约束规则等信息。<br>2.根据fuzzer规定的代码规则，编写相应规则的代码，来解析当前文件格式的结构。<br>3.用fuzzer工具通过我们写的代码，生成大量的畸形样本。<br>4.让fuzzer 执行并监控被挖掘程序处理畸形样本的运行情况，检测程序是否发生异常，如果异常保留异常样本和相关信息。<br>5.用OLLYDBG WINDBG IDA等工具深入分析崩溃信息，查看是否是漏洞同时确定危害级别。</p>
-<p><a href="https://www.cesafe.com/html/3611.html常见漏洞挖掘思路：" target="_blank" rel="noopener">https://www.cesafe.com/html/3611.html常见漏洞挖掘思路：</a></p>
-<p>前期信息收集</p>
-<p>​    whois 站长之家 中国万网</p>
-<p>​    社工库查询 尝试查询敏感信息</p>
-<p>​    收集子域名，将其管理系统分开便于后期渗透 子域名扫描工具</p>
-<p>​    github等代码托管工具 尝试获取敏感信息（数据库账号密码或者邮箱账号密码等）</p>
-<p>web层漏洞挖掘</p>
-<p>​    第一步获取得到的系统利用TOP500和自定义的密码字典爆破，尝试进入系统，进入以后，进行下一步漏洞挖掘——越权或SQL注入或任意文件上传；如果进入邮箱，把通讯录的人拔下来将其用户名加入TOP500爆破，其次查看是否具有一般邮箱的越权漏洞——越权查看他人邮件内容、任意密码修改、任意用户登录等，再利用社工库获得到的密码尝试进行登录，看是否成功或为管理员权限</p>
-<p>挖掘子域名网站的SQL注入</p>
-<p>挖掘逻辑漏洞 找一下修改地址 删除地址 尝试挖掘越权漏洞，如果存在可以支付的地方，可以尝试挖掘支付逻辑漏洞，一般把支付价格改为负数，如果有举报或反馈意见，可以尝试插一下</p>
-<p>挖掘环境漏洞 看端口有么有配置环境啥的 tomcat有没有弱口令 有 getshell</p>
-<p>扫描目录</p>
-<p>挖掘APP层漏洞</p>
-<p>很多app都是json传递数据的，json也是存在注入的，还有一些常见的漏洞——越权。sql注入，任意用户注册，任意用户密码重置，任意用户未授权登录，短信轰炸，拒绝服务等。如果想深入，可以学反编译，破解算法。</p>
-<ol>
-<li>shellcode编写</li>
-</ol>
-<p>shellcode是用来发送到服务器利用特定漏洞的代码，能在极小空间内完成一些基本且重要的工作。</p>
-<p>编写方式3种：</p>
-<p>1.直接编写16进制操作码，不现实</p>
-<p>2.像C高级编写程序，编译后进行反汇编以获取汇编指令和十六进制操作码</p>
-<p>3.编译汇编程序，将该程序汇编，从二进制中提取十六进制操作码</p>
-<p>C语言编写注意事项：1.系统调用2.坏字符问题。shellcode一般是由十几或者几十个字节组成，这样的小程序如果要像linux服务程序一样引入头文件，导入符号表，调用系统函数，那么十几个字节根本就不能满足要求，因此需要利用系统最核心的调用机制，即通过软中断的方式获取需要的资源，以绕开系统调用。shellcode如果存储在堆或者栈的内存中，这样执行时就不能出现\x00这样的阶段字符，需要我们在构造shellcode时防止此类坏字符的出现。</p>
-<p>提取shellcode</p>
-<p>Int 0x80软中断调用</p>
-<p>第一步，就是需要将系统调用号加入到eax中。</p>
-<p>第二步，ebx用于保存函数调用的第一个参数（ecx存放第二个参数，edx存放第三个参数，esi存放第四个参数，edi存放第五个参数）</p>
-<p>如果参数个数超过5个，那么就必须将参数数组存储在内存中，而且必须将该数组的地址存储在ebx中。</p>
-<p>一旦加载寄存器之后，就会调用int 0x80 汇编指令来发出软中断，强迫内核暂停手头上的工作并处理该中断。</p>
-<h4 id="验证int-0x80-调用"><a href="#验证int-0x80-调用" class="headerlink" title="验证int 0x80 调用"></a>验证int 0x80 调用</h4><h3 id="编写汇编源码"><a href="#编写汇编源码" class="headerlink" title="编写汇编源码"></a>编写汇编源码</h3><p>一般来说shellcode的总长度都非常短，所以可以直接采用汇编形式编写，这样不但可以直接通过软中断形式执行系统调用，而且可以控制坏字符的出现。如下图所示，为一个返回汇编行的shellcode代码</p>
-<p>通过Metaspolit的shellcode自动生成工具可以自动生成各种功能shellcode，为快速利用漏洞攻击系统提供更便捷方式。但是如果想自己想学习shellcode的编写过程还是需要亲身试验，亲自操作，才能发现问题，解决问题。</p>
-<p><a href="https://www.cnblogs.com/binarysystemloophole/articles/10576310.html" target="_blank" rel="noopener">https://www.cnblogs.com/binarysystemloophole/articles/10576310.html</a> Shellcode编写 定位API内容</p>
-<p>加密与解密解压码<a href="http://www.sanye.cx" target="_blank" rel="noopener">www.sanye.cx</a></p>
-<p>Q版缓冲区溢出教程笔记</p>
-<p>第一章、Windows 下堆栈溢出入门</p>
-<p>现在最流行的有攻击手段两种方式，一种是SQL注入，另一种就是缓冲 区溢出攻击。</p>
-<p>在计算机内部，输入数据通常被存放在一个临时空间内， 这个临时存放空间就被称为缓冲区，缓冲区的长度事先已经被程序或者操作系统定义好了。缓冲区就很像那个 啤酒杯，用来装东西，而且大小固定。”“向缓冲区内填充数据，如果数据的长度很长（如同那瓶啤酒），超过了缓冲区（那个啤酒杯）本身的容量， 那么结果就如同啤酒一样，四处溢出，数据也会溢出存储空间！装不下的啤酒会流到桌子上，而装不下的数据 则会覆盖在合法数据上，这就是缓冲区和缓冲区溢出的道理。”</p>
-<p>先把缓存区溢出利用理解为允许攻击者往某个程序变量中放一个比期望长 度要长的值，由此以当前运行该程序的用户的特权执行任意命令。</p>
-<p>关键——Windows 系统内部处理缓冲区的机制，我们明白了这个之后，就可利用缓冲区溢出漏洞来控制别人的主 机。</p>
-<p>strcpy（des，source） 不检查拷贝的长度，它会一直拷贝，直到source结尾，即是strcpy的弱点。</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590738829103.png" alt="1590738829103"></p>
-<p>Windows的运行机制——中断和堆栈</p>
-<p>中断及其处理过程</p>
-<p>堆栈——计算机为了能回头处理原来的事情，需要把原来指令的指针EIP保存在堆栈中； 当要回去原来的地方时，就把保存在堆栈中的EIP恢复即可。并且各个函数的局部变量的分配也是在堆栈中。堆栈是一种数据结构，遵循“先进后出，后进先出”的规则，存取的动作就是PUSH和POP。windows下堆栈的分配是高地址往低地址分配的。</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590739035362.png" alt="1590739035362"></p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590739080500.png" alt="1590739080500"></p>
-<p>因此可以通过覆盖EIP为任意值让程序运行到一个错误的地方。——想要的程序shellcode——实现任意功能的代码</p>
-<p>Shellcode编写</p>
-<p><em>Windows不像Unix那样使用系统调用来实现关键函数。Windows通过动态链接库来提供系统函数，就是 所谓的Dll。</em></p>
-<p>程序变成机器码——在VC中按F10调试，在Debug工具栏中点击最后一个Disassemble，出现源程序的汇编代码，然后在代码窗口点击鼠标右键，弹出菜单选择Code Bytes。</p>
-<p>需要做一些相关工作才可以直接抄取机器码，shellcode会在后面讲到。</p>
-<p>本地缓冲区溢出简单利用</p>
-<p>缓冲区溢出的基本原理和精髓——1.返回点定位：知道有问题程序返回的精确位置，2shellcode编写：有shellcode，3把有问题程序返回点地址覆盖成shellcode的地址。关于第三部，1999年天才想法——：用系统核心dll里的指令来完成跳转！</p>
-<p><em>过去Unix的覆盖方法：</em></p>
-<p><em>1.NNNNNNNNNSSSSSSSSSSSRRRRRRRRRRRRRR型。适合于大缓冲区，“N”代表空指令，也就是0x90，在实际运行 中，程序将什么也不做，而是一直延着这些NOPS运行下去，直到遇到不是NOPS的指令再执行之；“S”代表ShellCode；“R”代表覆盖的返回地址，思路是把返回地址R覆盖为nops的大概位置，这样就会跳到Nop中， 然后继续执行，直到我们的ShellCode中。但这种方法由于定位不准确，所以使用起来也不准确。</em><br><em>2.RRRRRRRRRRNNNNNNNNNNNSSSSSSSSSS型。 是用大量的“R” 填满整个缓冲区， 然后大量的Nop， 最后是ShellCode。 这里，“R”往后跳到Nop中，再顺着往下执行就会到ShellCode中。但在Windows下，“R”中必定会含有0， 这样，整个构造就会被截断，只能用于Unix中。</em><br><em>Windows的系统核心dll包括kernel32.dll、user32.dll、gdi32.dll。这些dll一直位于内存中，而且对应 于固定的版本，Windows加载的位置是固定的。</em></p>
-<p>在Windows下如何利用系统核心dll里的指令来完成跳转？用系统核心dll 中的jmp esp地址来覆盖返回地址，而把ShellCode紧跟在后面，这样就可跳转到我们的ShellCode 中。其利 用格式是 NNNNNNRSSSSSS，N＝Nop， S＝ShellCode， R＝jmp esp的地址 </p>
-<p>理解关键——覆盖后的缓冲区如图，N表示NOP，存原EIP的地方覆盖成了JMP ESP地址，接下去的S0,S1等表示Shellcode开始的0字节，1字节等。函数执行完毕，要返回时堆栈指针ESP会指向保存原EIP的地方，而指令指针EIP指向Ret指令。 </p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590739774369.png" alt="1590739774369"></p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590739931489.png" alt="1590739931489"></p>
-<p>Ret相当于 Pop EIP ，就是把栈顶指针ESP指向的值弹出来给EIP。所以在正常情况下，Ret执行后，就可 把原来的EIP恢复，从而回到中断前的流程。</p>
-<p>但保存的EIP已经被我们覆盖成JMP ESP指令的地址了。这样执行 Pop EIP 后，EIP会被改为JMP ESP 的地址，即指向JMP ESP。而堆栈指针ESP往下移一位，指向ShellCode的第一个字节。</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590739997458.png" alt="1590739997458"></p>
-<p>计算机会往下继续执行EIP指向的指令——JMP ESP ,而ESP指向的是S0，这样就JMP 到了S0中，开始执行shellcode了。</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590740081376.png" alt="1590740081376"></p>
-<p><em>EIP指令指针指向下一条要执行的命令，一般会自动加1。ESP堆栈顶指针指向堆栈的顶部。在PUSH 时，ESP往上走，减1；在POP时，ESP往下走，加1。</em></p>
-<p>JMP ESP ——FF E4机器码 ——0x77e0492b（windows 2000 sp2）</p>
-<p>程序返回时，执行Ret=POP EIP ，EIP就会变成0x77e0492b，而ESP往下走，指向Shellcode第一个字节中。系统执行EIP指向的指令，跳转ESP，而此时ESP指向的是Shellcode的第一个字节，正好进入到我们的Shellcode中。</p>
-<p>这里JMP ESP的地址，会由于版本的不同而不一样。比如在Win2000 的User32.dll 中，JMP ESP指令的地址分别为： <em>sp0:0x77e2e32a、 sp1:0x77e8898b、 sp2:0x77e0492b、 sp3:0x77e188a7、 sp4:0x77e22c75。</em> 以前很多攻击利用程序需要带上对方版本的参数。<strong>后来发现了可以通用的地址。</strong>是什么？</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590740397359.png" alt="1590740397359"></p>
-<p>小结：缓冲区溢出编程的基本原理和步骤，对一个有漏洞的程序通过精心构造数据，改变程序流程弹出了一个Dos窗口。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;	</span><br><span class="line">​	LoadLibrary(<span class="string">"msvcrt.dll"</span>);</span><br><span class="line">​	system(<span class="string">"command.com"</span>);</span><br><span class="line">​	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Windows漏洞的缓冲区溢出利用编写</p>
-<p>Foxmail溢出漏洞编写</p>
-<p><em>FoxMail是国内著名的Internet电子邮件客户端软件。可以到其主页<a href="http://www.FoxMail.com.cn获得最新的信息" target="_blank" rel="noopener">www.FoxMail.com.cn获得最新的信息</a></em></p>
-<p>分析漏洞公告</p>
-<p>拿到公告之后——什么程序，什么版本有漏洞</p>
-<p>Win2000 SP2+FoxMail5.0 beta1</p>
-<p>除此之外，公告一般还会给出漏洞的解决办法或补丁下载。当然漏洞公告不会告诉如何利用漏洞的，所以除了查看楼顶公告，还要查找其他人或安全组织的相关漏洞分析报告。比如root关于FoxMail漏洞的分析</p>
-<p>如何写出该缓冲区溢出的利用程序呢？</p>
-<p>1.有问题程序返回点的精确位置――我们可以把它覆盖成任意地址。漏洞公告和漏洞分析——From字段太长就会覆盖到返回地址，程序很简单，往邮箱发送一封信，只有“From：字段”，对该字段进行填充，不能超过0x200长度，因此先填充0x150个A</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590801331139.png" alt="1590801331139"></p>
-<p><em>*小知识：不同出错处理的外在表现</em><br>1.弹出“只有一个确定按钮的红叉框”，意味着外层有“<strong>try/</strong>except”块决定处理异常，而内层有“__ try/<strong>finally”块。当按下确定后，是在“</strong>try/<strong>finally”中执行。 2.弹出“有调试、关闭按钮的非红叉框”，意味着设置了“Just-In-Time Debugging”，并获得机会执行，这 已经是最后机会了。 3.弹出“只有一个关闭按钮的非红叉框”，意味着没有设置“Just-In-Time Debugging”，内层也没有决定处 理异常的“</strong>try/<strong>except”块。 4.触发异常，但什么框也未弹出，意味着内层有“</strong>try/__except”块决定处理异常。或者在异常处理过程中 再次触发异常。* </p>
-<p>一个不能读，一个不能写——改进——采用二分法 0x150太长，换成0x75,0x75没有报错，试一下0x115，覆盖到0x104时</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">memset</span> (<span class="built_in">buffer</span>, <span class="number">0x41</span>, <span class="number">0x104</span>);</span><br><span class="line"><span class="built_in">sprintf</span> (temp, <span class="string">"From: %s\r\n"</span>, <span class="built_in">buffer</span>); </span><br><span class="line">send (sock, temp, <span class="built_in">strlen</span> (temp), <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;=<span class="number">0x104</span>; i++) </span><br><span class="line">	<span class="built_in">buffer</span>[i] = <span class="string">'A'</span> + i % <span class="number">10</span>; </span><br><span class="line"><span class="built_in">sprintf</span> (temp, <span class="string">"From: %s\r\n"</span>, <span class="built_in">buffer</span>); </span><br><span class="line">send (sock, temp, <span class="built_in">strlen</span> (temp), <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;=<span class="number">0x104</span>; i++) </span><br><span class="line"><span class="built_in">buffer</span>[i] = <span class="string">'A'</span> + i / <span class="number">10</span>; </span><br><span class="line"><span class="built_in">sprintf</span> (temp, <span class="string">"From: %s\r\n"</span>, <span class="built_in">buffer</span>);</span><br></pre></td></tr></table></figure>
-
-<p>分析：第一次使用2.c,是在‘From:’字段不停的加上A<del>J的循环（就是十六进制0x41</del>0x4A 这十个数的循 环）<strong>报错最小值为0x47</strong>。第二次用FoxMail3.c，是以10为一段长度，每段分别为0x41、0x42……来填充‘From:’<strong>报错为0x5A</strong></p>
-<p>（0x5A－0x41）×10＋（0x47－0x41）＝25×10 ＋6＝256</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">memset</span>(<span class="built_in">buffer</span>, <span class="string">'A'</span>, <span class="number">0x104</span>); </span><br><span class="line"><span class="built_in">buffer</span>[<span class="number">256</span>] = <span class="string">'B'</span>; </span><br><span class="line"><span class="built_in">buffer</span>[<span class="number">257</span>] = <span class="string">'B'</span>; </span><br><span class="line"><span class="built_in">buffer</span>[<span class="number">258</span>] = <span class="string">'B'</span>;</span><br><span class="line"><span class="built_in">buffer</span>[<span class="number">259</span>] = <span class="string">'B'</span>;</span><br></pre></td></tr></table></figure>
-
-<p>指定‘From:’字段第256开始的四个字节是‘BBBB’，进行验证。在标准的堆栈溢出中，可以经常使用该方法进行定位。</p>
-<p>2.ShellCode――一个提供给我们想要的功能的代码。 </p>
-<p>就直接给出在中文Win2000 SP2下添加名为‘w’用户的 ShellCode</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> ShellCode[] = <span class="string">"\x8B\xE5\x55\x8B\xEC\x33\xFF\x57\x57\x57\x57\xC7\x45\xF1\x6E\x65"</span> <span class="string">"\x74\x20\xC7\x45\xF5\x75\x73\x65\x72\xC7\x45\xF9\x20\x77\x20\x2E"</span> <span class="string">"\x80\x45\xFC\x01\xC6\x45\xFD\x61\xC6\x45\xFE\x64\x33\xC0\x88\x45"</span> <span class="string">"\xFF\x8D\x45\xF1\x50\xB8\x4A\x9B\x01\x78\xFF\xD0"</span> ;</span><br></pre></td></tr></table></figure>
-
-<p>3.JMP ESP的地址――把返回点覆盖JMP ESP 的地址，这样可跳入ShellCode</p>
-<blockquote>
-<p>中文版Win2000、 XP、Win2003的JMP ESP 通用跳转地址（lion给出的0x7ffa4512）</p>
-</blockquote>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590802080259.png" alt="1590802080259"></p>
-<p>这样和最开始覆盖0x150个A测试时是类似的，Shellcode会把程序要写的参量覆盖，程序在返回之前会产生write类型错误！——①注意覆盖参量为可写的地址，即保证参量是可写的，不让他出现write错误，但是这种需要知道不能写的参量的所有位置；②覆盖异常，③Shellcode放在前面，不覆盖参量。</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590802255755.png" alt="1590802255755"></p>
-<p>总结：</p>
-<blockquote>
-<p>第一步、精确定位返回点。我们用求余取整法可巧妙得到返回位置。</p>
-<p>第二步、ShellCode编写。我们直接用别人写好的ShellCode。</p>
-<p>第三步、JMP ESP的地址。我们使用Lion共享的中文通用地址――0x7ffa4512。</p>
-<p>最后把它们合起来，由于返回点后面不远处不能覆盖，所以我们把组合位置作稍稍改变，把ShellCode放前 面，RET后面放一个往前跳的指令，用这样的方式跳到我们的ShellCode中。</p>
-</blockquote>
-<p>IIS5.0 Printer漏洞。Win2000SP0、SP1版本</p>
-<p>微软Win2K IIS5的打印ISAPI扩展接口建立了.printer扩展名到msw3prt.dll的映射关系，缺省情况下该 映射存在。当远程用户提交对.printer的URL请求时， IIS5调用msw3prt.dll解释该请求。由于msw3prt.dll 缺乏足够的缓冲区边界检查，远程用户可提交一个精心构造的针对.printer的URL 请求，这样，就会在 msw3prt.dll中发生典型的缓冲区溢出，潜在允许执行任意代码。——漏洞的背景和原因。</p>
-<p>http://域填充到268 个字节时就可以覆盖到EIP。</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590802478595.png" alt="1590802478595"></p>
-<p>另一种溢出方式——JMP /CALL EBX——覆盖异常处理地址</p>
-<p><strong>Windows 异常处理链表</strong></p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590802584284.png" alt="1590802584284"></p>
-<p>当系统遇到一个不知道如何处理的程序时，就会查找对应的异常处理程序，并将处理程序的地址赋给EIP，这样系统就会执行处理程序以避免系统崩溃。最后一个处理程序就是弹出对话框报错。<strong>异常处理也有很深的技术原理</strong></p>
-<p>Windows 2000系统的知识——就是在判断是否使用现在指向的异常处理程序时，<strong>EBX会自动变为下一处理点的地址</strong>，这 样可以把异常处理地址连接起来，形成一个异常处理串</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590802993594.png" alt="1590802993594"></p>
-<p>故意把返回地址覆盖成一个错误的地址，出错时windows就会跳到处理错误的入口点，而EBX就在入口前4个字节的地方。JMP 04往后跳四个字节。将错误入口覆盖为JMP EBX的地址，就会跳过覆盖值，到达我们的shellcode。接管异常。</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590803269259.png" alt="1590803269259"></p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590803348931.png" alt="1590803348931"></p>
-<p>这里的A有多少呢？——不知道异常处理入口点在哪里呢？牛人的做法——用工具Attach 有问题的服务，然后反汇编、跟踪进去。找到有问题的点，就向上找到该服务的异常处理入口。直接分析出异 常处理入口位置距离溢出点的长度。菜鸟——比较简单，相对于直接分析服务，将JMP ESP方式改写为JMP EBX。</p>
-<blockquote>
-<p>其思路是：先利用JMP ESP的攻击程序在JMP ESP代码后跟上“\xeb\xfe”，这句 即JMP –1。实行模拟攻击后，在被攻击机上调出SoftICE，就会发现停在“\xeb\xfe”这句。这时，我们查 看其fs:0000的值，它里面存的就是异常处理的入口地址！这时，我们计算那个值离现在的距离，就能轻松知 道要填充多少才能达到异常处理入口了。</p>
-</blockquote>
-<blockquote>
-<p>SoftICE<br>动态分析中最重要的是调试器，分为用户模式和内核模式两种类型。用户模式是指用来调试用户模式的应用程 序，它们工作在Ring 3级，如Visual C++等编译器自带的调试器。内核模式调试器指能调试操作系统内核的 调试器，它们处于CPU和操作系统之间，工作在Ring 0 级，如SoftICE。<strong>SoftICE 是Compuwar NuMega公司 的产品，是目前公认的最好的系统级调试工具！</strong>兼容性和稳定性极好，可在源代码级调试各种应用程序和设备 驱动程序，也可使用RCP/IP连接进行远程调试。</p>
-</blockquote>
-<p>softice没有单独版本，都是和numega的driverstudio一起发布的</p>
-<p>Ctrl+D呼出</p>
-<p>什么时候RET RET 04</p>
-<blockquote>
-<p>Windows下存在两种调用方式：C 式和Pascal式。第一种是C方式，这是C 和C++的缺省调用方式，函数修饰为<em>cdecl。它由主调用进行参数压栈并且恢复堆 栈，这样被调用函数就只用执行RET返回就行了。第二种是Pascal 方式，大多数Windows API 函数使用这种方式，函数修饰为WINAPI、 PASCAL、 CALLBACK或</em> stdcall。这种方式是由主调用负责压栈，而在被调用函数中恢复堆栈，返回就需要执行RET n了。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">data</span><br><span class="line">dd FS:0 &#x2F;&#x2F;显示值 可以看到0038:00000000 00D8F428</span><br></pre></td></tr></table></figure>
-
-<p>00D8F428就是这里的异常入口地址。如果出现异常错误，EBX就会变为0x00D8F428, 而系统会跳到 0x00D8F428+4 = 0x0172f42c中执行处理代码。把0x00D8F42C 覆盖成JMP EBX的地址，而把0x00D8F428覆盖成NOP NOP JMP 04 指令</p>
-<p>计算——覆盖的返回点0x00D8F3D8，异常点在0x00D8F428，异常点比覆盖返回点多80个字节。</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590804022026.png" alt="1590804022026"></p>
-<blockquote>
-<p>小知识：SoftICE的常用指令<br>SoftICE指令比较多，功能也比较强。在调试和破解时，常用的指令有：<br>F10：单步执行，CALL, INT会被跳过；<br>F8：单步执行，CALL, INT会被切入；<br>Ctrl＋上下键或ALT＋上下键：在数据窗口或代码窗口中移动。在鼠标失灵时特别有用。<br>BPX：设置执行地址断点，格式为 BPX 地址 和 BPX 函数名 。这个函数名可以是任意一个Windows API函 数，是破解时的明星指令。<br>U：反汇编，格式为 U 地址 。可以看到该地址后的指令代码是什么，测试Exploit时经常用来查看ShellCode 的功能。<br>D：查看内存数据。经常用来对照比较ShellCode 是否被改变。<br>R：更改寄存器的值。格式为 R 寄存器名=值 ，当EIP 陷入死循环时，又不想重启机器，就用R 来改变EIP 的值，手动跳出死循环。</p>
-</blockquote>
-<p>总结：</p>
-<p>JMP/CALL EBX 方式的利用格式是 NNNNNJESSSSSS 。这里，N=NOP，J=JMP 04，E =JMP EBX的地址， S=ShellCode。这样异常处理时，就会执行JMP EBX，而EBX 在 J的位置，那就可以跳过E， 进入ShellCode了。</p>
-<p>JMP ESP CALL EBX都可以用，特定情况只能使用一种——如果程序还是有长度限制不能覆盖到异常处理点，但 可以覆盖到返回地址时，那就只能用JMP ESP覆盖EIP； CALL EBX当能覆盖异常处理点时（在返回前就有异常）。另外，在XP 下发生异常时，EBX不再指向下一处理链表，而改成了堆栈中的第三个值指向下一处理链表。所 以，要使用pop pop ret 在内存中的地址覆盖异常处理点，而通用地址就是0x7ffa1571。</p>
-<p>IIS 的IDA/IDQ漏洞</p>
-<blockquote>
-<p>作为安装IIS过程的一部分，系统还会安装几个ISAPI扩展.dll，其中，idq.dll 是Index Server 的一个组 件，对管理员脚本和Internet数据查询提供支持。但是，idq.dll 在一段处理URL输入的代码中存在一个未 经检查的缓冲区，攻击者利用此漏洞能导致受影响的服务器产生缓冲区溢出，从而执行自己提供的代码。更为 严重的是，idq.dll是以System身份运行的，攻击者可以利用此漏洞取得系统管理员权限。该漏洞对Win2000 SP0、SP1、SP2有效。大家可以看到，采用 GET /NULL.ida?[bufer]=x HTTP /1.1 对 Buffeer（缓冲区）域进行填充，就可以覆盖到EIP，再继续也可以覆盖到异常处理点。</p>
-</blockquote>
-<p>三步：异常处理点位置（缓冲区）第240字节处，因此在236字节处放上NOP NOP jmp 04，在240字节处放上JMP EBX地址，在244字节处放上shellcode。shellcode添加用户。jmp ebx——0x7ffa1571</p>
-<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590804829002.png" alt="1590804829002"></p>
-<p>宽字符——双字节、多语言字符代码。unicode——在shellcode前面加上%u符号。</p>
-<p>课堂解惑</p>
-<p>1.无需知道ESP值。0x7FFA4512.JMP ESP指令（机器码为FF E4_VC中可以用“__asm{}”嵌入汇编JMP ESP，再按F10进入调试）的地址在同种系统甚至不同系统都是0x7FFA4512。</p>
-<p>2.覆盖异常处理点时，我用的就是CALL EBX指令地址，失败——xp系统EBX会变成0，需要用POP POP RET指令地址来覆盖。个中文版ＮＴ/Win2000/Win2003都通用的地址——0x7FFA1571。</p>
-<p>3.linux确切定位shellcode——把shellcode放在环境变量</p>
-<p>第二章 windows下shellcode编写初步</p>
-<p>ShellCode是一组能完成我们想要的功能的机器代码，通常以十六进制数组的形式存在。计算机能直接执行的机器代码，只要计算机的指令指针EIP指向shellcode里面，就可以顺利执行了。</p>
-<blockquote>
-<p>计算机每次都只是执行当前EIP指向的指令（单CPU）。在当前指令执行后，EIP 会自动加1，从而指向下一 条指令。如果有JMP CALL RET一类的指令，EIP就会被强行改变成指定的地址，从而完成流程的跳转。</p>
-</blockquote>
-<p>像在Debug时动态改变寄存器值一样</p>
-<p>最好能开一个DOS窗口</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    LoadLibrary(“msvcrt.dll”);</span><br><span class="line">    system(“command.com”);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt; #include &lt;winbase.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span> <span class="params">(*MYPROC)</span><span class="params">(LPTSTR)</span></span>; <span class="comment">//定义函数指针</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    HINSTANCE LibHandle; </span><br><span class="line">    MYPROC ProcAdd; </span><br><span class="line">    LibHandle = LoadLibrary(“msvcrt.dll”); </span><br><span class="line">    ProcAdd = (MYPROC) GetProcAddress(LibHandle, <span class="string">"system"</span>); <span class="comment">//查找system函数地址 </span></span><br><span class="line">    (ProcAdd) (<span class="string">"command.com"</span>); <span class="comment">//其实就是执行system(“command.com”)</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>定义函数指针，指向函数的参数是字符串，返回值是空。该指针的作用是指向system函数，然后在后面方便调用；</p>
-<p>加载msvcrt.dll这个动态链接库，动态链接库的句柄赋给LibHandle。获得句柄后，我们再使用GetProcAddress获得system的真实地址，使用真实地址调用system函数。执行该语句后，ProcAdd为指向system函数的指针。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/05/28/%E2%80%9C%E6%BC%8F%E6%B4%9E%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90%E2%80%9D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="万俟思睿">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="思睿's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/ytytytytyt6.github.io/2020/05/28/%E2%80%9C%E6%BC%8F%E6%B4%9E%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90%E2%80%9D/" itemprop="url">“漏洞样本分析”</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-28T21:57:39+08:00">
-                2020-05-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/02/04/wireshark%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="万俟思睿">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="思睿's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/ytytytytyt6.github.io/2020/02/04/wireshark%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/" itemprop="url">wireshark学习实战 </a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-04T09:49:33+08:00">
-                2020-02-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>学习链接：<br><a href="https://unit42.paloaltonetworks.com/unit42-customizing-wireshark-changing-column-display/" target="_blank" rel="noopener">https://unit42.paloaltonetworks.com/unit42-customizing-wireshark-changing-column-display/</a><br><a href="https://unit42.paloaltonetworks.com/using-wireshark-identifying-hosts-and-users/" target="_blank" rel="noopener">https://unit42.paloaltonetworks.com/using-wireshark-identifying-hosts-and-users/</a><br><a href="https://unit42.paloaltonetworks.com/using-wireshark-display-filter-expressions/" target="_blank" rel="noopener">https://unit42.paloaltonetworks.com/using-wireshark-display-filter-expressions/</a><br>以上系列文章作者是Palo Alto Networks 42部门的威胁情报分析师布拉德·邓肯，他经常使用Wireshark审查由恶意软件样本生成的流量。</p>
-<h2 id="1-wireshark可以自定义列显示"><a href="#1-wireshark可以自定义列显示" class="headerlink" title="1.wireshark可以自定义列显示"></a><strong>1.wireshark可以自定义列显示</strong></h2><!-- Wireshark的默认列为：
-No. -pcap开头的帧号。第一帧始终为1。
-time --秒数从pcap的第一帧降低到纳秒。第一帧始终为0.000000。
-Source --源地址，通常是IPv4，IPv6或以太网地址。
-Destination --目标地址，通常是IPv4，IPv6或以太网地址。
-Protocol --以太网帧，IP数据包或TCP段（ARP，DNS，TCP，HTTP等）中使用的协议。
-Length --帧的长度（以字节为单位）。 -->
-<p>流量分析通常需要使用UTC的日期和时间、源IP和源端口、目标IP和目标端口、HTTP主机、HTTPS服务器、信息。为了这个目的需要进行隐藏列、移除列、添加列、更改UTC时间、自定义列操作。<br>http.request或ssl.handshake.type == 1过滤会有更好的理解。</p>
-<h2 id="2-使用Wireshark：识别主机和用户"><a href="#2-使用Wireshark：识别主机和用户" class="headerlink" title="2.使用Wireshark：识别主机和用户"></a><strong>2.使用Wireshark：识别主机和用户</strong></h2><h5 id="来自DHCP流量的主机信息"><a href="#来自DHCP流量的主机信息" class="headerlink" title="来自DHCP流量的主机信息"></a>来自DHCP流量的主机信息</h5><p>三个标识符：mac地址，<a href="https://en.wikipedia.org/wiki/IP_address" target="_blank" rel="noopener">IP地址</a>和<a href="https://en.wikipedia.org/wiki/Hostname" target="_blank" rel="noopener">主机名</a>。一般是通过ip地址寻找关联的mac地址和主机</p>
-<p><a href="https://wiki.wireshark.org/DHCP" target="_blank" rel="noopener">DHCP</a>或<a href="https://wiki.wireshark.org/NetBIOS/NBNS" target="_blank" rel="noopener">NBNS</a>。DHCP流量可以帮助识别几乎所有连接到网络的计算机的主机。NBNS流量主要由运行Microsoft Windows的计算机或运行MacOS的Apple主机生成。</p>
-<h5 id="来自NetBIOS名称服务（NBNS）流量的主机信息"><a href="#来自NetBIOS名称服务（NBNS）流量的主机信息" class="headerlink" title="来自NetBIOS名称服务（NBNS）流量的主机信息"></a>来自NetBIOS名称服务（NBNS）流量的主机信息</h5><h5 id="来自HTTP流量的设备模型和操作系统"><a href="#来自HTTP流量的设备模型和操作系统" class="headerlink" title="来自HTTP流量的设备模型和操作系统"></a>来自HTTP流量的设备模型和操作系统</h5><h5 id="Windows用户帐户来自Kerberos流量"><a href="#Windows用户帐户来自Kerberos流量" class="headerlink" title="Windows用户帐户来自Kerberos流量"></a>Windows用户帐户来自Kerberos流量</h5>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/ytytytytyt6.github.io/">&lt;i class&#x3D;&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/ytytytytyt6.github.io/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/ytytytytyt6.github.io/">&lt;i class&#x3D;&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/ytytytytyt6.github.io/">1</a><span class="page-number current">2</span><a class="page-number" href="/ytytytytyt6.github.io/page/3/">3</a><a class="extend next" rel="next" href="/ytytytytyt6.github.io/page/3/">&lt;i class&#x3D;&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
   </nav>
 
 
@@ -2022,7 +2125,7 @@ Length --帧的长度（以字节为单位）。 -->
               
                 <a href="/ytytytytyt6.github.io/archives">
               
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

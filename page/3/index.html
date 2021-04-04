@@ -79,40 +79,15 @@
 
 
 
-<meta name="description" content="12  漏洞相关概念** 1234熟悉基本概念和原理（二进制漏洞基本原理、漏洞类型、漏洞利用方法、常见漏洞挖掘、shellcode编写）。通过关键字（栈溢出、堆溢出、整数溢出、UAF、double-free、shellcode）进行Google&#x2F;SecWiki等了解基本概念；阅读《Q版本缓冲区溢出》《0day漏洞挖掘》等书籍，学习二进制漏洞形成的基本原理和基本的利用方法，并进行实践操作；">
-<meta property="og:type" content="article">
-<meta property="og:title" content="漏洞基础概念">
-<meta property="og:url" content="https://ytytytytyt6.github.io/2020/07/20/%E6%BC%8F%E6%B4%9E%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/index.html">
+<meta name="description" content="进一寸有一寸的欢喜">
+<meta property="og:type" content="website">
+<meta property="og:title" content="思睿&#39;s Blog">
+<meta property="og:url" content="https://ytytytytyt6.github.io/page/3/index.html">
 <meta property="og:site_name" content="思睿&#39;s Blog">
-<meta property="og:description" content="12  漏洞相关概念** 1234熟悉基本概念和原理（二进制漏洞基本原理、漏洞类型、漏洞利用方法、常见漏洞挖掘、shellcode编写）。通过关键字（栈溢出、堆溢出、整数溢出、UAF、double-free、shellcode）进行Google&#x2F;SecWiki等了解基本概念；阅读《Q版本缓冲区溢出》《0day漏洞挖掘》等书籍，学习二进制漏洞形成的基本原理和基本的利用方法，并进行实践操作；">
+<meta property="og:description" content="进一寸有一寸的欢喜">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590715345698.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590716744637.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590719859961.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590720390686.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590738829103.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590739035362.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590739080500.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590739774369.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590739931489.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590739997458.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590740081376.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590740397359.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590801331139.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590802080259.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590802255755.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590802478595.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590802584284.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590802993594.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590803269259.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590803348931.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590804022026.png">
-<meta property="og:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590804829002.png">
-<meta property="article:published_time" content="2020-07-20T05:10:56.000Z">
-<meta property="article:modified_time" content="2020-05-30T02:31:02.000Z">
 <meta property="article:author" content="万俟思睿">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="c:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590715345698.png">
 
 
 
@@ -142,13 +117,13 @@
 
 
 
-  <link rel="canonical" href="https://ytytytytyt6.github.io/2020/07/20/漏洞基础概念/"/>
+  <link rel="canonical" href="https://ytytytytyt6.github.io/page/3/"/>
 
 
 
 
 
-  <title>漏洞基础概念 | 思睿's Blog</title>
+  <title>思睿's Blog</title>
   
 
 
@@ -167,7 +142,8 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left 
+  page-home">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -230,9 +206,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-
-  <div id="posts" class="posts-expand">
+  <section id="posts" class="posts-expand">
     
+      
 
   
 
@@ -245,7 +221,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/07/20/%E6%BC%8F%E6%B4%9E%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%B8%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="万俟思睿">
@@ -262,7 +238,9 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">漏洞基础概念</h1>
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%B8%80/" itemprop="url">恶意流量分析训练一</a></h1>
         
 
         <div class="post-meta">
@@ -312,7 +290,779 @@
       
 
       
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+        
+          
+            <h1 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h1><p>本次实验所涉及并要求掌握的知识点。</p>
+<hr>
+<p>wireshark起还原现场的作用，帮助审计。</p>
+<p>Wiki上是这样描述的：对于安全人员而言，网络安全工程师可以使用wireshark来检查讯息安全相关的问题。对于网络安全而言，现场很重要，黑客攻击的过程和服务器被攻击的过程都必须使用网络，wireshark完全可以记录下来，这也正是wireshark强大的地方。</p>
+<p>使用wireshark进行恶意流量分析，主要涉及知识点包括<strong>IOC，键盘记录器木马，ftp协议</strong>等。</p>
+<blockquote>
+<p>入侵指标IOC(Indicatorsof Compromised):[URLs, domains, IP addresses, andSHA256 hashes related to the infection should appear in this section]</p>
+</blockquote>
+<hr>
+<h1 id="二、实验环境"><a href="#二、实验环境" class="headerlink" title="二、实验环境"></a>二、实验环境</h1><p>实验所使用的设备名称及规格，网络管理工具简介、版本等。</p>
+<hr>
+<p>服务器：Windows 7 ，IP地址：随机分配</p>
+<p>辅助工具：Wireshark</p>
+<h1 id="三、实验内容与实验要求"><a href="#三、实验内容与实验要求" class="headerlink" title="三、实验内容与实验要求"></a>三、实验内容与实验要求</h1><p>实验内容、原理分析及具体实验要求。</p>
+<hr>
+<blockquote>
+<p><strong>实验步骤一</strong></p>
+<p><strong>场景</strong></p>
+<p>局域网段范围：10.0.0.0/24(10.0.0.0 到 10.0.0.255)</p>
+<p>域： beguilesoft.com</p>
+<p>域控：10.0.0.10 - BeguileSoft-DC</p>
+<p>局域网网关：10.0.0.1</p>
+<p>局域网广播地址：10.0.0.255</p>
+<p><strong>任务</strong></p>
+<p>分析现有的材料，针对受害的windows主机写一份应急报告。建议的模板如下：</p>
+<p><strong>总结:</strong></p>
+<p>​        在xx时间, 一台window主机被xx感染</p>
+<p><strong>细节:</strong></p>
+<p>​        IP address:</p>
+<p>​        MAC address:</p>
+<p>​        Host name:</p>
+<p>​        Windows user account name:</p>
+<p>入侵指标IOC(Indicatorsof Compromised)：[URLs, domains, IP addresses, andSHA256 hashes related to the infection should appear in this section]</p>
+<p>提供了两个压缩文件，分别是告警日志和数据包。</p>
+</blockquote>
+<blockquote>
+<p>实验步骤二</p>
+<p>​      那么攻击者究竟拿到了什么数据呢？我们使用ftp-data看看他通过ftp传送了什么</p>
+</blockquote>
+<blockquote>
+<p>实验步骤三</p>
+<p>应急报告现在还缺少IOC，所以我们需要整理下，需要整理出目标端口，ip等</p>
+<p>在这之前，我们需要先回顾下ftp协议，ftp协议用两个端口实现，分别是数据端口和命令端口。命令端口用于连接，数据端口用于传输数据。</p>
+<p>​      命令端口一般都是21。那么数据端口呢？这里又引入了主动模式（PORT）和被动模式（PASV）的概念。当客户端通知服务器它处于被动模式时才会启用，其标志就是客户端给服务端发送了一个PASV.</p>
+<p>​      主动模式：</p>
+<h1 id=""><a href="#" class="headerlink" title=""></a><img src="http://www.hetianlab.com/headImg.action?guideImg=/3dd647e9-8e45-4905-b820-e99c12a51f36.jpg" alt="img"></h1><p>​      在第1步中，客户端的命令端口与FTP服务器的命令端口建立连接，并发送命令“PORT 1027”。然后在第2步中，FTP服务器给客户端的命令端口返回一个”ACK”。在第3步中，FTP服务器发起一个从它自己的数据端口（20）到客户端先前指定的数据端口（1027）的连接，最后客户端在第4步中给服务器端返回一个”ACK”。</p>
+<p>  被动模式：</p>
+<h1 id="-1"><a href="#-1" class="headerlink" title=""></a><img src="http://www.hetianlab.com/headImg.action?guideImg=/59e76a29-8149-401f-a493-50b0520f2a86.jpg" alt="img"></h1><p>​      在第1步中，客户端的命令端口与服务器的命令端口建立连接，并发送命令“PASV”。然后在第2步中，服务器返回命令”PORT 2024”，告诉客户端（服务器）用哪个端口侦听数据连接。在第3步中，客户端初始化一个从自己的数据端口到服务器端指定的数据端口的数据连接。最后服务器在第4 步中给客户端的数据端口返回一个”ACK”响应。</p>
+<p>​      简单地说，就是，在主动模式下一般默认的数据端口为20，在被动模式下数据端口就不一定了。</p>
+</blockquote>
+<hr>
+<hr>
+<h1 id="四、实验过程与分析"><a href="#四、实验过程与分析" class="headerlink" title="四、实验过程与分析"></a>四、实验过程与分析</h1><p>根据具体实验，记录、整理相应命令、运行结果等，包括截图和文字说明。</p>
+<p>详细记录在实验过程中发生的故障和问题，并进行故障分析，说明故障排除的过程及方法。</p>
+<p><strong>实验步骤一</strong></p>
+<p>使用wireshark打开数据包pcap文件，先看告警日志（alert.jpg）：</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590823528961.png" alt="1590823528961"></p>
+<p>1.接收到whatismyaddress.com的请求，不能判断是否是恶意软件产生的流量；3.使用了FTP STOR用于存储文件到服务器上，连接到external network，可推测恶意软件通过ftp协议将数据传输到外网服务器；4.Hawkeye Keylogger的木马，可以检索到相关的分析文章<a href="https://www.freebuf.com/column/157857.html。涉及到ftp协议，因此使用ftp过滤查看：" target="_blank" rel="noopener">https://www.freebuf.com/column/157857.html。涉及到ftp协议，因此使用ftp过滤查看：</a></p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590825324591.png" alt="1590825324591"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FTP	Response: 220 ProFTPD Server (000webhost.com) [::ffff:145.14.144.10]</span><br></pre></td></tr></table></figure>
+
+<p>显示的是proftpd，一款很常用的ftp服务端软件，后面 (000webhost.com)[::ffff:145.14.144.10]进入查看，一家免费的虚拟主机商。</p>
+<p>使用ftp 关键字过滤</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ftp.request.command eq USER or ftp.request.command eq PASS or ftp.request.command eq STOR</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590825362266.png" alt="1590825362266">可以发现目标地址在变化，攻击者用的是免费的虚拟主机，比如000webhost。如果更新页面或者传送数据则有可能会导致自动更换ip。</p>
+<p><strong>实验步骤二</strong></p>
+<p>ftp-data</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590824626760.png" alt="1590824626760"></p>
+<p>追踪流</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590825226631.png" alt="1590825226631"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">可以看到系统信息被获取到了，包括：</span><br><span class="line">​      主机名：BREAUX-WIN7-PC</span><br><span class="line">​      用户名：Adriana.breaux</span><br><span class="line">​      MAC地址：84:8f:69:09:86:c0</span><br><span class="line">​      Ip地址：10.0.0.227</span><br><span class="line">还有谷歌等网站的账号、密码都被攻击者获取到了，我们注意到还有一部分的流量显示的是jpeg，推测可能是主机截屏的图我们注意到还有一部分的流量显示的是jpeg，推测可能是主机截屏的图片</span><br></pre></td></tr></table></figure>
+
+<p>选择jpeg 追踪流 显示 保存 另存为png格式</p>
+<p><strong>实验步骤三</strong></p>
+<p>在wireshark中要想把完整的ftp协议过滤出来需要使用 ftp-data or ftp,只用单个的话只能过滤出ftp命令端口的流量或数据端口的流量，是不完整的</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590825445417.png" alt="1590825445417"></p>
+<p>715——状态码220表示对新用户的服务已经准备好</p>
+<p>716,719可以看到受害者机器通过用户名密码连入ftp服务端</p>
+<p>一直到734条可以看到受害者机器向145.14.145.4发出PASV,前面提到，发出PASV,就说明后面的数据传输过程中服务端使用的端口就不是20了。</p>
+<p> 在715到744之间都是命令端口通信的流量。所以此时的IOC是</p>
+<p>​      </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ip:145.14.145.4  port:21  url:000.webhost.com</span><br></pre></td></tr></table></figure>
+
+<p>745开始是通过被动模式连接后进行数据传输了</p>
+<p>755为例查看：</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590825559834.png" alt="1590825559834"></p>
+<p>目标端口为37280，即此时的145.14.145.4使用的端口</p>
+<p>所以第二条IOC为 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ip:145.14.145.4  port:37280  url:000webhost.com</span><br></pre></td></tr></table></figure>
+
+<p>分析第二个外网地址——145.14.144.10[从839开始]</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590825693354.png" alt="1590825693354"></p>
+<p>858的时候pasv。</p>
+<p>命令端口的通信流量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ip:145.14.144.10  port:21  000webhost.com</span><br></pre></td></tr></table></figure>
+
+<p> 数据端口的通信流量以867为例</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590825799304.png" alt="1590825799304"></p>
+<p>得到IOC:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ip:145.14.144.10  port:40651  url:000webhost.com</span><br></pre></td></tr></table></figure>
+
+<p>​      从887开始又一次建立数据传输，端口47434</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590825843592.png" alt="1590825843592"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ip:145.14.144.10 port:47434 url:000webhost.com</span><br></pre></td></tr></table></figure>
+
+<p>第三个外网地址分析：从5259开始</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590825977425.png" alt="1590825977425"></p>
+<p>5278出现pasv。 可得两条IOC:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Ip:145.14.145.99  port:21  url:000webhost.com</span><br><span class="line">Ip:145.14.145.99 port:36091 url:000webhost.com</span><br></pre></td></tr></table></figure>
+
+<p> 5309开始又建立了一次数据传输，数据端口为35396，IOC为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ip:145.14.145.99  port:35396  url:000webhost.com</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="五、实验结果总结"><a href="#五、实验结果总结" class="headerlink" title="五、实验结果总结"></a>五、实验结果总结</h1><p>对实验结果进行分析，完成思考题目，总结实验的心得体会，并提出实验的改进意见。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">1）在2019年5月2日21点36分，Adriana.breaux的windows主机被Hawkeye Keylogger恶意软件感染。</span><br><span class="line">2）细节：</span><br><span class="line">​      主机名：BREAUX-WIN7-PC</span><br><span class="line">​      用户名：Adriana.breaux</span><br><span class="line">​      MAC地址：84:8f:69:09:86:c0</span><br><span class="line">​      Ip地址：10.0.0.227</span><br><span class="line">3）IOC:</span><br><span class="line">​      Ip:145.14.145.4   port:21         url:000.webhost.com</span><br><span class="line">​      Ip:145.14.145.4   port:37280   url:000webhost.com</span><br><span class="line">​      Ip:145.14.144.10 port:21         url:000webhost.com</span><br><span class="line">​      Ip:145.14.144.10 port:40651   url:000webhost.com</span><br><span class="line">​      Ip:145.14.144.10 port:47434    url:000webhost.com</span><br><span class="line">​      Ip:145.14.145.99 port:21         url:000webhost.com</span><br><span class="line">​      Ip:145.14.145.99 port:36091   url:000webhost.com</span><br><span class="line">​      Ip:145.14.145.99 port:35396   url:000webhost.com。</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%B8%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%B8%89/" itemprop="url">恶意流量分析训练三</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-20T13:10:56+08:00">
+                2020-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>一、实验目的</p>
+<p>本次实验所涉及并要求掌握的知识点。</p>
+<hr>
+<p>通过该实验了解使用wireshark进行恶意流量分析，培养流量分析的思维和能力，本次实验涉及知识包括<strong>善用搜索引擎、技术分析文章整合、snort日志分析、以及关于Lockyransomware和Angler EK部分攻击流量特征。</strong></p>
+<hr>
+<h1 id="二、实验环境"><a href="#二、实验环境" class="headerlink" title="二、实验环境"></a>二、实验环境</h1><p>实验所使用的设备名称及规格，网络管理工具简介、版本等。</p>
+<hr>
+<p>服务器：Windows 7 ，IP地址：随机分配</p>
+<p>辅助工具：Wireshark</p>
+<hr>
+<h1 id="三、实验内容与实验要求"><a href="#三、实验内容与实验要求" class="headerlink" title="三、实验内容与实验要求"></a>三、实验内容与实验要求</h1><p>实验内容、原理分析及具体实验要求。</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">试根据给出的数据包等文件，分析解答如下问题</span><br><span class="line"></span><br><span class="line">       Q1；用户的姓名？</span><br><span class="line">       Q2：用户windows机器的主机名？</span><br><span class="line">       Q3；用户windows主机的ip地址？</span><br><span class="line">       Q4；用户电脑的mac地址？</span><br><span class="line">       Q5；用户被感染了哪些恶意文件？</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="四、实验过程与分析"><a href="#四、实验过程与分析" class="headerlink" title="四、实验过程与分析"></a>四、实验过程与分析</h1><p>根据具体实验，记录、整理相应命令、运行结果等，包括截图和文字说明。</p>
+<p>详细记录在实验过程中发生的故障和问题，并进行故障分析，说明故障排除的过程及方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Q1；用户的姓名？</span><br><span class="line">Q2：用户windows机器的主机名？</span><br><span class="line">Q3；用户windows主机的ip地址？</span><br><span class="line">Q4；用户电脑的mac地址？</span><br></pre></td></tr></table></figure>
+
+<p>统计找到10.0.21.136</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591014527454.png" alt="1591014527454"></p>
+<p>如何找主机名？——</p>
+<blockquote>
+<p>NetBIOS是Network Basic Input/Output System的简称，一般指用于局域网通信的一套API，它在基于 NetBIOS 名称访问的网络上提供主机名和地址映射方法。所以通过NBNS协议我们可以找到主机名</p>
+</blockquote>
+<p>mac地址及主机名如下</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591014670680.png" alt="1591014670680"></p>
+<p>如何找用户名？</p>
+<blockquote>
+<p>在电脑自带的通信过程中，一般人是不会设置完整的姓名的，题目既然这么问说明要从其他地方入手，比如用户在网站注册，或者他的邮件的名字，都有可能是姓名，所以我们尝试过滤出http请求数据。</p>
+</blockquote>
+<p>出现signup 追踪流 发现</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591014808751.png" alt="1591014808751"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q5；用户被感染了哪些恶意文件？</span><br></pre></td></tr></table></figure>
+
+<p>  可以看到在用户注册之后，紧接着是google analytics,这是Google开发的网站流量跟踪工具。</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591015616412.png" alt="1591015616412"></p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591015895770.png" alt="1591015895770"></p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591015989193.png" alt="1591015989193"></p>
+<p>继续分析，往下</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591016377552.png" alt="1591016377552"></p>
+<p>出现top域名 值得注意 选择一条get 跟踪流</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591016521168.png" alt="1591016521168"></p>
+<p>可以看到referer信息，referer表示是从该页面链接过来的，所以此处的话表明用户访问正常的网页<a href="http://www.emidioleite.com........然后被定向访问到了.top" target="_blank" rel="noopener">http://www.emidioleite.com........然后被定向访问到了.top</a></p>
+<p>​    接下来结合snort日志分析，根据目的ip去日志中检索</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591016656334.png" alt="1591016656334"></p>
+<p>可以看到snort检测到是属于Angler exploit-kit发起的攻击，后面还提示是landing page，那么一定会传递载荷</p>
+<p>​       我们进一步分析其他的tcp流</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591016735113.png" alt="1591016735113"></p>
+<p>继续往下看看剩余有没有可疑的流量</p>
+<p>​       在最后的一系列postuserinfo.php这种用户正常访问的额流量之前我们有看到了奇怪的流量</p>
+<p>同上一步 在snort文件中查找ip 但是攻击手法有变化。实际攻击中IP是动态变化的，但是端口一般不会变化，取消条件后发现主要是80和443.在搜索引擎中搜索</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591017017379.png" alt="1591017017379"></p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591017029696.png" alt="1591017029696"></p>
+<p>  用户受到了三次感染，第一次是来自malware spam的Locky ransomware,第二次是Angler EK的文件（由分析文章推知是伪装的swf文件），第三次是AnglerEK的CryptXXX ransomware。</p>
+<hr>
+<h1 id="五、实验结果总结"><a href="#五、实验结果总结" class="headerlink" title="五、实验结果总结"></a>五、实验结果总结</h1><p>对实验结果进行分析，完成思考题目，总结实验的心得体会，并提出实验的改进意见。</p>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%BA%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/ytytytytyt6.github.io/2020/07/20/%E6%81%B6%E6%84%8F%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E8%AE%AD%E7%BB%83%E4%BA%8C/" itemprop="url">恶意流量分析训练二</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-20T13:10:56+08:00">
+                2020-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h1><p>本次实验所涉及并要求掌握的知识点。</p>
+<hr>
+<p>通过该实验了解使用wireshark进行恶意流量分析，本次实验涉及知识包括<strong>操作系统指纹识别、域环境、Emotet银行木马流量特征等</strong>。</p>
+<hr>
+<h1 id="二、实验环境"><a href="#二、实验环境" class="headerlink" title="二、实验环境"></a>二、实验环境</h1><p>实验所使用的设备名称及规格，网络管理工具简介、版本等。</p>
+<hr>
+<p>服务器：Windows 7 ，IP地址：随机分配</p>
+<p>辅助工具：Wireshark</p>
+<hr>
+<h1 id="三、实验内容与实验要求"><a href="#三、实验内容与实验要求" class="headerlink" title="三、实验内容与实验要求"></a>三、实验内容与实验要求</h1><p>实验内容、原理分析及具体实验要求。</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">环境：</span><br><span class="line">局域网段：172.16.3.0&#x2F;24（172.16.3.0 到 172.16.3.255）</span><br><span class="line">域：eggnogsoup.com</span><br><span class="line">域控：172.16.3.2-EggNogSoup-DC</span><br><span class="line">网关：172.16.3.1</span><br><span class="line">广播地址：172.16.3.255</span><br><span class="line">Q1:域里有多少台存活的主机，分别给出他们的地址</span><br><span class="line">Q2.哪个主机的操作系统是ubuntu？</span><br><span class="line">这个问题考到一个知识点，就是访问网页时，用户的http请求包的头部的user-agent可能会泄露对应的操作系统的部分信息。</span><br><span class="line">Q3：ip地址为172.16.3.188的是什么类型的主机？</span><br><span class="line">Q4:哪个ip地址最有可能是Amazon Fire tablet</span><br><span class="line">Q5:哪些windows主机曾经连接到域控上？</span><br><span class="line">Q6:下面三台主机中哪一台主机有感染Emotet银行木马的迹象？（172.16.3.114,172.16.3.133,172.16.3.189）</span><br><span class="line">Q7:运行着安卓8.0.0的ip地址是多少？是什么牌子和型号？</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="四、实验过程与分析"><a href="#四、实验过程与分析" class="headerlink" title="四、实验过程与分析"></a>四、实验过程与分析</h1><p>根据具体实验，记录、整理相应命令、运行结果等，包括截图和文字说明。</p>
+<p>详细记录在实验过程中发生的故障和问题，并进行故障分析，说明故障排除的过程及方法。</p>
+<p>下载数据流量特征如图：</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590932843485.png" alt="1590932843485"></p>
+<p>pcap包文件：</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590932890626.png" alt="1590932890626"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q1:域里有多少台存活的主机，分别给出他们的地址</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590932964175.png" alt="1590932964175"></p>
+<p>菜单。统计。会话。IPv4。</p>
+<p>172.16.3.0/24的各个主机的ip</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590933158128.png" alt="1590933158128"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q2.哪个主机的操作系统是ubuntu？</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">这个问题考到一个知识点，就是访问网页时，用户的http请求包的头部的user-agent可能会泄露对应的操作系统的部分信息。</span><br><span class="line">部分user agent如下所示</span><br><span class="line">​       ·  ·  Firefox</span><br><span class="line">​       ·  ·  Mozilla&#x2F;5.0(Windows NT 6.1; WOW64; rv:34.0) Gecko&#x2F;20100101 Firefox&#x2F;34.0</span><br><span class="line">​       ·  ·  Mozilla&#x2F;5.0(X11; U; Linux x86_64; zh-CN; rv:1.9.2.10) Gecko&#x2F;20100922 Ubuntu&#x2F;10.10(maverick) Firefox&#x2F;3.6.10</span><br><span class="line"></span><br><span class="line">​       ·  ·  Safari</span><br><span class="line">​       ·  ·  Mozilla&#x2F;5.0(Windows NT 6.1; WOW64) AppleWebKit&#x2F;534.57.2 (KHTML, like Gecko) Version&#x2F;5.1.7Safari&#x2F;534.57.2</span><br><span class="line"></span><br><span class="line">​       ·  ·  chrome</span><br><span class="line">​       ·  ·  Mozilla&#x2F;5.0(Windows NT 6.1; WOW64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko)Chrome&#x2F;39.0.2171.71 Safari&#x2F;537.36</span><br><span class="line">​       ·  ·  Mozilla&#x2F;5.0(X11; Linux x86_64) AppleWebKit&#x2F;537.11 (KHTML, like Gecko) Chrome&#x2F;23.0.1271.64Safari&#x2F;537.11</span><br><span class="line">​       ·  ·  Mozilla&#x2F;5.0(Windows; U; Windows NT 6.1; en-US) AppleWebKit&#x2F;534.16 (KHTML, like Gecko)Chrome&#x2F;10.0.648.133 Safari&#x2F;534.16</span><br></pre></td></tr></table></figure>
+
+<p> ip contains Ubuntu and http.request</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590933381111.png" alt="1590933381111"></p>
+<p>可以看出172.16.3.110主机的操作系统是，可以随便打开一条，追踪TCP流，查看User-Agent字段进行验证</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q3：ip地址为172.16.3.188的是什么类型的主机？</span><br></pre></td></tr></table></figure>
+
+<p> ip.addr eq 172.16.3.188</p>
+<p>选择追踪流，可以发现是苹果设备</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590933604056.png" alt="1590933604056"></p>
+<p>也可以通过DNS请求发现查询iCloud</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590933944966.png" alt="1590933944966"></p>
+<p>怎样知道是iPhone ，iPad还是Mac呢？具体还是看User Agent，</p>
+<p>  ip.addr eq 172.16.3.188 and http.request</p>
+<p> 右键跟踪tcp流，可以看出是iPhone 8 </p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934174649.png" alt="1590934174649"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q4:哪个ip地址最有可能是Amazon Fire tablet</span><br></pre></td></tr></table></figure>
+
+<p> 这是亚马逊的一款平板电脑。这时候还是用找ubuntu的方法能行吗？  ip contains Amazon and http.request  失效</p>
+<p>尝试查询Amazon的域名：  dns.qry.name contains amazon</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934296184.png" alt="1590934296184"></p>
+<p>可以看到111,122,109三个主机。我们知道亚马逊的网上采用了https，我们可以尝试过滤出https域名中有amazon的</p>
+<p>​       ssl.handshake.type == 1 and ip contains amazon</p>
+<p>发现122和109主机</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934422638.png" alt="1590934422638"></p>
+<p>查看对应的MAC，发现122为苹果的设备。</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934488802.png" alt="1590934488802"></p>
+<p>对应的看ua的思路也会有浏览器特征，比如firefox,chrome等，那么这个平板上的浏览器是什么呢？</p>
+<p>通过关键字可以看到其特有的浏览器是Silk，那么我们试试使用silk关键字来过滤</p>
+<p>​       ssl.handshake.type == 1 and ip contains silk</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934631806.png" alt="1590934631806"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q5:哪些windows主机曾经连接到域控上？</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>域建立后会有一个管理域成员的目录列表，称之为活动目录ActiveDirectory(AD),而AD默认使用Kerberos处理认证请求。所以我们考虑使用kerberos关键字进行过滤</p>
+</blockquote>
+<p>  kerberos.CNameSrting</p>
+<p><img src="C:%5CUsers%5Clenovo%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1590934719712.png" alt="1590934719712"></p>
+<p>展开，cnamestring，右键选中为列查看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q6:下面三台主机中哪一台主机有感染Emotet银行木马的迹象？（172.16.3.114,172.16.3.133,172.16.3.189）</span><br></pre></td></tr></table></figure>
+
+<p>(http.request or ssl.handshake.type == 1) and  !(udp.port eq 1900) and ip.addr  eq 172.16.3.114</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Q7:运行着安卓8.0.0的ip地址是多少？是什么牌子和型号？</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<h1 id="五、实验结果总结"><a href="#五、实验结果总结" class="headerlink" title="五、实验结果总结"></a>五、实验结果总结</h1><p>对实验结果进行分析，完成思考题目，总结实验的心得体会，并提出实验的改进意见。</p>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/07/20/%E6%BC%8F%E6%B4%9E%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/ytytytytyt6.github.io/2020/07/20/%E6%BC%8F%E6%B4%9E%E7%AC%94%E8%AE%B0/" itemprop="url">漏洞笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-20T13:10:56+08:00">
+                2020-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>有道无术，术尚可求，有术无道，止于术。如果说网络安全是互联网发展的“道”，那么漏洞则是互联网安全的“术”。</p>
+<p>作者认为人与生俱来就有贪婪、自私、猜疑、虚荣、恐惧、固执等弱点，这些缺陷一旦被利用，就是致命的漏洞。作者因此认为漏洞时因人而生，因人心而用，因人性而决定使用之道。</p>
+<p>据深圳市反电信网络诈骗中心介绍，利用第三方支付平台专业赃款和洗钱的手段一般有三种：通过第三方支付平台发型的商户POS机虚构交易套现；将诈骗得手的资金转移到第三方支付平台账户，在线购买游戏点卡、比特币；将赃款在银行账户和第三方支付平台之间多次转账切换。</p>
+<p>网站挂马与篡改——病毒感染、零日漏洞利用、SQL注入漏洞、网络劫持、恶意广告投放等。</p>
+<p>拖库——黑客从有价值的网站中将用户资料数据库拖走。</p>
+<p>撞库——黑客通过手机互联网已泄露的用户和密码信息，生成对应的密码字典表，尝试批量登录其他网站后，碰撞出一系列可以登录的账户。</p>
+<p>私服——未经版权拥有者授权，非法获得服务器安装程序之后设立的网络服务器，本质上属于网络盗版，与在互联网上共享未经授权的版权作品本质差别不大。</p>
+<p>DNS安全是网络安全的第一道大门。</p>
+<p>2017年7月《关键信息基础设施安全保护条例（征求意见稿）》</p>
+<p>狭义上说，网络白产是围绕漏洞评估、发现与响应工作而形成的。其中漏洞挖掘技术是白产的核心技术，漏洞防护是白产快反的高级手段。</p>
+<p>补天漏洞响应平台</p>
+<p>糊掉问题的本源，风险是与威胁相对应的概念，在排优算法中加入威胁相关的数据，可以极大缩减处理漏洞的数量，优化漏洞排优算法。在漏洞排优中使用威胁情报和机器学习算法。</p>
+<p>可利用的威胁情报及上下文数据包括：观测到的语漏洞相关的安全事件数量、公开已获得的漏洞利用代码、已知的恶意代码家族或攻击工具套件使用的漏洞、检测到相关的组织受到类似的攻击等。这些情报和数据在未来将越来越重要。</p>
+<p>2018.05.25欧盟发布GDPR通用数据保护条例正式实施，目的是就规范并约束企业对用户个人数据的收集和使用，加强对欧盟境内居民的个人数据和隐私保护。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/07/20/%E6%BC%8F%E6%B4%9E%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/ytytytytyt6.github.io/2020/07/20/%E6%BC%8F%E6%B4%9E%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/" itemprop="url">漏洞基础概念</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-20T13:10:56+08:00">
+                2020-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>漏洞相关概念**</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">熟悉基本概念和原理（二进制漏洞基本原理、漏洞类型、漏洞利用方法、常见漏洞挖掘、shellcode编写）。</span><br><span class="line">通过关键字（栈溢出、堆溢出、整数溢出、UAF、double-free、shellcode）进行Google&#x2F;SecWiki等了解基本概念；</span><br><span class="line">阅读《Q版本缓冲区溢出》《0day漏洞挖掘》等书籍，学习二进制漏洞形成的基本原理和基本的利用方法，并进行实践操作；</span><br><span class="line">学习《加密与解密》中部分章节，熟悉Windows系统的重要数据结构、函数传参方法以及PE文件结构等基础知识。</span><br></pre></td></tr></table></figure>
@@ -674,6 +1424,8 @@
 <p>定义函数指针，指向函数的参数是字符串，返回值是空。该指针的作用是指向system函数，然后在后面方便调用；</p>
 <p>加载msvcrt.dll这个动态链接库，动态链接库的句柄赋给LibHandle。获得句柄后，我们再使用GetProcAddress获得system的真实地址，使用真实地址调用system函数。执行该语句后，ProcAdd为指向system函数的指针。</p>
 
+          
+        
       
     </div>
     
@@ -690,32 +1442,12 @@
       
 
       
-      
+
       
 
       
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/ytytytytyt6.github.io/2020/05/28/%E2%80%9C%E6%BC%8F%E6%B4%9E%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90%E2%80%9D/" rel="next" title="“漏洞样本分析”">
-                <i class="fa fa-chevron-left"></i> “漏洞样本分析”
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/ytytytytyt6.github.io/2020/07/20/%E6%BC%8F%E6%B4%9E%E7%AC%94%E8%AE%B0/" rel="prev" title="漏洞笔记">
-                漏洞笔记 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
       
-
-      
+        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -725,11 +1457,263 @@
   </article>
 
 
+    
+      
 
-    <div class="post-spread">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/05/28/%E2%80%9C%E6%BC%8F%E6%B4%9E%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90%E2%80%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/ytytytytyt6.github.io/2020/05/28/%E2%80%9C%E6%BC%8F%E6%B4%9E%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90%E2%80%9D/" itemprop="url">“漏洞样本分析”</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-28T21:57:39+08:00">
+                2020-05-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
       
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/02/04/wireshark%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/ytytytytyt6.github.io/2020/02/04/wireshark%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/" itemprop="url">wireshark学习实战 </a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-04T09:49:33+08:00">
+                2020-02-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>学习链接：<br><a href="https://unit42.paloaltonetworks.com/unit42-customizing-wireshark-changing-column-display/" target="_blank" rel="noopener">https://unit42.paloaltonetworks.com/unit42-customizing-wireshark-changing-column-display/</a><br><a href="https://unit42.paloaltonetworks.com/using-wireshark-identifying-hosts-and-users/" target="_blank" rel="noopener">https://unit42.paloaltonetworks.com/using-wireshark-identifying-hosts-and-users/</a><br><a href="https://unit42.paloaltonetworks.com/using-wireshark-display-filter-expressions/" target="_blank" rel="noopener">https://unit42.paloaltonetworks.com/using-wireshark-display-filter-expressions/</a><br>以上系列文章作者是Palo Alto Networks 42部门的威胁情报分析师布拉德·邓肯，他经常使用Wireshark审查由恶意软件样本生成的流量。</p>
+<h2 id="1-wireshark可以自定义列显示"><a href="#1-wireshark可以自定义列显示" class="headerlink" title="1.wireshark可以自定义列显示"></a><strong>1.wireshark可以自定义列显示</strong></h2><!-- Wireshark的默认列为：
+No. -pcap开头的帧号。第一帧始终为1。
+time --秒数从pcap的第一帧降低到纳秒。第一帧始终为0.000000。
+Source --源地址，通常是IPv4，IPv6或以太网地址。
+Destination --目标地址，通常是IPv4，IPv6或以太网地址。
+Protocol --以太网帧，IP数据包或TCP段（ARP，DNS，TCP，HTTP等）中使用的协议。
+Length --帧的长度（以字节为单位）。 -->
+<p>流量分析通常需要使用UTC的日期和时间、源IP和源端口、目标IP和目标端口、HTTP主机、HTTPS服务器、信息。为了这个目的需要进行隐藏列、移除列、添加列、更改UTC时间、自定义列操作。<br>http.request或ssl.handshake.type == 1过滤会有更好的理解。</p>
+<h2 id="2-使用Wireshark：识别主机和用户"><a href="#2-使用Wireshark：识别主机和用户" class="headerlink" title="2.使用Wireshark：识别主机和用户"></a><strong>2.使用Wireshark：识别主机和用户</strong></h2><h5 id="来自DHCP流量的主机信息"><a href="#来自DHCP流量的主机信息" class="headerlink" title="来自DHCP流量的主机信息"></a>来自DHCP流量的主机信息</h5><p>三个标识符：mac地址，<a href="https://en.wikipedia.org/wiki/IP_address" target="_blank" rel="noopener">IP地址</a>和<a href="https://en.wikipedia.org/wiki/Hostname" target="_blank" rel="noopener">主机名</a>。一般是通过ip地址寻找关联的mac地址和主机</p>
+<p><a href="https://wiki.wireshark.org/DHCP" target="_blank" rel="noopener">DHCP</a>或<a href="https://wiki.wireshark.org/NetBIOS/NBNS" target="_blank" rel="noopener">NBNS</a>。DHCP流量可以帮助识别几乎所有连接到网络的计算机的主机。NBNS流量主要由运行Microsoft Windows的计算机或运行MacOS的Apple主机生成。</p>
+<h5 id="来自NetBIOS名称服务（NBNS）流量的主机信息"><a href="#来自NetBIOS名称服务（NBNS）流量的主机信息" class="headerlink" title="来自NetBIOS名称服务（NBNS）流量的主机信息"></a>来自NetBIOS名称服务（NBNS）流量的主机信息</h5><h5 id="来自HTTP流量的设备模型和操作系统"><a href="#来自HTTP流量的设备模型和操作系统" class="headerlink" title="来自HTTP流量的设备模型和操作系统"></a>来自HTTP流量的设备模型和操作系统</h5><h5 id="Windows用户帐户来自Kerberos流量"><a href="#Windows用户帐户来自Kerberos流量" class="headerlink" title="Windows用户帐户来自Kerberos流量"></a>Windows用户帐户来自Kerberos流量</h5>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/ytytytytyt6.github.io/page/2/">&lt;i class&#x3D;&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/ytytytytyt6.github.io/">1</a><a class="page-number" href="/ytytytytyt6.github.io/page/2/">2</a><span class="page-number current">3</span>
+  </nav>
+
 
 
           </div>
@@ -737,10 +1721,6 @@
 
 
           
-
-  
-
-
 
         </div>
         
@@ -761,17 +1741,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -822,22 +1793,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-熟悉基本概念和原理（二进制漏洞基本原理、漏洞类型、漏洞利用方法、常见漏洞挖掘、shellcode编写）"><span class="nav-number">1.</span> <span class="nav-text">0x01 熟悉基本概念和原理（二进制漏洞基本原理、漏洞类型、漏洞利用方法、常见漏洞挖掘、shellcode编写）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通用fuzz法进行漏洞挖掘："><span class="nav-number"></span> <span class="nav-text">通用fuzz法进行漏洞挖掘：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#智能fuzz法进行漏洞挖掘"><span class="nav-number"></span> <span class="nav-text">智能fuzz法进行漏洞挖掘</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#验证int-0x80-调用"><span class="nav-number">0.1.</span> <span class="nav-text">验证int 0x80 调用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编写汇编源码"><span class="nav-number">1.</span> <span class="nav-text">编写汇编源码</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -971,10 +1926,6 @@
   
 
   
-  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/ytytytytyt6.github.io/js/src/post-details.js?v=5.1.4"></script>
-
-
 
   
 
