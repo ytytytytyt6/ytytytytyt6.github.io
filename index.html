@@ -221,6 +221,230 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/04/2020-12-31%20-%20PCAPS%20FOR%20AN%20ISC%20DIARY%20(TRAFFIC%20ANALYSIS%20QUIZ)%20/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/ytytytytyt6.github.io/2021/04/04/2020-12-31%20-%20PCAPS%20FOR%20AN%20ISC%20DIARY%20(TRAFFIC%20ANALYSIS%20QUIZ)%20/" itemprop="url">2020-12-31 - PCAPS FOR AN ISC DIARY (TRAFFIC ANALYSIS QUIZ) </a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-04T11:43:00+08:00">
+                2021-04-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="pcap1"><a href="#pcap1" class="headerlink" title="pcap1"></a>pcap1</h2><p> an Ursnif (Gozi/ISFB) infection. Some IOCs from the pcap follow :</p>
+<p>47.241.19.44    443    fersite24.xyz     TLSv1.2    </p>
+<p>193.56.255.166    80 madorigum.top        GET /images/images/[long base64 string with backslashes and underscores].avi </p>
+<p>45.11.180.154    80 -  <strong>45.11.180.154</strong>-    GET /vnc32.rar </p>
+<p>45.11.180.154    80 -  <strong>45.11.180.154</strong>-    GET /vnc64.rar </p>
+<p>45.11.180.154    80 -  <strong>45.11.180.154</strong>-    GET /gr32.rar </p>
+<p>45.11.180.154    80 -  <strong>45.11.180.154</strong>-    GET /gr64.rar         </p>
+<p>176.10.118.191    80 -  176.10.118.191-    GET /lechi/client.rar</p>
+<h3 id="ssl-handshake-type-1-and-tcp-port-443"><a href="#ssl-handshake-type-1-and-tcp-port-443" class="headerlink" title="ssl.handshake.type == 1 and tcp.port ==443"></a>ssl.handshake.type == 1 and tcp.port ==443</h3><p>82.118.22.23    443    <strong>-  82.118.22.23 -</strong> TLSv1.2    </p>
+<p>45.141.84.244    443    <strong>- 45.141.84.244 -</strong> TLSv1.2</p>
+<p>45.141.84.247    443    <strong>- 45.141.84.247 -</strong> TLSv1.2</p>
+<p>![image-20210404110713330](/Users/yueting/Library/Application Support/typora-user-images/image-20210404110713330.png)</p>
+<ul>
+<li>• 8.253.197.120 port 443 - attempted TCP connections </li>
+<li>• 8.253.164.240 port 443 - attempted TCP connections </li>
+<li>• 8.242.77.126 port 443 - attempted TCP connections </li>
+<li>• 8.242.77.254 port 443 - attempted TCP connections </li>
+</ul>
+<p>![image-20210404103528462](/Users/yueting/Library/Application Support/typora-user-images/image-20210404103528462.png)</p>
+<p>证书不对</p>
+<p>![image-20210404103618913](/Users/yueting/Library/Application Support/typora-user-images/image-20210404103618913.png)</p>
+<p>![image-20210404103730253](/Users/yueting/Library/Application Support/typora-user-images/image-20210404103730253.png)</p>
+<p>![image-20210404103757608](/Users/yueting/Library/Application Support/typora-user-images/image-20210404103757608.png)</p>
+<p>![image-20210404103904774](/Users/yueting/Library/Application Support/typora-user-images/image-20210404103904774.png)</p>
+<p>urnisf</p>
+<h2 id="pcap2"><a href="#pcap2" class="headerlink" title="pcap2"></a>pcap2</h2><p>Trickbot infection in an Active Directory environment. Some IOCs follow: </p>
+<p>43.240.64.184    80    cahrhomeopathy.com    GET /diego.png HTTP/1.1         </p>
+<p>216.239.32.21    80    ipecho.net        GET /plain HTTP/1.1         </p>
+<p>45.141.59.212    443        45.141.59.212:443        POST /rob23/DESKTOP-3KI6Y6G_W10019042.A4801B519365B27E563BF48CAE82BD58/83/ HTTP/1.1 186.47.209.222    443    186.47.209.222:443    POST /rob23/DESKTOP-3KI6Y6G_W10019042.A4801B519365B27E563BF48CAE82BD58/90 HTTP/1.1 </p>
+<p>45.141.59.212    443    45.141.59.212:443    POST /rob23/DESKTOP-3KI6Y6G_W10019042.A4801B519365B27E563BF48CAE82BD58/81/ HTTP/1.1 </p>
+<p>45.141.59.212    443        45.141.59.212:443        POST /rob23/DESKTOP-3KI6Y6G_W10019042.A4801B519365B27E563BF48CAE82BD58/83/ HTTP/1.1 </p>
+<p>196.45.140.146    449    Trickbot infection https traffic    </p>
+<p>23.160.192.125    447    Trickbot infection https traffic</p>
+<p>118.69.133.4    447    Trickbot infection https traffic    </p>
+<p>diego.png</p>
+<p>sha256:da1ae69acf1b97bfac587addc9266155342bf8f2a7a80e0d09df9a577c39f7f9    </p>
+<p>文件位置: <a href="http://cahrhomeopathy.com/diego.png" target="_blank" rel="noopener">http://cahrhomeopathy.com/diego.png</a>         </p>
+<p>文件描述:diego.png: PE32 executable (DLL) (console) Intel 80386, for MS Windows        </p>
+<p>用户名:smalls.hammish</p>
+<p>主机名:DESKTOP-3KI6Y6G</p>
+<p>![image-20210404104011918](/Users/yueting/Library/Application Support/typora-user-images/image-20210404104011918.png)</p>
+<p>![image-20210404104039950](/Users/yueting/Library/Application Support/typora-user-images/image-20210404104039950.png)</p>
+<p>![image-20210404104202466](/Users/yueting/Library/Application Support/typora-user-images/image-20210404104202466.png)![image-20210404104251830](/Users/yueting/Library/Application Support/typora-user-images/image-20210404104251830.png)</p>
+<p>![image-20210404104334581](/Users/yueting/Library/Application Support/typora-user-images/image-20210404104334581.png)</p>
+<h3 id="pcap3"><a href="#pcap3" class="headerlink" title="pcap3"></a>pcap3</h3><p>Emotet infection. Some IOCs follow: </p>
+<p>185.66.41.127    80    - haciaelsup.com -    GET /wp-includes/fhPe00/             </p>
+<p>152.170.79.100    80    152.170.79.100    POST /4uswe5623zhj321li/urers0/whbjlc1xfev4bh1xgws/s6aozj8tgc3nz9g0b5k/         46.101.230.194    443    46.101.230.194:443    POST /4lv7d4p9kal989pta2a/xnt917nm5u95c1/al91gitzqwg2/jfbtyeyhed634l4r/ </p>
+<p>![image-20210404104409143](/Users/yueting/Library/Application Support/typora-user-images/image-20210404104409143.png)</p>
+<p>![image-20210404104430244](/Users/yueting/Library/Application Support/typora-user-images/image-20210404104430244.png)</p>
+<p>![image-20210404104509856](/Users/yueting/Library/Application Support/typora-user-images/image-20210404104509856.png)</p>
+<p>![image-20210404104543407](/Users/yueting/Library/Application Support/typora-user-images/image-20210404104543407.png)</p>
+<h3 id="pcap4"><a href="#pcap4" class="headerlink" title="pcap4"></a>pcap4</h3><p>it contains traffic from a Dridex infection. Some IOCs are: </p>
+<p>203.170.83.97    443        <a href="http://www.altavidatechnology.com" target="_blank" rel="noopener">www.altavidatechnology.com</a>     TLSv1.2    </p>
+<p>172.86.186.22    3889    TLSv1</p>
+<p>103.244.206.74    33443    TLSv1</p>
+<p>46.105.131.78    14431    尝试TCP连接</p>
+<p>![image-20210404115120114](/Users/yueting/Library/Application Support/typora-user-images/image-20210404115120114.png)        </p>
+<p>NOTE: At least 50 different Word documents submitted to VirusTotal as early as 2020-12-17 contact this domain, and the associated URL might have been: </p>
+<p><a href="https://www.altavidatechnology.com/fonts/fontawesome/css/fyxghuk7e1e.php" target="_blank" rel="noopener">https://www.altavidatechnology.com/fonts/fontawesome/css/fyxghuk7e1e.php</a> </p>
+<p>![image-20210404104620277](/Users/yueting/Library/Application Support/typora-user-images/image-20210404104620277.png)</p>
+<p>![image-20210404104653795](/Users/yueting/Library/Application Support/typora-user-images/image-20210404104653795.png)</p>
+<p>![image-20210404104734756](/Users/yueting/Library/Application Support/typora-user-images/image-20210404104734756.png)</p>
+<h3 id="pcap5"><a href="#pcap5" class="headerlink" title="pcap5"></a>pcap5</h3><p>The fifth pcap contains traffic from a Hancitor infection with Ficker Stealer and Cobalt Strike (Beacon). Some of the IOCs are: </p>
+<p>返回一个宏word文件包含一个web页面:</p>
+<p>94.237.48.82    80    clientpreview.site        GET /carat.php </p>
+<p>​    Hancitor流量:</p>
+<p>54.225.169.28    80    api.ipify.org        GET /     </p>
+<p>91.215.170.225    80    peasseal.com    POST /8/forum.php </p>
+<p>Ficker Stealer流量:</p>
+<p>8.208.96.63    80    trustpilot-scam.com            GET /32453.exe    </p>
+<ul>
+<li>185.18.52.47 port 80 - <strong><em>otsoebabe.com\</em></strong> - TCP traffic (not HTTP) </li>
+</ul>
+<p>12436    2020-12-17 17:20:41    10.12.17.17    53    <strong>10.12.17.101</strong>    61944    DNS    Standard query response 0x2b52 A <strong>otsoebabe.com</strong> A 185.18.52.47    </p>
+<p>Cobalt Strike (Beacon): </p>
+<p>216.108.231.142    8080    216.108.231.142:8080        GET /9aZh </p>
+<p>216.108.231.142    8080    216.108.231.142:8080 GET /push </p>
+<p>8.208.96.63    80    trustpilot-scam.com    GET /1612.bin HTTP/1.1             </p>
+<p>8.208.96.63    80    trustpilot-scam.com    GET /1612s.bin HTTP/1.1     </p>
+<p>216.108.231.142    4443    HTTPS traffic for Cobalt STrike(Beacon)                </p>
+<p>有三点需要注意:</p>
+<p>1.保存clientpreview.site,打开会返回一个word宏文件,在隔离的环境中运行会得到一个DLL文件</p>
+<p>2.32453.exe文件</p>
+<p>3.主机名和用户名</p>
+<p>LAPTOP-J2R58U2Q</p>
+<p>gandalf.thegrey</p>
+<p>![image-20210404104824541](/Users/yueting/Library/Application Support/typora-user-images/image-20210404104824541.png)</p>
+<p>![image-20210404104911268](/Users/yueting/Library/Application Support/typora-user-images/image-20210404104911268.png)</p>
+<h2 id="pcap6"><a href="#pcap6" class="headerlink" title="pcap6"></a>pcap6</h2><p>185.183.161.128    80    lleft5.com GET /images/[longstring] </p>
+<p>3.217.178.33    443    instagram.com    TLSv1.2    </p>
+<p>31.13.93.174    443        <a href="http://www.instagram.com" target="_blank" rel="noopener">www.instagram.com</a>    TLSv1.2    </p>
+<p>104.244.42.129    443    twitter.com TLSv1.2    </p>
+<p>152.199.24.192    443    <a href="http://www.tumblr.com" target="_blank" rel="noopener">www.tumblr.com</a> TLSv1.2    </p>
+<p>188.166.126.25    443    premierre.cyou TLSv1.2    </p>
+<p>31.13.93.35    443    facebook.com TLSv1.2</p>
+<p>157.240.25.35    443        <a href="http://www.facebook.com" target="_blank" rel="noopener">www.facebook.com</a>     TLSv1.2</p>
+<p>139.59.101.19    443    phillifighters.cyou     TLSv1.2    </p>
+<p>139.59.101.19    443    likishino.pw     TLSv1.2    </p>
+<p>139.59.101.19    443 aviaaero.pw        TLSv1.2</p>
+<p>注意:</p>
+<ol>
+<li>Lleft5.com返回一个dll文件</li>
+</ol>
+<p>![image-20210404104956828](/Users/yueting/Library/Application Support/typora-user-images/image-20210404104956828.png)</p>
+<p>![image-20210404105012753](/Users/yueting/Library/Application Support/typora-user-images/image-20210404105012753.png)</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/04/2020-12-03%20-%20PCAP%20AND%20INFO%20FOR%20AN%20ISC%20DIARY%20(TRAFFIC%20ANALYSIS%20QUIZ)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -836,178 +1060,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/04/2019-01-28%20-%20TRAFFIC%20ANALYSIS%20EXERCISE%20-%20TIMBERSHADE%202/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="万俟思睿">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="思睿's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/ytytytytyt6.github.io/2021/04/04/2019-01-28%20-%20TRAFFIC%20ANALYSIS%20EXERCISE%20-%20TIMBERSHADE%202/" itemprop="url">2019-01-28 - TRAFFIC ANALYSIS EXERCISE - TIMBERSHADE 2</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-04T00:20:58+08:00">
-                2021-04-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="2019-01-28-TRAFFIC-ANALYSIS-EXERCISE-TIMBERSHADE"><a href="#2019-01-28-TRAFFIC-ANALYSIS-EXERCISE-TIMBERSHADE" class="headerlink" title="2019-01-28 - TRAFFIC ANALYSIS EXERCISE - TIMBERSHADE"></a><a href="https://www.malware-traffic-analysis.net/2019/01/28/index.html" target="_blank" rel="noopener">2019-01-28 - TRAFFIC ANALYSIS EXERCISE - TIMBERSHADE</a></h2><h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://www.malware-traffic-analysis.net/2019/01/28/2019-01-28-traffic-analysis-exercise-image-01.jpg" alt="img"></h2><h2 id="SCENARIO"><a href="#SCENARIO" class="headerlink" title="SCENARIO"></a>SCENARIO</h2><p>LAN segment data:</p>
-<ul>
-<li>LAN segment range: 172.17.8.0/24 (172.17.8.0 through 172.17.8.255)</li>
-<li>Domain: timbershade.info</li>
-<li>Domain controller: 172.17.8.2 - Timbershade-DC</li>
-<li>LAN segment gateway: 172.17.8.1</li>
-<li>LAN segment broadcast address: 172.17.8.255</li>
-</ul>
-<h2 id="YOUR-TASK"><a href="#YOUR-TASK" class="headerlink" title="YOUR TASK"></a>YOUR TASK</h2><p>Answer the following questions:</p>
-<ul>
-<li>What is the IP address of the infected Windows host?</li>
-<li>What is the MAC address of the infected Windows host</li>
-<li>What is the host name of the infected Windows host</li>
-<li>What is the Windows user account name for the infected Windows host</li>
-<li>What is the SHA256 file hash of the Windows executable file sent to the infected Windows host?</li>
-<li>Based on the IDS alerts, what type of infection is this?</li>
-</ul>
-<h2 id="ANSWERS"><a href="#ANSWERS" class="headerlink" title="ANSWERS"></a>ANSWERS</h2><ul>
-<li>Click <a href="https://www.malware-traffic-analysis.net/2019/01/28/page2.html" target="_blank" rel="noopener">here</a> for the answers.</li>
-</ul>
-<ul>
-<li><h2 id="What-is-the-IP-address-of-the-infected-Windows-host"><a href="#What-is-the-IP-address-of-the-infected-Windows-host" class="headerlink" title="What is the IP address of the infected Windows host?"></a>What is the IP address of the infected Windows host?</h2></li>
-</ul>
-<p>172.17.8.109</p>
-<ul>
-<li><h2 id="What-is-the-MAC-address-of-the-infected-Windows-host"><a href="#What-is-the-MAC-address-of-the-infected-Windows-host" class="headerlink" title="What is the MAC address of the infected Windows host"></a>What is the MAC address of the infected Windows host</h2></li>
-</ul>
-<p>Dell_d4:15:ca (14:fe:b5:d4:15:ca)</p>
-<ul>
-<li><h2 id="What-is-the-host-name-of-the-infected-Windows-host"><a href="#What-is-the-host-name-of-the-infected-Windows-host" class="headerlink" title="What is the host name of the infected Windows host"></a>What is the host name of the infected Windows host</h2></li>
-</ul>
-<p>2019-01-28 21:44:25    172.17.8.2    88    172.17.8.109    49189    KRB5            <strong>DUNN-WINDOWS-PC$</strong>    TGS-REP</p>
-<ul>
-<li><h2 id="What-is-the-Windows-user-account-name-for-the-infected-Windows-host"><a href="#What-is-the-Windows-user-account-name-for-the-infected-Windows-host" class="headerlink" title="What is the Windows user account name for the infected Windows host"></a>What is the Windows user account name for the infected Windows host</h2></li>
-</ul>
-<p>2019-01-28 21:48:50    172.17.8.109    49194    172.17.8.2    88    KRB5            <strong>margaret.dunn</strong>    AS-REQ</p>
-<ul>
-<li><h2 id="What-is-the-SHA256-file-hash-of-the-Windows-executable-file-sent-to-the-infected-Windows-host"><a href="#What-is-the-SHA256-file-hash-of-the-Windows-executable-file-sent-to-the-infected-Windows-host" class="headerlink" title="What is the SHA256 file hash of the Windows executable file sent to the infected Windows host?"></a>What is the SHA256 file hash of the Windows executable file sent to the infected Windows host?</h2></li>
-<li><p>9f6e3e65aedca997c6445329663bd1d279392a34cfda7d1b56461eb41641fa08</p>
-</li>
-</ul>
-<p>![image-20210404001105754](/Users/yueting/Library/Application Support/typora-user-images/image-20210404001105754.png)</p>
-<ul>
-<li><h2 id="Based-on-the-IDS-alerts-what-type-of-infection-is-this"><a href="#Based-on-the-IDS-alerts-what-type-of-infection-is-this" class="headerlink" title="Based on the IDS alerts, what type of infection is this?"></a>Based on the IDS alerts, what type of infection is this?</h2></li>
-</ul>
-<p>Dridex</p>
-<h2 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h2><p>如果您在Wireshark中查看pcap，请使用“统计”菜单选项进行“对话”，如下图所示。<br>![image-20210404001359954](/Users/yueting/Library/Application Support/typora-user-images/image-20210404001359954.png)<br>上图所示：统计信息→会话<br>我们已经知道LAN数据用于172.17.8.0/24地址空间，并且仅列出了一个IP地址，它不是域控制器（172.17.8.2）或广播地址（172.17.8.255），即172.17.8.109。此外，警报文件仅显示172.17.8.109的警报。</p>
-<p>![image-20210404001500901](/Users/yueting/Library/Application Support/typora-user-images/image-20210404001500901.png)上图所示：寻找172.17.8.0/24地址。</p>
-<p>您可以通过查看DHCP流量（过滤：bootp）或NBNS流量（过滤：nbns），将IP地址与MAC地址和主机名相关联，如下图所示。</p>
-<p>上图所示：筛选DHCP流量（bootp）以查找主机名。<br>![image-20210404001712784](/Users/yueting/Library/Application Support/typora-user-images/image-20210404001712784.png)<br>上图所示：过滤NBNS流量以查找主机名。<br>要查找Windows用户帐户名，请使用以下Wireshark筛选器：<br><strong>kerberos.CNameString and !(kerberos.CNameString contains $)</strong><br>注意：您应该使用最新版本的Wireshark来执行此操作（我认为是2.2版和更高版本）。然后继续工作，在帧详细信息中找到CNameString值，如下图所示。<br>![image-20210404001909534](/Users/yueting/Library/Application Support/typora-user-images/image-20210404001909534.png)<br>上图所示：查找Windows用户帐户名。<br>根据IDS警报，这很可能是Dridex感染。警报列表以以下几种警报结尾：<strong>ET TROJAN ABUSE.CH SSL Blacklist Malicious SSL certificate detected (Dridex)</strong> </p>
-<p><em>Shown above: Alerts from Sguil on Security Onion using the EmergingThreats (ET) ruleset.</em> </p>
-<p>上图所示：使用EmergingThreats（ET）规则集的来自Sguil的关于安全性洋葱的警报。</p>
-<p>这与我见过的其他Dridex感染相吻合。在这些Dridex警报之前，有条目指示Windows EXE或DLL文件是通过TCP端口8000从91.121.30.159下载的。可以通过使用菜单路径文件→导出对象→HTTP从此pcap导出此可执行文件，如下图所示。 。<br>如上所示：使用Wireshark从HTTP通信中导出对象。<br>上图所示：从HTTP流量中导出actiV.bin。<br>在导出文件之前，如何确定这是Windows可执行文件？遵循该HTTP请求的TCP流，它显示服务器返回可执行文件。 Windows可执行文件的指示符如下图所示。<br>![image-20210404002053645](/Users/yueting/Library/Application Support/typora-user-images/image-20210404002053645.png)<br>上图所示：跟随HTTP请求的TCP流到达91.121.30.169。<br>上图所示：您正在处理EXE或DLL文件的指示器。<br>从pcap中提取EXE后，可以将其提交给VirusTotal以获取有关它的更多信息，例如SHA256哈希。 VirusTotal链接：这里。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/04/2019-01-28%20-%20TRAFFIC%20ANALYSIS%20EXERCISE%20-%20TIMBERSHADE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1180,7 +1232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/03/eiest/">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/03/EITest%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="万俟思睿">
@@ -1199,7 +1251,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/ytytytytyt6.github.io/2021/04/03/eiest/" itemprop="url">eiest</a></h1>
+                <a class="post-title-link" href="/ytytytytyt6.github.io/2021/04/03/EITest%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/" itemprop="url">EITest技术博客</a></h1>
         
 
         <div class="post-meta">
