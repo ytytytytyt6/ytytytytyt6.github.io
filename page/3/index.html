@@ -221,6 +221,150 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/07/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB07-30/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/ytytytytyt6.github.io/2020/07/30/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB07-30/" itemprop="url">demo.md</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-30T09:34:46+08:00">
+                2020-07-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Automated Ransomware Behavior Analysis: Pattern Extraction and Early Detection Preprint</p>
+<ol>
+<li><h3 id="论文摘要"><a href="#论文摘要" class="headerlink" title="论文摘要"></a><strong>论文摘要</strong></h3><p>使用cuckoo sandbox分析得到的日志，三种机器学习方法（TF-IDF (term frequencyinverse document frequency), Fisher’s LDA (linear discriminant analysis) and ET (extra trees/extremely randomized trees)）实现了恶意代码模式提取和早期检测工具。可以实现三点：1.在沙箱环境中分析新发现的恶意代码样本并生成动态分析报告（主机日志）；2.自动提取与大数量未受攻击的主机日志相比恶意代码导致的事件序列，并且相关的少数日志从受到潜在多态恶意代码产生的；3.排列最具有辨识性的特征（独特模式）4.允许操作者可视化特征以及它们之间的关系用于取证。</p>
+<p>整个实验数据：7个不同家族的勒索病毒WannaCry, DBGer, Cerber, Defray, GandCrab, Locky, and nRansom</p>
+<p>实验结果：tf-idf最优，et时间效率 健壮</p>
+</li>
+<li><h3 id="论文结论"><a href="#论文结论" class="headerlink" title="论文结论"></a><strong>论文结论</strong></h3><p>![image-20200730100608003](/Users/yueting/Library/Application Support/typora-user-images/image-20200730100608003.png)</p>
+</li>
+<li><h3 id="论文贡献"><a href="#论文贡献" class="headerlink" title="论文贡献"></a><strong>论文贡献</strong></h3><p>1.使用cuckoo日志分析勒索病毒并且从主机行为报告中生成特征。</p>
+<p>2.提取勒索病毒日志文件（大部分被感染和潜在来自未被感染的大量的ambient报告）产生的特征（事件序列）</p>
+<p>3.排序最具有辨识性的特征并且去识别恶意代码行为在数据被勒索病毒加密之前。</p>
+<p>4.创建图可视化et模型用于取证，便于操作者可视化独特模式及其关系。</p>
+</li>
+<li><h3 id="achievements"><a href="#achievements" class="headerlink" title="achievements"></a><strong>achievements</strong></h3><p>1。参考文献8 只考虑特征提取 tf-idf 一种勒索病毒</p>
+<p>2.参考文献16 作者应用了序列模式挖掘用于找到最大频率模式msp 对于四种勒索病毒攻击，不同于本文中直接从主机文件中生成特征的方法，他们的方法总结了使用不同类型msp的行为。使用四种学习分类器，发现注册表的msp是最重要的序列在检测时可以达到99%。</p>
+<p>3.27将主机日志文件嵌入到语义上有意义的度量空间，表示用于构建勒索病毒行为签名。用于提前检测。</p>
+<p>4.28 REDFISH——一种勒索病毒检测算法，识别勒索病毒行为 当尝试加密共享文件的时候。基于被监视的smb流量分析，使用3个流量统计参数检测恶意行为。作者使用了19种勒索病毒家族测试该算法，均小于20秒。很高的检测率，但是不能在开始加密之前进行检测。</p>
+<p>5.29全面的分析和调查</p>
+<p>6.augment paths of specific files to emphasize their names only. For example, C:\Windows\system32\ \rsaenh.dll is converted to a string “c:..rsaenh.dll”.</p>
+</li>
+</ol>
+<ol start="5">
+<li><h3 id="启示和思考"><a href="#启示和思考" class="headerlink" title="启示和思考"></a><strong>启示和思考</strong></h3><p>1.主机日志是什么？Cuckoo analysis report (raw behavior log) </p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2020/07/21/cuckoo2mist/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2022,7 +2166,7 @@ Length --帧的长度（以字节为单位）。 -->
               
                 <a href="/ytytytytyt6.github.io/archives">
               
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
