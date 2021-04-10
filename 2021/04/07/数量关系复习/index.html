@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/ytytytytyt6.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/ytytytytyt6.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/ytytytytyt6.github.io/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/ytytytytyt6.github.io/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/ytytytytyt6.github.io/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/ytytytytyt6.github.io/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/ytytytytyt6.github.io/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="0x01周期循环+日期星期123周期循环的解题实质：去掉周期看余数①周期循环——推测某一位的情况②和日期星期相关的周期问题  12平年365天——52周零一天 闰年366天——52周零两天每五天 5天 每隔五天 6天  123求解所求日期是已知日期的第多少天，直接做差即可 先粗算 再纠正2月最后一天是周三这种情况——3月第一天是周四，避免讨论2月是28还是29星期类的 7、7、7、7、2或者其他形">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数量关系复习">
+<meta property="og:url" content="https://ytytytytyt6.github.io/2021/04/07/%E6%95%B0%E9%87%8F%E5%85%B3%E7%B3%BB%E5%A4%8D%E4%B9%A0/index.html">
+<meta property="og:site_name" content="思睿&#39;s Blog">
+<meta property="og:description" content="0x01周期循环+日期星期123周期循环的解题实质：去掉周期看余数①周期循环——推测某一位的情况②和日期星期相关的周期问题  12平年365天——52周零一天 闰年366天——52周零两天每五天 5天 每隔五天 6天  123求解所求日期是已知日期的第多少天，直接做差即可 先粗算 再纠正2月最后一天是周三这种情况——3月第一天是周四，避免讨论2月是28还是29星期类的 7、7、7、7、2或者其他形">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-04-07T08:08:55.308Z">
+<meta property="article:modified_time" content="2021-04-07T10:49:43.638Z">
+<meta property="article:author" content="万俟思睿">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/ytytytytyt6.github.io/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ytytytytyt6.github.io/2021/04/07/数量关系复习/"/>
+
+
+
+
+
+  <title>数量关系复习 | 思睿's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/ytytytytyt6.github.io/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">思睿's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/ytytytytyt6.github.io/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ytytytytyt6.github.io/ytytytytyt6.github.io/2021/04/07/%E6%95%B0%E9%87%8F%E5%85%B3%E7%B3%BB%E5%A4%8D%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="万俟思睿">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/ytytytytyt6.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="思睿's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数量关系复习</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-07T16:08:55+08:00">
+                2021-04-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="0x01周期循环-日期星期"><a href="#0x01周期循环-日期星期" class="headerlink" title="0x01周期循环+日期星期"></a>0x01周期循环+日期星期</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">周期循环的解题实质：去掉周期看余数</span><br><span class="line">①周期循环——推测某一位的情况</span><br><span class="line">②和日期星期相关的周期问题</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">平年365天——52周零一天 闰年366天——52周零两天</span><br><span class="line">每五天 5天 每隔五天 6天</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">求解所求日期是已知日期的第多少天，直接做差即可 先粗算 再纠正</span><br><span class="line">2月最后一天是周三这种情况——3月第一天是周四，避免讨论2月是28还是29</span><br><span class="line">星期类的 7、7、7、7、2或者其他形式推导</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x02牛吃草"><a href="#0x02牛吃草" class="headerlink" title="0x02牛吃草"></a>0x02牛吃草</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">白吃牛🐂问题：</span><br><span class="line">白吃牛 &#x3D; 总量差&#x2F;时间差</span><br><span class="line">总量 &#x3D; （牛-白吃牛）X 时间 #需要把白吃牛的部分抵消掉</span><br><span class="line">牛-白吃牛即为干活牛</span><br><span class="line">给定时间内完成的牛  &#x3D;总量&#x2F;时间+白吃牛</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x03容斥原理"><a href="#0x03容斥原理" class="headerlink" title="0x03容斥原理"></a>0x03容斥原理</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">原则：无遗漏无重复</span><br><span class="line">全部个数-不符合个数&#x3D;各部分和-重复部分</span><br><span class="line">【思路：先全部计算，再将重复部分减去，保证每人被计数一次】</span><br><span class="line">A+B+C-b-2c&#x3D;总数 b为参加两项 c为参加三项</span><br><span class="line">符合A和B不等于只符合A和B</span><br><span class="line">重复减去 减多加回</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x04-排列组合"><a href="#0x04-排列组合" class="headerlink" title="0x04 排列组合"></a>0x04 排列组合</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">注意枚举的时候不要遗漏</span><br><span class="line">八种特殊情形——识别</span><br><span class="line">1.相邻问题：总元素数量改变，内部排序</span><br><span class="line">2不相邻问题：插空法 无关的构成空位 有要求的插入</span><br><span class="line">3定序问题：没有顺序&#x3D;顺序一定 注意和不相邻问题易混</span><br><span class="line">4.插板法：元素相同，每份至少分得一个元素-----多减少加</span><br><span class="line">	6个相同的  3个盒子 每盒至少1个 预留1个 c5（2）</span><br><span class="line">									每盒至少2个 预留2个  c4（2）</span><br><span class="line">	m个相同的  n个盒子 每盒至少x个 预留1个 cm-x（n-1）</span><br><span class="line">5.平均分堆问题 容易认为加入顺序 需要除以Ann避免重复计数</span><br><span class="line">	4本书分成两堆，每堆两本。c4（2）&#x2F;A22</span><br><span class="line">6.全错位排序 记住就行 0，1，2，9，44，265</span><br><span class="line">7.环形排序 8个人环坐 A77&#x3D;7！</span><br><span class="line">8.重复排列 密码 电话</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x05-概率问题"><a href="#0x05-概率问题" class="headerlink" title="0x05 概率问题"></a>0x05 概率问题</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">比赛概率问题</span><br><span class="line">三局两胜 -- 2：0无需再进行第三场</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x06极限问题"><a href="#0x06极限问题" class="headerlink" title="0x06极限问题"></a>0x06极限问题</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">最不利极限 抽屉原理</span><br><span class="line">问法：至少有多少个小球才能保证每个盒子至少有五个</span><br><span class="line">最不利情况+1+小抽屉</span><br><span class="line">5，8，18，21，22 保证至少7个人</span><br><span class="line">4x7+1+5&#x3D;34</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">和定最值 和一定 某些元素尽量大 其他尽量小 反之亦然</span><br><span class="line">x + （x+1）+(x+2)</span><br><span class="line">误区：最后取整时是大于还是小于；误以为各元素各不相同（看清题目要求）</span><br><span class="line">设的是最多则取整的结果小的 比如x小于等于4.5 x取4</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x07不等式-等式"><a href="#0x07不等式-等式" class="headerlink" title="0x07不等式  等式"></a>0x07不等式  等式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">进价 成本 利润 售价</span><br><span class="line">售价&#x3D;成本+利润</span><br><span class="line">总成本总利润 总销售额 &#x3D; 单成本 单利润 单销售额*数量</span><br><span class="line">折扣 几成 几折</span><br><span class="line">分批销售问题 &#x3D; 各批次之和</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x08-比例法"><a href="#0x08-比例法" class="headerlink" title="0x08 比例法"></a>0x08 比例法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">范式</span><br><span class="line">出现份数或分数</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x09工程问题"><a href="#0x09工程问题" class="headerlink" title="0x09工程问题"></a>0x09工程问题</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">合作完工 考虑整体思想 注意效率和</span><br><span class="line">工作总量设置最小公倍数</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x10相遇追击问题"><a href="#0x10相遇追击问题" class="headerlink" title="0x10相遇追击问题"></a>0x10相遇追击问题</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">相遇——————速度和——————相遇点</span><br><span class="line">追及——————速度差——————距离差</span><br><span class="line">多次相遇问题：</span><br><span class="line">分别出发 (2n-1)s &#x3D;(大速+小速)x时间</span><br><span class="line">一头同时出发2ns &#x3D; (大速+小速)x时间</span><br></pre></td></tr></table></figure>
+
+
+
+<table>
+<thead>
+<tr>
+<th>第几次相遇</th>
+<th>两人距离和</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>一次</td>
+<td>1S</td>
+</tr>
+<tr>
+<td>二次</td>
+<td>3S</td>
+</tr>
+<tr>
+<td>n次</td>
+<td>（2n-1）S</td>
+</tr>
+</tbody></table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">环形运动问题</span><br><span class="line">N次相遇会走完N个圆周长</span><br><span class="line">追上N次代表超过N圈</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x11奥数问题"><a href="#0x11奥数问题" class="headerlink" title="0x11奥数问题"></a>0x11奥数问题</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">鸡兔同笼问题 考试对错</span><br><span class="line">假设都赚到或者</span><br><span class="line">最大情况的差值&#x2F;单个差值&#x3D;做错的数量 单个差值的时候正-负注意符号</span><br><span class="line">盈亏问题：</span><br><span class="line">一盈一余型： 对象数 &#x3D;盈亏数和&#x2F;分配的标准差</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x12年龄问题"><a href="#0x12年龄问题" class="headerlink" title="0x12年龄问题"></a>0x12年龄问题</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">无论时间如何改变，年龄差不变</span><br><span class="line">时间改变，年龄增量是相同的</span><br><span class="line">常见的年龄平方差64 36 9 100 49 45的平方为2025</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x13方阵问题"><a href="#0x13方阵问题" class="headerlink" title="0x13方阵问题"></a>0x13方阵问题</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">方阵总人数 &#x3D; 最外层边长的平方</span><br><span class="line">层数 &#x3D; 最外层边长&#x2F;2</span><br><span class="line">每层人数 &#x3D; 该层每边人数*4 -4</span><br><span class="line"></span><br><span class="line">内层比外层少8个元素，边长少2</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x14-植树问题"><a href="#0x14-植树问题" class="headerlink" title="0x14 植树问题"></a>0x14 植树问题</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">种树问题：</span><br><span class="line">两端不植树 总长 &#x3D; 间隔*（棵数+1） 49</span><br><span class="line">一端不植树 总长 &#x3D; 间隔*棵数 50</span><br><span class="line">两端植树 总长 &#x3D; 间隔*（棵数-1） 51</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ytytytytyt6.github.io/2021/04/06/2020-09-25%20-%20TRAFFIC%20ANALYSIS%20EXERCISE/" rel="next" title="2020-09-25 - TRAFFIC ANALYSIS EXERCISE">
+                <i class="fa fa-chevron-left"></i> 2020-09-25 - TRAFFIC ANALYSIS EXERCISE
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ytytytytyt6.github.io/2021/04/07/%E7%89%87%E6%AE%B5%E9%98%85%E8%AF%BB/" rel="prev" title="片段阅读">
+                片段阅读 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">万俟思睿</p>
+              <p class="site-description motion-element" itemprop="description">进一寸有一寸的欢喜</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/ytytytytyt6.github.io/archives">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01周期循环-日期星期"><span class="nav-number">1.</span> <span class="nav-text">0x01周期循环+日期星期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02牛吃草"><span class="nav-number">2.</span> <span class="nav-text">0x02牛吃草</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03容斥原理"><span class="nav-number">3.</span> <span class="nav-text">0x03容斥原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-排列组合"><span class="nav-number">4.</span> <span class="nav-text">0x04 排列组合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-概率问题"><span class="nav-number">5.</span> <span class="nav-text">0x05 概率问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x06极限问题"><span class="nav-number">6.</span> <span class="nav-text">0x06极限问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x07不等式-等式"><span class="nav-number">7.</span> <span class="nav-text">0x07不等式  等式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x08-比例法"><span class="nav-number">8.</span> <span class="nav-text">0x08 比例法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x09工程问题"><span class="nav-number">9.</span> <span class="nav-text">0x09工程问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x10相遇追击问题"><span class="nav-number">10.</span> <span class="nav-text">0x10相遇追击问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x11奥数问题"><span class="nav-number">11.</span> <span class="nav-text">0x11奥数问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x12年龄问题"><span class="nav-number">12.</span> <span class="nav-text">0x12年龄问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x13方阵问题"><span class="nav-number">13.</span> <span class="nav-text">0x13方阵问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x14-植树问题"><span class="nav-number">14.</span> <span class="nav-text">0x14 植树问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">万俟思睿</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/ytytytytyt6.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/ytytytytyt6.github.io/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/ytytytytyt6.github.io/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
